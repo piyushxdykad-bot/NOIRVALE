@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0A1416">
+<meta name="theme-color" content="#071113">
 <title>NOIRVALE — The Residents' App</title>
 <meta name="description" content="Twelve private villas on a forested ridge above Lake Vale. A concept website.">
 <link rel="preload" href="pack/manifest.json" as="fetch" crossorigin>
@@ -14,15 +14,16 @@
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Hanken+Grotesk:wght@300;400;500;600&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <style>
 :root{
-  --ink:#0A1416;        /* night lake */
-  --ink-2:#102024;
-  --pine:#1F2D28;       /* forest under dusk */
-  --trav:#E7DFD1;       /* honed travertine */
-  --trav-2:#CFC5B3;
-  --bronze:#A07D55;     /* patinated bronze */
-  --bronze-hi:#C9A57A;
-  --lamp:#E2A867;       /* lit windows — used sparingly */
-  --mist:#93A19D;
+  --ink:#071113;        /* the lake at night */
+  --ink-2:#0D1B1E;
+  --pine:#14221D;       /* deodar in shadow */
+  --trav:#EEE6D7;       /* honed travertine */
+  --trav-2:#CDC1AB;
+  --bronze:#A9845A;     /* patinated bronze */
+  --bronze-hi:#D6B486;  /* champagne edge of the bronze */
+  --lamp:#ECAF6A;       /* lit windows — used sparingly */
+  --mist:#8E9E99;
+  --glass:#6F9A95;      /* lake glass — water and maps only */
   --serif:"Bodoni Moda", "Didot", Georgia, serif;
   --sans:"Hanken Grotesk", system-ui, sans-serif;
   --ease:cubic-bezier(.22,.8,.18,1);
@@ -429,18 +430,18 @@ a:hover .roll > span,a:focus-visible .roll > span{transform:translateY(-100%)}
 .chap-odo .roll-n i{display:block;font-style:normal;line-height:1.1;transition:transform .8s cubic-bezier(.16,1,.3,1)}
 .chap-odo small{font-size:14px;color:var(--mist)}
 /* residences: the plan draws itself over the photograph */
-.res .shot::after{content:"";position:absolute;inset:0;background:rgba(8,14,15,.55);opacity:0;transition:opacity .8s var(--ease)}
-.res .shot:hover::after,.res .shot:focus-visible::after{opacity:1}
-.res .shot .mini{position:absolute;inset:8% 10%;width:80%;height:84%;z-index:2;pointer-events:none;overflow:visible}
-.res .shot .mini rect{fill:none;stroke:var(--trav);stroke-width:1;vector-effect:non-scaling-stroke;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1s cubic-bezier(.16,1,.3,1)}
-.res .shot .mini rect.o{stroke:var(--bronze-hi);stroke-width:1.6}
-.res .shot .mini line{stroke:var(--lamp);stroke-width:2.2;vector-effect:non-scaling-stroke;opacity:0;transition:opacity .6s .5s}
-.res .shot .mini text{font-family:var(--sans);font-size:11px;fill:var(--trav-2);opacity:0;transition:opacity .5s}
-.res .shot:hover .mini rect,.res .shot:focus-visible .mini rect{stroke-dashoffset:0}
-.res .shot:hover .mini line,.res .shot:focus-visible .mini line{opacity:.9}
-.res .shot:hover .mini text,.res .shot:focus-visible .mini text{opacity:1;transition-delay:.55s}
-.res .shot .tag{position:absolute;left:22px;bottom:18px;z-index:3;font-size:13px;color:var(--trav);opacity:0;transform:translateY(10px);transition:.6s var(--ease) .3s}
-.res .shot:hover .tag,.res .shot:focus-visible .tag{opacity:1;transform:none}
+.shot::after{content:"";position:absolute;inset:0;background:rgba(8,14,15,.55);opacity:0;transition:opacity .8s var(--ease)}
+.shot:hover::after,.shot:focus-visible::after{opacity:1}
+.shot .mini{position:absolute;inset:8% 10%;width:80%;height:84%;z-index:2;pointer-events:none;overflow:visible}
+.shot .mini rect{fill:none;stroke:var(--trav);stroke-width:1;vector-effect:non-scaling-stroke;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1s cubic-bezier(.16,1,.3,1)}
+.shot .mini rect.o{stroke:var(--bronze-hi);stroke-width:1.6}
+.shot .mini line{stroke:var(--lamp);stroke-width:2.2;vector-effect:non-scaling-stroke;opacity:0;transition:opacity .6s .5s}
+.shot .mini text{font-family:var(--sans);font-size:11px;fill:var(--trav-2);opacity:0;transition:opacity .5s}
+.shot:hover .mini rect,.shot:focus-visible .mini rect{stroke-dashoffset:0}
+.shot:hover .mini line,.shot:focus-visible .mini line{opacity:.9}
+.shot:hover .mini text,.shot:focus-visible .mini text{opacity:1;transition-delay:.55s}
+.shot .tag{position:absolute;left:22px;bottom:18px;z-index:3;font-size:13px;color:var(--trav);opacity:0;transform:translateY(10px);transition:.6s var(--ease) .3s}
+.shot:hover .tag,.shot:focus-visible .tag{opacity:1;transform:none}
 /* footer: a lamp follows the cursor across the stone-coloured word */
 .foot::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(520px circle at var(--mx,50%) var(--my,30%),rgba(226,168,103,.16),transparent 60%);opacity:var(--lit,0);transition:opacity .8s}
 /* section heading characters */
@@ -695,6 +696,36 @@ body{padding-left:var(--rail)}
 .toast.on{transform:none;opacity:1;visibility:visible;pointer-events:auto}
 .toast button{font-weight:600;color:var(--bronze);padding:4px 10px;border-radius:999px}
 .toast button:hover{background:rgba(160,125,85,.15)}
+/* ═════════ RESIDENCES: stacked cards ═════════ */
+.homes{background:linear-gradient(180deg,var(--ink) 0%,#0A171A 40%,var(--ink) 100%)}
+.stack{position:relative}
+.scard{position:sticky;top:calc(var(--abh) + 18px + var(--i) * 16px);height:min(80svh,780px);margin-bottom:9vh}
+.scard:last-child{margin-bottom:0}
+.scard-in{position:relative;height:100%;border-radius:28px;overflow:hidden;border:1px solid rgba(214,180,134,.22);transform-origin:50% 0;
+  transform:scale(var(--s,1));filter:brightness(var(--b,1));box-shadow:0 -24px 60px rgba(0,0,0,.45);will-change:transform,filter}
+.scard .shot{position:absolute;inset:0;display:block;overflow:hidden}
+.scard .shot img{position:absolute;left:0;top:-8%;width:100%;height:116%;object-fit:cover;transform:translateY(var(--py,0)) scale(1.06);transition:scale 1.6s cubic-bezier(.16,1,.3,1)}
+.scard:hover .shot img{scale:1.03}
+.scard .shot::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(90deg,rgba(7,17,19,.9) 0%,rgba(7,17,19,.55) 34%,rgba(7,17,19,0) 62%),linear-gradient(0deg,rgba(7,17,19,.6),transparent 40%)}
+.scard .shot::after{z-index:1}
+.scard-tx{position:absolute;z-index:3;left:clamp(22px,4vw,64px);bottom:clamp(24px,5vh,56px);max-width:min(520px,82%)}
+.sc-status{display:inline-flex;align-items:center;gap:9px;font-size:13px;color:var(--trav-2);padding:7px 14px;border:1px solid rgba(238,230,215,.22);border-radius:999px;background:rgba(7,17,19,.4);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);margin-bottom:22px}
+.sc-status i{width:7px;height:7px;border-radius:50%;background:var(--lamp);box-shadow:0 0 10px var(--lamp)}
+.scard h3{font-family:var(--serif);font-weight:400;font-size:clamp(52px,7vw,120px);line-height:.9;letter-spacing:-.025em}
+.sc-tag{font-family:var(--serif);font-style:italic;font-size:clamp(19px,1.7vw,26px);color:var(--bronze-hi);margin:12px 0 16px}
+.sc-body{color:var(--trav-2);max-width:44ch;margin-bottom:24px}
+.scard .facts{margin-bottom:26px}
+.sc-acts{display:flex;gap:10px;flex-wrap:wrap}
+.scard .shot .mini{inset:10% 6% 10% 52%;width:42%;height:80%}
+.scard .shot .tag{left:auto;right:24px}
+@media (max-width:760px){
+  .scard{height:min(calc(100svh - var(--abh) - var(--tb) - 44px),720px);top:calc(var(--abh) + 10px + var(--i) * 10px)}
+  .scard .shot::before{background:linear-gradient(0deg,rgba(7,17,19,.95) 0%,rgba(7,17,19,.72) 50%,rgba(7,17,19,.1) 80%)}
+  .scard-tx{left:20px;right:20px;bottom:22px;max-width:none}
+  .sc-body{font-size:15px}
+  .scard .shot .mini{display:none}
+}
 </style>
 </head>
 <body>
@@ -866,44 +897,52 @@ body{padding-left:var(--rail)}
 </section>
 
 <!-- ───── residences preview ───── -->
-<section class="sec" id="homes" aria-labelledby="homes-h">
+<section class="sec homes" id="homes" aria-labelledby="homes-h">
   <div class="sec-head">
     <h2 class="h2 hsplit" id="homes-h" aria-label="Three ways to live on a ridge.">Three ways<br>to live on a ridge.</h2>
-    <p data-rv>The trees decided where the houses go. No two share a view, and from inside any one of them, you cannot see another.</p>
+    <p data-rv>The forest decided where each house would stand. No two share a view, and from inside any one of them, you will not see another.</p>
   </div>
-
-  <article class="res">
-    <a class="shot mask-rv" href="#residences" data-plan="ridge" data-cursor="Plan"><img src="img/pool.webp" alt="Cantilevered infinity pool at sunset above the lake valley" loading="lazy"></a>
-    <div class="info" data-rv>
-      <h3>The Ridge</h3>
-      <p>The highest ground on the estate. The pool reaches 7.2 metres past the cliff, and the principal suite takes the entire upper floor: sunrise on one side, the lake on the other.</p>
-      <div class="facts"><div><b>4</b>bedrooms</div><div><b>6,400</b>sq ft</div><div><b>₹18.5 Cr</b>from</div></div>
-      <a href="#residences" class="btn" data-plan="ridge">View floor plan</a>
-      <div class="status"><i></i>2 of 4 available</div>
-    </div>
-  </article>
-
-  <article class="res">
-    <a class="shot mask-rv" href="#residences" data-plan="shore" data-cursor="Plan"><img src="img/night.webp" alt="Villa at night with lit windows reflected in the lake" loading="lazy"></a>
-    <div class="info" data-rv>
-      <h3>The Shore</h3>
-      <p>Built at the waterline. The living room opens on three sides, and stone steps lead from the deck straight down to your own jetty.</p>
-      <div class="facts"><div><b>3</b>bedrooms</div><div><b>4,900</b>sq ft</div><div><b>₹13.2 Cr</b>from</div></div>
-      <a href="#residences" class="btn" data-plan="shore">View floor plan</a>
-      <div class="status"><i></i>1 of 5 available</div>
-    </div>
-  </article>
-
-  <article class="res">
-    <a class="shot mask-rv" href="#residences" data-plan="canopy" data-cursor="Plan"><img src="img/aerial.webp" alt="Aerial view of the villa on a forested ridge above misty hills at dusk" loading="lazy"></a>
-    <div class="info" data-rv>
-      <h3>The Canopy</h3>
-      <p>Lifted into the deodars on stone piers. On clear mornings the roof terrace looks across the mist to the snow line of Nanda Devi.</p>
-      <div class="facts"><div><b>5</b>bedrooms</div><div><b>7,800</b>sq ft</div><div><b>₹24 Cr</b>from</div></div>
-      <a href="#residences" class="btn" data-plan="canopy">View floor plan</a>
-      <div class="status"><i></i>1 of 3 available</div>
-    </div>
-  </article>
+  <div class="stack" id="stack">
+    <article class="scard" style="--i:0" aria-labelledby="sc-ridge">
+      <div class="scard-in">
+        <a class="shot" href="#residences" data-plan="ridge" data-cursor="Plan" aria-label="Open the floor plan of The Ridge"><img src="img/pool.webp" alt="Cantilevered infinity pool at sunset above the lake valley" loading="lazy"></a>
+        <div class="scard-tx">
+          <p class="sc-status"><i></i>2 of 4 open</p>
+          <h3 id="sc-ridge">The Ridge</h3>
+          <p class="sc-tag">The highest ground, and the longest view.</p>
+          <p class="sc-body">The crest of the estate. The pool runs 7.2 metres past the cliff edge, and the principal suite takes the entire upper floor: sunrise on one side, the lake on the other.</p>
+          <div class="facts"><div><b>4</b>bedrooms</div><div><b>6,400</b>sq ft</div><div><b>₹18.5 Cr</b>from</div></div>
+          <div class="sc-acts"><button type="button" class="btn solid" data-book-open data-res="ridge">Book a walk</button><a href="#residences" class="btn" data-plan="ridge">Floor plan</a></div>
+        </div>
+      </div>
+    </article>
+    <article class="scard" style="--i:1" aria-labelledby="sc-shore">
+      <div class="scard-in">
+        <a class="shot" href="#residences" data-plan="shore" data-cursor="Plan" aria-label="Open the floor plan of The Shore"><img src="img/night.webp" alt="Villa at night with lit windows reflected in the lake" loading="lazy"></a>
+        <div class="scard-tx">
+          <p class="sc-status"><i></i>1 of 5 open</p>
+          <h3 id="sc-shore">The Shore</h3>
+          <p class="sc-tag">Built where the water starts.</p>
+          <p class="sc-body">One long, low house at the waterline. The living room opens on three sides, and stone steps lead from the deck straight down to your own jetty.</p>
+          <div class="facts"><div><b>3</b>bedrooms</div><div><b>4,900</b>sq ft</div><div><b>₹13.2 Cr</b>from</div></div>
+          <div class="sc-acts"><button type="button" class="btn solid" data-book-open data-res="shore">Book a walk</button><a href="#residences" class="btn" data-plan="shore">Floor plan</a></div>
+        </div>
+      </div>
+    </article>
+    <article class="scard" style="--i:2" aria-labelledby="sc-canopy">
+      <div class="scard-in">
+        <a class="shot" href="#residences" data-plan="canopy" data-cursor="Plan" aria-label="Open the floor plan of The Canopy"><img src="img/aerial.webp" alt="Aerial view of the villa on a forested ridge above misty hills at dusk" loading="lazy"></a>
+        <div class="scard-tx">
+          <p class="sc-status"><i></i>1 of 3 open</p>
+          <h3 id="sc-canopy">The Canopy</h3>
+          <p class="sc-tag">A house in the trees, above the weather.</p>
+          <p class="sc-body">Lifted into the deodars on stone piers. On clear mornings the roof terrace looks across a sea of mist to the snow line of Nanda Devi.</p>
+          <div class="facts"><div><b>5</b>bedrooms</div><div><b>7,800</b>sq ft</div><div><b>₹24 Cr</b>from</div></div>
+          <div class="sc-acts"><button type="button" class="btn solid" data-book-open data-res="canopy">Book a walk</button><a href="#residences" class="btn" data-plan="canopy">Floor plan</a></div>
+        </div>
+      </div>
+    </article>
+  </div>
 </section>
 </main>
 
@@ -1320,21 +1359,24 @@ chapBtns.forEach((b,i)=>b.addEventListener('click',()=>{
 /* ───── page reveals, parallax, footer fill ───── */
 const io=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} }),{rootMargin:'0px 0px -12% 0px'});
 $$('[data-rv],.mask-rv').forEach(el=>io.observe(el));
-const shots=$$('.res .shot');
+const shots=$$('.scard .shot'), scards=$$('.scard');
 const bigword=$('#bigword'), foot=$('#foot');
 let lastY=0; const nav=$('#nav');
 function page(){
   const y=scrollY;
   const filmEnd=film.offsetTop+film.offsetHeight-innerHeight;
   // reads first
-  let shotT=null, footP=null;
+  let shotT=null, footP=null, stackT=null;
   if(y>filmEnd-innerHeight*.2){
     shotT=shots.map(s=>{ const r=s.getBoundingClientRect(); return (r.bottom<0||r.top>innerHeight)?null:(r.top+r.height/2-innerHeight/2)/innerHeight; });
+    // each card sinks back and dims as the next one slides over it
+    stackT=scards.map((c,i)=>{ const nx=scards[i+1]; if(!nx) return 0; const a=c.getBoundingClientRect(), b=nx.getBoundingClientRect(); return clamp(1-(b.top-a.top)/a.height); });
     const fr=foot.getBoundingClientRect();
     footP=clamp((innerHeight-fr.top)/fr.height);
   }
   // then writes
-  if(shotT) shotT.forEach((t,i)=>{ if(t!==null) shots[i].firstElementChild.style.setProperty('--py',(t*-9-6).toFixed(2)+'%'); });
+  if(shotT) shotT.forEach((t,i)=>{ if(t!==null) shots[i].firstElementChild.style.setProperty('--py',(t*-6).toFixed(2)+'%'); });
+  if(stackT) stackT.forEach((p,i)=>{ const inn=scards[i].firstElementChild; inn.style.setProperty('--s',(1-p*.07).toFixed(4)); inn.style.setProperty('--b',(1-p*.55).toFixed(3)); });
   if(footP!==null) bigword.style.setProperty('--fill',(footP*100).toFixed(1)+'%');
   if(!document.body.classList.contains('locked')){
     if(y>lastY+4 && y>innerHeight*.5) nav.classList.add('hide');
@@ -1474,7 +1516,7 @@ function closeView(){
 // remember what opened a view, so Back and focus return there
 document.addEventListener('click',e=>{
   const bo=e.target.closest('[data-book-open],a[href="#viewing"],a[href="#book"]');
-  if(bo){ e.preventDefault(); openBooking(); return; }
+  if(bo){ e.preventDefault(); openBooking(bo.dataset.res?{res:bo.dataset.res}:{}); return; }
   if(e.target.closest('[data-goto-plots]')) setTimeout(()=>{ const p=$('#plots-h'); p&&p.scrollIntoView({behavior:RM?'auto':'smooth',block:'start'}); },900);
   const a=e.target.closest('a[href^="#"]'); if(!a) return;
   const h=a.getAttribute('href');
@@ -2032,7 +2074,7 @@ $$('.btn').forEach(b=>{
   b.addEventListener('pointerleave',()=>{ b.style.transform=''; if(lbl) lbl.style.transform=''; });
 });
 // residences: the plan draws itself over each photograph on hover
-$$('.res .shot').forEach(sh=>{
+$$('.shot[data-plan]').forEach(sh=>{
   const P=PLANS[sh.dataset.plan]; if(!P) return;
   const xs=P.rooms.flatMap(r=>[r[1],r[1]+r[3]]), ys=P.rooms.flatMap(r=>[r[2],r[2]+r[4]]);
   const x0=Math.min(...xs)-10,y0=Math.min(...ys)-10,w=Math.max(...xs)-x0+10,h=Math.max(...ys)-y0+10;
