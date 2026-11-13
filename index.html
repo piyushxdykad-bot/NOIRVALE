@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NOIRVALE — Private Hillside Villas</title>
+<meta name="description" content="Twelve private villas on a forested ridge above Lake Vale. A concept website.">
+<link rel="preload" href="pack/manifest.json" as="fetch" crossorigin>
+<link rel="preload" href="pack/approach-0.webp" as="fetch" crossorigin>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 fill=%27%230A1416%27/%3E%3Cpath d=%27M3 22 Q9 18 13 19 T22 14 T29 17%27 fill=%27none%27 stroke=%27%23C9A57A%27 stroke-width=%271.5%27/%3E%3Crect x=%2715%27 y=%2712%27 width=%275%27 height=%272%27 fill=%27%23E2A867%27/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Hanken+Grotesk:wght@300;400;500;600&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<style>
+:root{
+  --ink:#0A1416;        /* night lake */
+  --ink-2:#102024;
+  --pine:#1F2D28;       /* forest under dusk */
+  --trav:#E7DFD1;       /* honed travertine */
+  --trav-2:#CFC5B3;
+  --bronze:#A07D55;     /* patinated bronze */
+  --bronze-hi:#C9A57A;
+  --lamp:#E2A867;       /* lit windows — used sparingly */
+  --mist:#93A19D;
+  --serif:"Bodoni Moda", "Didot", Georgia, serif;
+  --sans:"Hanken Grotesk", system-ui, sans-serif;
+  --ease:cubic-bezier(.22,.8,.18,1);
+  --gut:clamp(20px,4vw,64px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--ink);color:var(--trav);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+body{font-family:var(--sans);font-weight:300;font-size:17px;line-height:1.6;overflow-x:hidden}
+body.locked{overflow:hidden}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:1px solid var(--bronze-hi);outline-offset:4px}
+::selection{background:var(--bronze);color:var(--ink)}
+
+/* ───────── grain + cursor ───────── */
+.grain{position:fixed;inset:-50%;width:200%;height:200%;pointer-events:none;z-index:90;opacity:.07;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:grain 1.2s steps(6) infinite}
+@keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-3%,2%)}40%{transform:translate(2%,-4%)}60%{transform:translate(-4%,-1%)}80%{transform:translate(3%,3%)}100%{transform:translate(0,0)}}
+.cursor{position:fixed;left:0;top:0;width:34px;height:34px;margin:-17px 0 0 -17px;border:1px solid rgba(201,165,122,.7);border-radius:50%;
+  pointer-events:none;z-index:200;transition:width .45s var(--ease),height .45s var(--ease),margin .45s var(--ease),background .45s,border-color .45s;
+  display:grid;place-items:center;font-size:11px;letter-spacing:.06em;color:var(--ink)}
+.cursor span{opacity:0;transition:opacity .3s}
+.cursor.big{width:84px;height:84px;margin:-42px 0 0 -42px;background:var(--trav);border-color:var(--trav)}
+.cursor.big span{opacity:1}
+@media (hover:none),(pointer:coarse){.cursor{display:none}}
+
+/* ───────── loader ───────── */
+.loader{position:fixed;inset:0;z-index:150;background:var(--ink);display:grid;place-items:center;transition:opacity 1.2s var(--ease),visibility 1.2s}
+.loader.gone{opacity:0;visibility:hidden}
+.loader svg{width:min(560px,80vw);height:auto;overflow:visible}
+.loader .ridge{fill:none;stroke:var(--bronze);stroke-width:1;stroke-dasharray:1;stroke-dashoffset:1}
+.loader .house{fill:var(--lamp);opacity:0;transition:opacity 1s}
+.loader .meta{position:absolute;bottom:clamp(28px,6vh,60px);left:var(--gut);right:var(--gut);display:flex;justify-content:space-between;font-size:13px;color:var(--mist)}
+.loader .count{font-family:var(--serif);font-size:15px;color:var(--trav);font-variant-numeric:tabular-nums}
+
+/* ───────── nav ───────── */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:22px var(--gut);
+  transition:transform .8s var(--ease),background .6s;mix-blend-mode:normal}
+.nav.hide{transform:translateY(-110%)}
+.nav::before{content:"";position:absolute;inset:0;z-index:-1;background:rgba(10,20,22,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(160,125,85,.18);opacity:0;transition:opacity .6s}
+.nav.solid::before{opacity:1}
+.wordmark{font-family:var(--serif);font-size:19px;letter-spacing:.42em;padding-left:.42em;font-weight:400}
+.nav ul{display:flex;gap:clamp(18px,2.6vw,40px);list-style:none;align-items:center;font-size:14px}
+.nav ul a{position:relative;padding:6px 0;color:var(--trav-2);transition:color .4s}
+.nav ul a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--bronze-hi);transform:scaleX(0);transform-origin:right;transition:transform .6s var(--ease)}
+.nav ul a:hover{color:var(--trav)}
+.nav ul a:hover::after,.nav ul a[aria-current]::after{transform:scaleX(1);transform-origin:left}
+.btn{display:inline-flex;align-items:center;gap:12px;padding:13px 22px;border:1px solid rgba(201,165,122,.55);border-radius:999px;font-size:14px;color:var(--trav);
+  position:relative;overflow:hidden;isolation:isolate;transition:color .5s var(--ease),border-color .5s}
+.btn::before{content:"";position:absolute;inset:0;background:var(--trav);z-index:-1;transform:translateY(101%);border-radius:inherit;transition:transform .6s var(--ease)}
+.btn:hover{color:var(--ink);border-color:var(--trav)}
+.btn:hover::before{transform:translateY(0)}
+.btn.solid{background:var(--trav);color:var(--ink);border-color:var(--trav)}
+.btn.solid::before{background:var(--bronze-hi)}
+.btn .dot{width:6px;height:6px;border-radius:50%;background:var(--lamp);box-shadow:0 0 calc(12px + var(--glow,0) * 18px) calc(var(--glow,0) * 4px) var(--lamp)}
+.chapter button.on i{box-shadow:0 0 calc(var(--glow,0)*12px) var(--lamp)}
+.wordmark{text-shadow:0 0 calc(var(--glow,0)*24px) rgba(226,168,103,calc(var(--glow,0)*.55))}
+.menu-btn{display:none;font-size:14px}
+@media (max-width:860px){
+  .nav ul li:not(.keep){display:none}
+  .menu-btn{display:block}
+}
+.mobile-menu{position:fixed;inset:0;z-index:99;background:var(--ink);display:flex;flex-direction:column;justify-content:center;padding:0 var(--gut);gap:10px;
+  clip-path:inset(0 0 100% 0);transition:clip-path .9s var(--ease)}
+.mobile-menu.open{clip-path:inset(0 0 0 0)}
+.mobile-menu a{font-family:var(--serif);font-size:clamp(34px,9vw,56px);line-height:1.15;opacity:0;transform:translateY(24px);transition:opacity .6s var(--ease),transform .7s var(--ease)}
+.mobile-menu.open a{opacity:1;transform:none}
+.mobile-menu.open a:nth-child(2){transition-delay:.06s}.mobile-menu.open a:nth-child(3){transition-delay:.12s}.mobile-menu.open a:nth-child(4){transition-delay:.18s}.mobile-menu.open a:nth-child(5){transition-delay:.24s}
+
+/* ───────── film ───────── */
+.film{position:relative}
+.stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;background:#05090a}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.vignette{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(120% 90% at 50% 45%,transparent 45%,rgba(5,10,11,.55) 100%),linear-gradient(180deg,rgba(5,10,11,.45) 0%,transparent 22%,transparent 62%,rgba(5,10,11,.7) 100%)}
+.shadeL{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity 1s var(--ease);background:linear-gradient(90deg,rgba(8,14,15,.62) 0%,rgba(8,14,15,.38) 30%,transparent 58%)}
+.cue{position:absolute;opacity:0;will-change:opacity,transform;pointer-events:none}
+.cue.live{pointer-events:auto}
+.h-film{font-family:var(--serif);font-weight:400;font-size:clamp(46px,8.6vw,148px);line-height:.95;letter-spacing:-.02em}
+.sr{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.split .w{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.08em;margin-bottom:-.08em}
+.split .c{display:inline-block;will-change:transform}
+.lede{max-width:34ch;font-size:clamp(16px,1.25vw,19px);color:var(--trav-2)}
+.place{font-size:14px;color:var(--trav-2);display:flex;gap:14px;align-items:center}
+.place::before{content:"";width:42px;height:1px;background:var(--bronze-hi)}
+
+.c-approach-h{left:var(--gut);bottom:clamp(90px,16vh,170px)}
+.c-approach-l{right:var(--gut);bottom:clamp(96px,17vh,180px);text-align:left}
+.c-approach-p{left:var(--gut);top:clamp(96px,16vh,150px)}
+.scrollhint{position:absolute;left:50%;bottom:28px;transform:translateX(-50%);font-size:12px;color:var(--mist);display:flex;flex-direction:column;align-items:center;gap:10px;transition:opacity .6s}
+.scrollhint i{width:1px;height:44px;background:linear-gradient(var(--bronze-hi),transparent);transform-origin:top;animation:drip 2.2s var(--ease) infinite}
+@keyframes drip{0%{transform:scaleY(0)}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+.c-thr-h{left:var(--gut);top:clamp(110px,18vh,190px)}
+.c-thr-l{left:var(--gut);top:calc(clamp(110px,18vh,190px) + clamp(70px,10vw,170px))}
+.callout{position:absolute;display:flex;align-items:center;gap:12px;font-size:13px;color:var(--trav)}
+.callout > div{background:rgba(8,14,15,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding:8px 12px;border:1px solid rgba(231,223,209,.14)}
+.callout b{font-weight:500}
+.callout small{display:block;color:var(--mist);font-size:12px}
+.callout .pin{width:9px;height:9px;border-radius:50%;border:1px solid var(--trav);position:relative;flex:none}
+.callout .pin::after{content:"";position:absolute;inset:-7px;border-radius:50%;border:1px solid rgba(231,223,209,.35);animation:ping 2.4s var(--ease) infinite}
+@keyframes ping{0%{transform:scale(.4);opacity:1}100%{transform:scale(1.6);opacity:0}}
+.callout .line{height:1px;width:60px;background:rgba(231,223,209,.5);transform-origin:left}
+.c-co1{left:21%;top:52%}
+.c-co2{left:56%;top:31%}
+.c-co3{left:63%;top:70%}
+
+.c-edge-h{right:var(--gut);top:clamp(110px,17vh,180px);text-align:right}
+.c-edge-h .h-film{font-size:clamp(40px,6.4vw,112px)}
+.measure{position:absolute;left:var(--gut);right:var(--gut);bottom:clamp(70px,13vh,140px)}
+.measure .bar{position:relative;height:30px}
+.measure .bar::before,.measure .bar::after{content:"";position:absolute;top:8px;width:1px;height:14px;background:var(--trav)}
+.measure .bar::before{left:0}
+.measure .bar::after{right:calc((1 - var(--m,0)) * 100%)}
+.measure .bar i{position:absolute;left:0;top:15px;height:1px;background:var(--trav);width:calc(var(--m,0) * 100%)}
+.measure .read{display:flex;justify-content:space-between;align-items:baseline;margin-top:6px;font-size:13px;color:var(--trav-2)}
+.measure .read em{font-family:var(--serif);font-style:normal;font-size:clamp(28px,3vw,44px);color:var(--trav);font-variant-numeric:tabular-nums}
+
+/* blueprint */
+.blue{position:absolute;inset:0;opacity:0;background:var(--ink-2);will-change:opacity}
+.blue .grid{position:absolute;inset:0;opacity:.5;
+  background-image:linear-gradient(rgba(160,125,85,.09) 1px,transparent 1px),linear-gradient(90deg,rgba(160,125,85,.09) 1px,transparent 1px),
+  linear-gradient(rgba(160,125,85,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(160,125,85,.05) 1px,transparent 1px);
+  background-size:120px 120px,120px 120px,24px 24px,24px 24px}
+.blue .backdrop{position:absolute;inset:-40px;background:url(img/elevation.webp) center/cover;filter:blur(28px) brightness(.55);opacity:var(--bd,0)}
+.plate{position:absolute;left:0;top:0;width:1376px;height:768px;transform-origin:0 0}
+.plate img{position:absolute;inset:0;width:100%;height:100%;clip-path:inset(0 calc(100% - var(--rev,0) * 100%) 0 0)}
+.plate .scan{position:absolute;top:0;bottom:0;width:1px;left:calc(var(--rev,0) * 100%);background:var(--bronze-hi);box-shadow:0 0 18px 2px rgba(226,168,103,.5);opacity:var(--scan,0)}
+.plate svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.plate svg .ln{fill:none;stroke:var(--trav);stroke-width:1.1;vector-effect:non-scaling-stroke;stroke-dasharray:1;stroke-dashoffset:1}
+.plate svg .glow{opacity:var(--g,0);mix-blend-mode:screen}
+.plate svg .glow rect{fill:#E9A85C}
+.plate svg .ln.b{stroke:var(--bronze-hi)}
+.plate svg .ln.f{stroke-width:.6;opacity:.7}
+.plate svg .lab{font-family:var(--sans);font-size:9px;fill:var(--bronze-hi);opacity:var(--t,0);letter-spacing:.02em}
+.plate svg .lab.l{fill:var(--trav)}
+.c-blue-h{left:var(--gut);bottom:clamp(28px,6vh,60px)}
+.c-blue-h .h-film{font-size:clamp(38px,5.6vw,96px)}
+.titleblock{position:absolute;right:var(--gut);bottom:clamp(28px,6vh,60px);display:grid;grid-template-columns:auto auto;border:1px solid rgba(201,165,122,.5);font-size:12px;min-width:300px;background:rgba(10,20,22,.6);backdrop-filter:blur(6px)}
+.titleblock div{padding:9px 14px;border-right:1px solid rgba(201,165,122,.3);border-bottom:1px solid rgba(201,165,122,.3)}
+.titleblock div:nth-child(2n){border-right:0}
+.titleblock div:nth-last-child(-n+2){border-bottom:0}
+.titleblock span{display:block;color:var(--mist);font-size:11px}
+.titleblock .wide{grid-column:1/-1;border-right:0;font-family:var(--serif);font-size:16px}
+
+.c-night-h{left:0;right:0;top:clamp(92px,13vh,140px);text-align:center;display:flex;flex-direction:column;align-items:center;gap:22px}
+.c-night-h .h-film{font-size:clamp(40px,6vw,104px)}
+.c-night-h .acts{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+.chapter{position:absolute;right:var(--gut);top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:14px;z-index:3;transition:opacity .6s,visibility .6s}
+.chapter.off{opacity:0;visibility:hidden}
+.chapter button{display:flex;align-items:center;gap:12px;justify-content:flex-end;font-size:12px;color:var(--mist);transition:color .4s}
+.chapter button span{opacity:0;transform:translateX(8px);transition:.5s var(--ease)}
+.chapter button i{width:14px;height:1px;background:currentColor;transition:width .5s var(--ease)}
+.chapter button.on{color:var(--trav)}
+.chapter button.on i{width:34px;background:var(--bronze-hi)}
+.chapter button:hover span,.chapter button.on span{opacity:1;transform:none}
+@media (max-width:860px){.chapter{display:none}}
+
+/* ───────── residences preview ───────── */
+.sec{position:relative;padding:clamp(100px,16vh,190px) var(--gut)}
+.sec-head{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:end;margin-bottom:clamp(60px,9vh,110px)}
+.h2{font-family:var(--serif);font-weight:400;font-size:clamp(40px,5.2vw,88px);line-height:1;letter-spacing:-.015em}
+.sec-head p{max-width:42ch;color:var(--trav-2);justify-self:end}
+@media (max-width:860px){.sec-head{grid-template-columns:1fr}.sec-head p{justify-self:start}}
+.res{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--gut);align-items:center;padding:clamp(40px,7vh,80px) 0;border-top:1px solid rgba(160,125,85,.28)}
+.res:last-child{border-bottom:1px solid rgba(160,125,85,.28)}
+.res .shot{grid-column:1/8;aspect-ratio:16/10;overflow:hidden;position:relative;clip-path:inset(0 0 0 0);transition:clip-path 1s var(--ease)}
+.res:nth-child(even) .shot{grid-column:6/13;grid-row:1}
+.res:nth-child(even) .info{grid-column:1/6;grid-row:1}
+.res .shot img{width:100%;height:118%;object-fit:cover;transform:translateY(var(--py,0)) scale(1.04);transition:scale 1.4s var(--ease)}
+.res:hover .shot img{scale:1.06}
+.res .info{grid-column:8/13}
+.res h3{font-family:var(--serif);font-weight:400;font-size:clamp(34px,3.6vw,60px);line-height:1;margin-bottom:22px}
+.res p{color:var(--trav-2);max-width:38ch;margin-bottom:30px}
+.facts{display:grid;grid-template-columns:repeat(3,auto);gap:18px 32px;justify-content:start;margin-bottom:34px;font-size:13px;color:var(--mist)}
+.facts b{display:block;font-family:var(--serif);font-weight:400;font-size:22px;color:var(--trav)}
+.res .status{font-size:13px;color:var(--mist);display:flex;align-items:center;gap:10px;margin-top:18px}
+.res .status i{width:7px;height:7px;border-radius:50%;background:var(--lamp);box-shadow:0 0 10px var(--lamp)}
+.res .status.sold i{background:transparent;border:1px solid var(--mist);box-shadow:none}
+@media (max-width:860px){.res .shot,.res:nth-child(even) .shot,.res .info,.res:nth-child(even) .info{grid-column:1/-1;grid-row:auto}}
+
+/* reveal on enter (one orchestrated motion per block) */
+[data-rv]{opacity:0;transform:translateY(40px);transition:opacity 1.2s var(--ease),transform 1.2s var(--ease)}
+[data-rv].in{opacity:1;transform:none}
+.mask-rv{clip-path:inset(100% 0 0 0)!important}
+.mask-rv.in{clip-path:inset(0 0 0 0)!important}
+
+/* ───────── footer ───────── */
+.foot{padding:clamp(90px,14vh,160px) var(--gut) 40px;background:var(--pine);position:relative;overflow:hidden}
+.foot .big{font-family:var(--serif);font-size:clamp(56px,15.2vw,300px);line-height:.8;letter-spacing:.06em;color:transparent;-webkit-text-stroke:1px rgba(201,165,122,.55);
+  white-space:nowrap;width:max-content;max-width:100%;background:linear-gradient(90deg,var(--trav) 0 var(--fill,0%),transparent var(--fill,0%));-webkit-background-clip:text;background-clip:text;margin-left:-.04em}
+.foot-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-top:clamp(60px,10vh,120px);font-size:14px;color:var(--trav-2)}
+.foot-grid h4{font-weight:500;color:var(--trav);margin-bottom:12px;font-size:14px}
+.foot-grid a:not(.btn){display:block;padding:3px 0;transition:color .3s}
+.foot-grid a:not(.btn):hover{color:var(--lamp)}
+.foot .fine{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-top:70px;padding-top:24px;border-top:1px solid rgba(201,165,122,.25);font-size:12px;color:var(--mist)}
+@media (max-width:860px){.foot-grid{grid-template-columns:1fr 1fr}}
+
+/* ───────── views (hash pages) ───────── */
+.view{position:fixed;inset:0;z-index:80;overflow-y:auto;overscroll-behavior:contain;background:var(--ink);visibility:hidden;-webkit-overflow-scrolling:touch}
+.view.open{visibility:visible}
+.view-in{min-height:100%;padding:130px var(--gut) 90px;opacity:0;transform:translateY(30px);transition:opacity .9s var(--ease) .15s,transform .9s var(--ease) .15s}
+.view.open .view-in{opacity:1;transform:none}
+/* horizon-line transition: a lamp-amber line crosses the screen, the next page opens out of it */
+.horizon{position:fixed;left:0;right:0;top:50%;height:1px;z-index:120;pointer-events:none;background:var(--lamp);box-shadow:0 0 18px 1px rgba(226,168,103,.7);transform:scaleX(0);opacity:0}
+.horizon.run{animation:horizon 1s var(--ease) both}
+@keyframes horizon{0%{transform:scaleX(0);opacity:1}42%{transform:scaleX(1);opacity:1}70%{opacity:1}100%{transform:scaleX(1);opacity:0}}
+.view{clip-path:inset(0 0 0 0);transition:clip-path .75s var(--ease)}
+.view.entering{clip-path:inset(50% 0 50% 0);transition:none}
+.back{display:inline-flex;align-items:center;gap:10px;font-size:14px;color:var(--trav-2);margin-bottom:40px}
+.back::before{content:"";width:28px;height:1px;background:var(--bronze-hi);transition:width .5s var(--ease)}
+.back:hover::before{width:44px}
+
+/* residences view */
+.tabs{display:flex;gap:6px;margin:40px 0 50px;flex-wrap:wrap}
+.tabs button{padding:11px 20px;border:1px solid rgba(160,125,85,.4);border-radius:999px;font-size:14px;color:var(--trav-2);transition:.4s}
+.tabs button[aria-selected="true"]{background:var(--trav);color:var(--ink);border-color:var(--trav)}
+.plan-wrap{display:grid;grid-template-columns:1.6fr 1fr;gap:clamp(30px,5vw,80px);align-items:start}
+@media (max-width:960px){.plan-wrap{grid-template-columns:1fr}}
+.plan{position:relative;background:var(--ink-2);border:1px solid rgba(160,125,85,.25);padding:clamp(16px,3vw,36px)}
+.plan svg{width:100%;height:auto;display:block}
+.plan .wall{fill:none;stroke:var(--trav);stroke-width:2.2}
+.plan .room{fill:rgba(160,125,85,0);stroke:rgba(231,223,209,.35);stroke-width:.8;cursor:pointer;transition:fill .35s}
+.plan .room:hover,.plan .room.hl{fill:rgba(160,125,85,.28)}
+.plan .room.out{stroke-dasharray:3 3}
+.plan .glass{stroke:var(--lamp);stroke-width:2.4;opacity:.85}
+.plan .rl{font-family:var(--sans);font-size:11.5px;fill:var(--trav-2);pointer-events:none}
+.plan .room:focus{outline:none;fill:rgba(160,125,85,.38);stroke:var(--lamp)}
+.plan .north{position:absolute;right:16px;top:16px;font-size:12px;color:var(--mist);display:flex;align-items:center;gap:8px}
+.plan .lake{position:absolute;left:0;right:0;bottom:-1px;height:4px;background:linear-gradient(90deg,transparent,rgba(226,168,103,.0),transparent)}
+.readout{position:sticky;top:120px}
+.readout h3{font-family:var(--serif);font-weight:400;font-size:clamp(36px,3.6vw,58px);line-height:1;margin-bottom:16px}
+.readout .price{font-family:var(--serif);font-size:24px;margin:22px 0 4px}
+.readout .room-now{margin-top:28px;padding:18px 0;border-top:1px solid rgba(160,125,85,.3);border-bottom:1px solid rgba(160,125,85,.3);min-height:92px}
+.readout .room-now b{display:block;font-family:var(--serif);font-weight:400;font-size:24px}
+.readout .room-now span{color:var(--mist);font-size:14px}
+.rlist{list-style:none;margin-top:22px;font-size:14px;columns:2;column-gap:24px}
+.rlist li{break-inside:avoid;border-bottom:1px dotted rgba(160,125,85,.25)}
+.rlist button{width:100%;padding:6px 0;display:flex;justify-content:space-between;gap:10px;color:var(--trav-2);text-align:left;font-size:14px}
+.rlist button:hover,.rlist li.hl button{color:var(--trav)}
+.rlist li.hl{color:var(--trav)}
+
+/* estate view */
+.day{position:relative;aspect-ratio:16/8;overflow:hidden;margin:50px 0 24px;background:#000}
+.day canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.day-ctl{display:grid;grid-template-columns:auto 1fr auto;gap:20px;align-items:center;font-size:14px;color:var(--trav-2)}
+.day-ctl output{font-family:var(--serif);font-size:24px;color:var(--trav);min-width:5.5ch;font-variant-numeric:tabular-nums}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:24px;background:transparent}
+input[type=range]::-webkit-slider-runnable-track{height:1px;background:rgba(231,223,209,.4)}
+input[type=range]::-moz-range-track{height:1px;background:rgba(231,223,209,.4)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--lamp);margin-top:-9px;box-shadow:0 0 0 6px rgba(226,168,103,.18)}
+input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--lamp);border:0}
+.amen{display:grid;grid-template-columns:repeat(2,1fr);gap:0;margin-top:90px;border-top:1px solid rgba(160,125,85,.28)}
+.amen article{padding:36px 36px 40px 0;border-bottom:1px solid rgba(160,125,85,.28)}
+.amen article:nth-child(odd){border-right:1px solid rgba(160,125,85,.28)}
+.amen article:nth-child(even){padding-left:36px}
+.amen h3{font-family:var(--serif);font-weight:400;font-size:30px;margin-bottom:10px}
+.amen p{color:var(--trav-2);max-width:40ch}
+@media (max-width:760px){.amen{grid-template-columns:1fr}.amen article,.amen article:nth-child(even){padding:28px 0;border-right:0}}
+
+/* location view */
+.loc{display:grid;grid-template-columns:1.4fr 1fr;gap:clamp(30px,5vw,80px);margin-top:50px;align-items:start}
+@media (max-width:960px){.loc{grid-template-columns:1fr}}
+.map{background:var(--ink-2);border:1px solid rgba(160,125,85,.25);position:relative}
+.map svg{display:block;width:100%;height:auto}
+.map .contour{fill:none;stroke:rgba(160,125,85,.35);stroke-width:.8}
+.map .road{fill:none;stroke:var(--trav-2);stroke-width:1.4;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 2.4s var(--ease)}
+.map.drawn .road{stroke-dashoffset:0}
+.map .water{fill:rgba(143,170,170,.12);stroke:rgba(143,170,170,.5);stroke-width:.8}
+.map text{font-family:var(--sans);font-size:11px;fill:var(--trav-2)}
+.map .site{fill:var(--lamp)}
+.map .site-ring{fill:none;stroke:var(--lamp);animation:ring 2.6s var(--ease) infinite;transform-box:fill-box;transform-origin:center}
+@keyframes ring{0%{transform:scale(.6);opacity:1}100%{transform:scale(2.6);opacity:0}}
+.times{list-style:none;border-top:1px solid rgba(160,125,85,.28)}
+.times li{display:flex;justify-content:space-between;align-items:baseline;padding:18px 0;border-bottom:1px solid rgba(160,125,85,.28);gap:20px}
+.times b{font-family:var(--serif);font-weight:400;font-size:22px;color:var(--trav)}
+.times span{color:var(--mist);font-size:14px;text-align:right}
+
+/* viewing view */
+.book{display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,6vw,100px);margin-top:50px}
+@media (max-width:960px){.book{grid-template-columns:1fr}}
+.field{display:block;margin-bottom:26px}
+.field span{display:block;font-size:13px;color:var(--mist);margin-bottom:6px}
+.field input,.field select{width:100%;background:transparent;border:0;border-bottom:1px solid rgba(231,223,209,.35);color:var(--trav);font:inherit;font-size:18px;padding:10px 0;border-radius:0;transition:border-color .4s}
+.field select option{background:var(--ink)}
+.field input:focus,.field select:focus{outline:none;border-color:var(--lamp)}
+.field.err input{border-color:#d07a63}
+.field .msg{display:none;font-size:12px;color:#e09a86;margin-top:6px}
+.field.err .msg{display:block}
+.cal{border:1px solid rgba(160,125,85,.3);padding:20px}
+.cal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.cal-head b{font-family:var(--serif);font-weight:400;font-size:22px}
+.cal-head button{width:34px;height:34px;border:1px solid rgba(160,125,85,.4);border-radius:50%}
+.cal-head button:disabled{opacity:.3;cursor:default}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center;font-size:14px}
+.cal-grid .dow{font-size:11px;color:var(--mist);padding:6px 0}
+.cal-grid button{aspect-ratio:1;border-radius:50%;transition:background .3s,color .3s;font-variant-numeric:tabular-nums}
+.cal-grid button:hover:not(:disabled){background:rgba(160,125,85,.25)}
+.cal-grid button:disabled{color:rgba(147,161,157,.35);cursor:default}
+.cal-grid button.sel{background:var(--trav);color:var(--ink)}
+.slots{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:18px}
+.slots button{padding:12px 6px;border:1px solid rgba(160,125,85,.4);font-size:14px;transition:.3s}
+.slots button small{display:block;font-size:11px;color:var(--lamp)}
+.slots button.sel{background:var(--trav);color:var(--ink);border-color:var(--trav)}
+.slots button.sel small{color:var(--ink)}
+.summary{margin-top:26px;font-size:15px;color:var(--trav-2);min-height:48px}
+.summary.warn{color:#e09a86}
+.book :disabled{opacity:.55}
+.done{display:none;border:1px solid rgba(201,165,122,.5);padding:34px;margin-top:10px}
+.done.show{display:block;animation:rise .9s var(--ease)}
+@keyframes rise{from{opacity:0;transform:translateY(20px)}}
+.done h3{font-family:var(--serif);font-weight:400;font-size:34px;margin-bottom:10px}
+.done p{color:var(--trav-2)}
+.done small{display:block;margin-top:16px;color:var(--mist);font-size:12px}
+
+.vh1{font-family:var(--serif);font-weight:400;font-size:clamp(48px,7.4vw,124px);line-height:.95;letter-spacing:-.02em;max-width:14ch}
+.vlede{max-width:52ch;color:var(--trav-2);margin-top:26px;font-size:clamp(16px,1.25vw,19px)}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition-duration:.01ms!important}
+  .grain{display:none}
+}
+/* readability over bright frames */
+.cue{text-shadow:0 1px 28px rgba(5,10,11,.45)}
+.btn{white-space:nowrap}
+@media (max-width:600px){
+  .nav li.keep:has(.btn){display:none}
+  .c-approach-h{bottom:clamp(110px,18vh,170px)}
+  .c-approach-l{left:var(--gut);right:var(--gut);bottom:auto;top:clamp(130px,19vh,170px)}
+  .c-thr-l{top:auto;bottom:clamp(60px,10vh,110px);right:var(--gut)}
+  .callout{display:none}
+  .c-night-h{padding:0 var(--gut)}
+  .day-ctl{grid-template-columns:1fr auto}
+  .day-ctl span{grid-column:1/-1}
+  .foot-grid > div:first-child{grid-column:1/-1}
+  .plan .rl{font-size:15px}
+  .plan{padding:10px}
+  .titleblock{min-width:0;left:var(--gut)}
+}
+</style>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+<div class="cursor" aria-hidden="true"><span>View</span></div>
+<div class="horizon" aria-hidden="true"></div>
+
+<!-- loader -->
+<div class="loader" role="status" aria-live="polite">
+  <svg viewBox="0 0 560 140" aria-hidden="true">
+    <path class="ridge" pathLength="1" d="M0 118 C 40 112, 70 96, 110 98 S 170 84, 210 78 S 262 52, 300 56 S 352 74, 392 70 S 446 88, 488 92 S 536 104, 560 106"/>
+    <rect class="house" x="286" y="44" width="22" height="7" rx="1"/>
+  </svg>
+  <div class="meta"><span>NOIRVALE, Lake Vale</span><span class="count">000</span></div>
+</div>
+
+<!-- nav -->
+<header class="nav" id="nav">
+  <a href="#" class="wordmark" data-home aria-label="NOIRVALE home">NOIRVALE</a>
+  <ul>
+    <li><a href="#residences">Residences</a></li>
+    <li><a href="#estate">The estate</a></li>
+    <li><a href="#location">Location</a></li>
+    <li class="keep"><a href="#viewing" class="btn"><i class="dot"></i>Book a private viewing</a></li>
+    <li class="keep"><button class="menu-btn" aria-expanded="false" aria-controls="mm">Menu</button></li>
+  </ul>
+</header>
+<nav class="mobile-menu" id="mm" aria-label="Mobile">
+  <a href="#">Home</a><a href="#residences">Residences</a><a href="#estate">The estate</a><a href="#location">Location</a><a href="#viewing">Private viewing</a>
+</nav>
+
+<main>
+<!-- ───── film ───── -->
+<section class="film" id="film" aria-label="NOIRVALE film">
+  <div class="stage" id="stage">
+    <canvas id="cv" aria-hidden="true"></canvas>
+
+    <!-- blueprint plate -->
+    <div class="blue" id="blue" aria-hidden="true">
+      <div class="grid"></div><div class="backdrop"></div>
+      <div class="plate" id="plate">
+        <img src="img/elevation.webp" alt="" decoding="async">
+        <div class="scan"></div>
+        <svg viewBox="0 0 1376 768" id="bp">
+          <!-- ground & plinth -->
+          <path class="ln f" pathLength="1" d="M300 470 H1160"/>
+          <path class="ln" pathLength="1" d="M301 396 H829 V449 H521 V428 H301 Z"/>
+          <path class="ln f" pathLength="1" d="M829 466 H1120 M987 466 V445"/>
+          <!-- left wing -->
+          <path class="ln" pathLength="1" d="M350 330 H617 V350 H350 Z"/>
+          <path class="ln" pathLength="1" d="M405 350 H542 V412 H405 Z"/>
+          <path class="ln f" pathLength="1" d="M440 350 V412 M475 350 V412 M508 350 V412"/>
+          <!-- central -->
+          <path class="ln" pathLength="1" d="M505 286 H780 V300 H505 Z"/>
+          <path class="ln" pathLength="1" d="M542 300 H622 V412 H542 Z"/>
+          <path class="ln" pathLength="1" d="M622 304 H770 V360 H622 Z"/>
+          <path class="ln" pathLength="1" d="M622 367 H770 V412 H622 Z"/>
+          <path class="ln f" pathLength="1" d="M652 304 V360 M684 304 V360 M716 304 V360 M745 304 V360 M660 367 V412 M735 367 V412"/>
+          <path class="ln f" pathLength="1" d="M622 360 H770 M622 367 H770"/>
+          <path class="ln" pathLength="1" d="M770 300 H806 V412 H770 Z"/>
+          <!-- right wing -->
+          <path class="ln" pathLength="1" d="M806 270 H850 V279 H806 Z"/>
+          <path class="ln" pathLength="1" d="M775 279 H1050 V291 H775 Z"/>
+          <path class="ln" pathLength="1" d="M852 297 H985 V347 H852 Z"/>
+          <path class="ln" pathLength="1" d="M775 349 H1065 V362 H775 Z"/>
+          <path class="ln" pathLength="1" d="M852 364 H985 V412 H852 Z"/>
+          <path class="ln" pathLength="1" d="M807 412 H1060 V422 H807 Z"/>
+          <path class="ln" pathLength="1" d="M852 422 H987 V465 H852 Z"/>
+          <path class="ln f" pathLength="1" d="M885 297 V347 M918 297 V347 M952 297 V347 M885 364 V412 M918 364 V412 M952 364 V412 M885 422 V465 M918 422 V465 M952 422 V465"/>
+          <defs><filter id="lampblur" x="-30%" y="-60%" width="160%" height="220%"><feGaussianBlur stdDeviation="7"/></filter></defs>
+          <g class="glow" aria-hidden="true" filter="url(#lampblur)">
+            <rect x="405" y="350" width="137" height="62"/><rect x="622" y="304" width="148" height="56"/><rect x="622" y="367" width="148" height="45"/>
+            <rect x="852" y="297" width="133" height="50"/><rect x="852" y="364" width="133" height="48"/><rect x="852" y="422" width="135" height="43"/>
+          </g>
+          <!-- dimensions -->
+          <path class="ln b" pathLength="1" d="M301 236 H1120 M301 228 V244 M1120 228 V244 M301 236 L307 233 M301 236 L307 239 M1120 236 L1114 233 M1120 236 L1114 239"/>
+          <path class="ln b" pathLength="1" d="M350 318 H405 M350 312 V324 M405 312 V324"/>
+          <path class="ln b" pathLength="1" d="M1150 412 H1205 M1150 362 H1205 M1150 291 H1205 M1180 291 V412"/>
+          <path class="ln b" pathLength="1" d="M1180 412 L1176 404 H1184 Z M1180 362 L1176 354 H1184 Z M1180 291 L1176 283 H1184 Z"/>
+          <text class="lab l" x="710" y="226" text-anchor="middle">48.60 m overall</text>
+          <text class="lab" x="378" y="308" text-anchor="middle">4.2 m</text>
+          <text class="lab" x="1212" y="415">±0.00 terrace</text>
+          <text class="lab" x="1212" y="365">+3.60 living</text>
+          <text class="lab" x="1212" y="294">+7.20 roof</text>
+          <text class="lab" x="696" y="336" text-anchor="middle">double-height hall</text>
+          <text class="lab" x="918" y="324" text-anchor="middle">principal suite</text>
+          <text class="lab" x="473" y="386" text-anchor="middle">pavilion</text>
+        </svg>
+      </div>
+    </div>
+
+    <div class="vignette" aria-hidden="true"></div>
+    <div class="shadeL" id="shadeL" aria-hidden="true"></div>
+
+    <!-- approach -->
+    <p class="cue place c-approach-p" data-seg="0" data-a="0" data-b=".78">Lake Vale, Kumaon hills</p>
+    <h1 class="cue c-approach-h" data-seg="0" data-a="0" data-b=".55"><span class="h-film split">Some addresses<br>are earned.</span></h1>
+    <p class="cue lede c-approach-l" data-seg="0" data-a=".18" data-b=".62">Twelve private villas on a forested ridge, 1,900 metres above the lake. Each one sits on two acres of oak and deodar.</p>
+    <div class="scrollhint" id="hint"><i></i>Scroll to approach</div>
+
+    <!-- threshold -->
+    <h2 class="cue c-thr-h" data-seg="1" data-a=".04" data-b=".66"><span class="h-film split">Enter slowly.</span></h2>
+    <p class="cue lede c-thr-l" data-seg="1" data-a=".12" data-b=".66">A 4.2-metre bronze door turns on a single pivot and opens onto a double-height hall of honed travertine. The light follows you in.</p>
+    <div class="cue callout c-co1" data-seg="1" data-a=".2" data-b=".55"><i class="pin"></i><i class="line"></i><div><b>Pivot door</b><small>Hand-patinated bronze, 900 kg</small></div></div>
+    <div class="cue callout c-co2" data-seg="1" data-a=".32" data-b=".72"><i class="pin"></i><i class="line"></i><div><b>Travertine walls</b><small>Honed, quarried in Tivoli</small></div></div>
+    <div class="cue callout c-co3" data-seg="1" data-a=".44" data-b=".88"><i class="pin"></i><i class="line"></i><div><b>Lake glass</b><small>9-metre sliding wall, opens fully</small></div></div>
+
+    <!-- edge -->
+    <h2 class="cue c-edge-h" data-seg="2" data-a=".04" data-b=".6"><span class="h-film split">The pool ends where<br>the lake begins.</span></h2>
+    <div class="cue measure" data-seg="2" data-a=".12" data-b=".72" id="measure">
+      <div class="bar"><i></i></div>
+      <div class="read"><span>Cantilever, unsupported</span><em id="mval">0.00 m</em></div>
+    </div>
+
+    <!-- blueprint -->
+    <h2 class="cue c-blue-h" data-seg="3" data-a=".06" data-b=".5"><span class="h-film split">Drawn for the ridge,<br>not the market.</span></h2>
+    <div class="cue titleblock" data-seg="3" data-a=".1" data-b=".9">
+      <div class="wide">Residence R-04, The Ridge</div>
+      <div><span>Drawing</span>North elevation</div>
+      <div><span>Scale</span>1 : 200</div>
+      <div><span>Architect</span>Studio Vale</div>
+      <div><span>Sheet</span>A-201</div>
+    </div>
+
+    <!-- nightfall -->
+    <div class="cue c-night-h" data-seg="4" data-a=".28" data-b="1.01">
+      <span class="place">Completion, winter 2027</span>
+      <h2 class="h-film split">Twelve residences.<br>Four remain.</h2>
+      <div class="acts"><a href="#viewing" class="btn solid">Book a private viewing</a><a href="#residences" class="btn">See the residences</a></div>
+    </div>
+
+    <nav class="chapter" aria-label="Chapters" id="chapters">
+      <button data-go="0"><span>Approach</span><i></i></button>
+      <button data-go="1"><span>Threshold</span><i></i></button>
+      <button data-go="2"><span>The edge</span><i></i></button>
+      <button data-go="3"><span>Drawing</span><i></i></button>
+      <button data-go="4"><span>Nightfall</span><i></i></button>
+    </nav>
+  </div>
+</section>
+
+<!-- ───── residences preview ───── -->
+<section class="sec" id="homes" aria-labelledby="homes-h">
+  <div class="sec-head">
+    <h2 class="h2" id="homes-h" data-rv>Three houses,<br>one ridge.</h2>
+    <p data-rv>Every residence is placed by the trees, not by a grid. No two share a view, and none can see another from inside.</p>
+  </div>
+
+  <article class="res">
+    <a class="shot mask-rv" href="#residences" data-plan="ridge" data-cursor="Plan"><img src="img/pool.webp" alt="Cantilevered infinity pool at sunset above the lake valley" loading="lazy"></a>
+    <div class="info" data-rv>
+      <h3>The Ridge</h3>
+      <p>The crest of the site. A 7.2-metre pool cantilevers over the valley, and the principal suite takes the whole upper floor.</p>
+      <div class="facts"><div><b>4</b>bedrooms</div><div><b>6,400</b>sq ft</div><div><b>₹18.5 Cr</b>from</div></div>
+      <a href="#residences" class="btn" data-plan="ridge">View floor plan</a>
+      <div class="status"><i></i>2 of 4 available</div>
+    </div>
+  </article>
+
+  <article class="res">
+    <a class="shot mask-rv" href="#residences" data-plan="shore" data-cursor="Plan"><img src="img/night.webp" alt="Villa at night with lit windows reflected in the lake" loading="lazy"></a>
+    <div class="info" data-rv>
+      <h3>The Shore</h3>
+      <p>Set low beside the water, with a private jetty and a living room that opens fully to the lake on three sides.</p>
+      <div class="facts"><div><b>3</b>bedrooms</div><div><b>4,900</b>sq ft</div><div><b>₹13.2 Cr</b>from</div></div>
+      <a href="#residences" class="btn" data-plan="shore">View floor plan</a>
+      <div class="status"><i></i>1 of 5 available</div>
+    </div>
+  </article>
+
+  <article class="res">
+    <a class="shot mask-rv" href="#residences" data-plan="canopy" data-cursor="Plan"><img src="img/aerial.webp" alt="Aerial view of the villa on a forested ridge above misty hills at dusk" loading="lazy"></a>
+    <div class="info" data-rv>
+      <h3>The Canopy</h3>
+      <p>Raised into the deodar canopy on stone piers. A roof terrace looks over the mist line to the snow peaks on clear mornings.</p>
+      <div class="facts"><div><b>5</b>bedrooms</div><div><b>7,800</b>sq ft</div><div><b>₹24 Cr</b>from</div></div>
+      <a href="#residences" class="btn" data-plan="canopy">View floor plan</a>
+      <div class="status"><i></i>1 of 3 available</div>
+    </div>
+  </article>
+</section>
+</main>
+
+<footer class="foot" id="foot">
+  <div class="big" id="bigword" aria-hidden="true">NOIRVALE</div>
+  <div class="foot-grid">
+    <div><h4>Private viewings</h4><p>Tuesday to Sunday, by appointment.<br>Our concierge collects you from Pantnagar airport.</p><p style="margin-top:22px"><a href="#viewing" class="btn"><i class="dot"></i>Book a private viewing</a></p></div>
+    <div><h4>Explore</h4><a href="#residences">Residences</a><a href="#estate">The estate</a><a href="#location">Location</a></div>
+    <div><h4>Sales gallery</h4><p>Lake Vale Road<br>Kumaon, Uttarakhand</p></div>
+    <div><h4>Contact</h4><p>+91 00000 00000<br>concierge@noirvale.example</p></div>
+  </div>
+  <div class="fine"><span>A concept website. NOIRVALE, its residences and prices are fictional.</span><span>Design and build by Arqora</span></div>
+</footer>
+
+<!-- ───── views ───── -->
+<section class="view" id="v-residences" aria-label="Residences" tabindex="-1">
+  <div class="view-in">
+    <a href="#" class="back">Back to the film</a>
+    <h1 class="vh1">Residences</h1>
+    <p class="vlede">Hover or tap a room to see its size. Glass walls are marked in amber; every plan opens to the lake on its south side.</p>
+    <div class="tabs" role="tablist" aria-label="Residence type">
+      <button role="tab" aria-selected="true" data-t="ridge">The Ridge</button>
+      <button role="tab" aria-selected="false" data-t="shore">The Shore</button>
+      <button role="tab" aria-selected="false" data-t="canopy">The Canopy</button>
+    </div>
+    <div class="plan-wrap">
+      <div class="plan"><div class="north">N <svg width="14" height="18" viewBox="0 0 14 18"><path d="M7 0 L13 18 L7 13 L1 18 Z" fill="none" stroke="currentColor"/></svg></div><svg id="plan" viewBox="0 0 600 420" role="group" aria-label="Floor plan, select a room"></svg></div>
+      <div class="readout">
+        <h3 id="r-name">The Ridge</h3>
+        <p id="r-desc" style="color:var(--trav-2)"></p>
+        <p class="price" id="r-price"></p>
+        <div class="room-now" aria-live="polite"><b id="r-room">Choose a room</b><span id="r-area">Hover the plan or the list below</span></div>
+        <ul class="rlist" id="r-list"></ul>
+        <p style="margin-top:34px"><a href="#viewing" class="btn solid">Book a private viewing</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="view" id="v-estate" aria-label="The estate" tabindex="-1">
+  <div class="view-in">
+    <a href="#" class="back">Back to the film</a>
+    <h1 class="vh1">Sixty acres, mostly forest.</h1>
+    <p class="vlede">Only nine percent of the estate is built on. The rest stays oak, deodar and rhododendron, managed by a resident forester.</p>
+    <div class="day" id="day"><canvas id="dayc" role="img" aria-label="Residence R-04 at night, seen from the lake as the camera rises"></canvas></div>
+    <div class="day-ctl"><span>Drag to rise over the lake</span><input type="range" id="dayr" min="0" max="191" value="0" aria-label="Camera height above the lake" aria-valuetext="2 metres"><output id="dayo">2 m</output></div>
+    <div class="amen">
+      <article><h3>The lake house</h3><p>A shared boathouse with a 25-metre indoor pool, a sauna in cedar and a wood-fired kitchen on the water.</p></article>
+      <article><h3>Forest trails</h3><p>Eleven kilometres of private paths, lit at ankle height so the night sky stays dark.</p></article>
+      <article><h3>The observatory</h3><p>A 14-inch telescope under a sliding roof. Lake Vale sits in one of the darkest skies in north India.</p></article>
+      <article><h3>Residence care</h3><p>Housekeeping, a resident chef on request and full maintenance while you are away.</p></article>
+    </div>
+    <figure style="margin-top:90px"><img src="img/interior.webp" alt="Double-height travertine living room opening to the lake" loading="lazy" style="width:100%;aspect-ratio:16/8;object-fit:cover"></figure>
+  </div>
+</section>
+
+<section class="view" id="v-location" aria-label="Location" tabindex="-1">
+  <div class="view-in">
+    <a href="#" class="back">Back to the film</a>
+    <h1 class="vh1">Far enough.</h1>
+    <p class="vlede">Lake Vale sits above the cloud line in the Kumaon hills, close enough to fly in for a weekend, far enough that nobody passes by.</p>
+    <div class="loc">
+      <div class="map" id="map">
+        <svg viewBox="0 0 640 460" role="img" aria-label="Stylised map of Lake Vale and the approach road">
+          <g class="contours"></g>
+          <path class="water" d="M150 300 C 190 250, 270 240, 320 262 S 430 300, 470 286 S 540 250, 560 276 C 572 300, 520 336, 460 338 S 350 330, 300 344 S 190 360, 160 340 C 140 328, 138 314, 150 300 Z"/>
+          <path class="road" pathLength="1" d="M20 440 C 80 420, 90 380, 130 372 S 210 392, 250 370 S 280 320, 330 330 S 390 360, 400 300 S 380 220, 410 190"/>
+          <circle class="site" cx="410" cy="186" r="5"/><circle class="site-ring" cx="410" cy="186" r="9"/>
+          <text x="424" y="182">NOIRVALE</text>
+          <text x="300" y="300" style="fill:rgba(190,210,208,.8)">Lake Vale</text>
+          <text x="30" y="428">to Nainital</text>
+          <text x="610" y="84" text-anchor="end">Nanda Devi range, 110 km</text>
+          <path d="M560 62 l10 -16 l8 10 l7 -14 l12 20" fill="none" stroke="rgba(231,223,209,.5)"/>
+        </svg>
+      </div>
+      <ul class="times">
+        <li><b>Nainital</b><span>45 minutes by road</span></li>
+        <li><b>Pantnagar airport</b><span>1 hr 50 min, with concierge transfer</span></li>
+        <li><b>Kathgodam railway</b><span>1 hr 20 min</span></li>
+        <li><b>New Delhi</b><span>1 hr flight, or 6 hrs by road</span></li>
+        <li><b>Altitude</b><span>1,900 m, above the summer haze</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="view" id="v-viewing" aria-label="Book a private viewing" tabindex="-1">
+  <div class="view-in">
+    <a href="#" class="back">Back to the film</a>
+    <h1 class="vh1">Come and see the light.</h1>
+    <p class="vlede">Viewings last about three hours and include lunch at the lake house. We recommend the 5:30 pm slot to walk the ridge at golden hour.</p>
+    <form class="book" id="bookf" novalidate>
+      <div>
+        <label class="field" id="f-name"><span>Full name</span><input name="name" autocomplete="name" required aria-describedby="e-name"><em class="msg" id="e-name">Enter your name so the concierge knows who to expect.</em></label>
+        <label class="field" id="f-phone"><span>Phone</span><input name="phone" type="tel" autocomplete="tel" inputmode="tel" required aria-describedby="e-phone"><em class="msg" id="e-phone">Enter a phone number with at least 10 digits.</em></label>
+        <label class="field"><span>Email (optional)</span><input name="email" type="email" autocomplete="email"></label>
+        <label class="field"><span>Residence</span>
+          <select name="res" id="f-res"><option>The Ridge</option><option>The Shore</option><option>The Canopy</option><option>Not sure yet</option></select></label>
+        <label class="field"><span>Guests</span><select name="guests"><option>Just me</option><option selected>2 people</option><option>3 to 4 people</option></select></label>
+      </div>
+      <div>
+        <div class="cal" aria-label="Choose a date">
+          <div class="cal-head"><button type="button" id="calp" aria-label="Previous month">‹</button><b id="calm" aria-live="polite"></b><button type="button" id="caln" aria-label="Next month">›</button></div>
+          <div class="cal-grid" id="calg"></div>
+          <div class="slots" id="slots" role="group" aria-label="Time">
+            <button type="button" data-s="10:00 am" aria-pressed="false">10:00</button><button type="button" data-s="12:30 pm" aria-pressed="false">12:30</button><button type="button" data-s="3:00 pm" aria-pressed="false">15:00</button><button type="button" data-s="5:30 pm" aria-pressed="false">17:30<small>Golden hour</small></button>
+          </div>
+        </div>
+        <p class="summary" id="sum" aria-live="polite">Choose a date and time. Viewings run Tuesday to Sunday.</p>
+        <button class="btn solid" type="submit">Request viewing</button>
+        <div class="done" id="done" role="status" tabindex="-1"><h3>Viewing requested</h3><p id="done-t"></p><small>This is a concept website, so the request isn't sent anywhere.</small></div>
+      </div>
+    </form>
+  </div>
+</section>
+
+<script>
+(()=>{
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const clamp=(v,a=0,b=1)=>Math.min(b,Math.max(a,v));
+const ease=t=>1-Math.pow(1-t,3);
+const smooth=(a,b,v)=>{const t=clamp((v-a)/(b-a));return t*t*(3-2*t)};
+
+/* ───── frame sequences ───── */
+const N=192;
+const CLIPS=['approach','threshold','edge',null,'nightfall'];
+const SEGLEN=[2.7,2.6,2.2,2.9,2.6];          // viewport-heights per chapter
+const TOTAL=SEGLEN.reduce((a,b)=>a+b,0);
+const imgs={};
+CLIPS.forEach(c=>{ if(c) imgs[c]=new Array(N).fill(null); });
+// frames ship as 4 interleaved bundles per clip (every 4th frame each): bytes are untouched,
+// bundle 0 of every clip gives the whole film a smooth skeleton, the others fill it in
+function frameAt(c,i){
+  const a=imgs[c]; if(a[i]) return a[i];
+  for(let d=1;d<N;d++){ if(a[i-d]) return a[i-d]; if(a[i+d]) return a[i+d]; }
+  return null;
+}
+let manifest=null;
+async function fetchBundle(c,k,onBytes){
+  const res=await fetch(`pack/${c}-${k}.webp`,{credentials:'same-origin'});
+  if(!res.ok) throw new Error('bundle '+c+k);
+  let buf;
+  if(res.body && onBytes){
+    const rd=res.body.getReader(), parts=[]; let n=0;
+    for(;;){ const {done,value}=await rd.read(); if(done) break; parts.push(value); n+=value.length; onBytes(value.length); }
+    buf=new Uint8Array(n); let o=0; for(const p of parts){ buf.set(p,o); o+=p.length; }
+  } else buf=new Uint8Array(await res.arrayBuffer());
+  await Promise.all(manifest[c][k].map(([i,off,len])=>new Promise(r=>{
+    const im=new Image();
+    im.src=URL.createObjectURL(new Blob([buf.subarray(off,off+len)],{type:'image/webp'}));
+    // decode off the scroll path so scrubbing never waits on it
+    im.decode().then(()=>{ imgs[c][i]=im; r(); },()=>{ im.onload=()=>{imgs[c][i]=im;r();}; im.onerror=()=>r(); if(im.complete) r(); });
+  })));
+}
+/* ───── canvas ───── */
+const cv=$('#cv'), ctx=cv.getContext('2d');
+let W=0,H=0,DPR=1;
+function size(){
+  DPR=Math.min(devicePixelRatio||1,2);
+  W=cv.clientWidth; H=cv.clientHeight;
+  cv.width=Math.round(W*DPR); cv.height=Math.round(H*DPR);
+  ctx.imageSmoothingQuality='high';
+  fitPlate(); drawn=-1;
+}
+function cover(im,alpha=1,zoom=1){
+  if(!im) return;
+  const iw=im.naturalWidth, ih=im.naturalHeight;
+  const s=Math.max(cv.width/iw, cv.height/ih)*zoom;
+  const w=iw*s, h=ih*s;
+  ctx.globalAlpha=alpha;
+  ctx.drawImage(im,(cv.width-w)/2,(cv.height-h)/2,w,h);
+  ctx.globalAlpha=1;
+}
+
+/* blueprint plate fits the villa: cover on wide screens, villa-width on narrow */
+const plate=$('#plate');
+function fitPlate(){
+  const vw=innerWidth, vh=$('#stage').clientHeight;
+  const coverS=Math.max(vw/1376, vh/768);
+  const focusS=(vw*0.94)/ (1240-330);  // villa + dimension labels
+  const s=Math.min(coverS, Math.max(focusS, Math.min(vw/1376,vh/768)));
+  const cx=735, cy=370;  // villa centre in plate px
+  let tx=vw/2-cx*s, ty=vh*0.56-cy*s;
+  const pw=1376*s, ph=768*s;
+  // keep the photo edge-to-edge whenever it is large enough to cover
+  tx = pw>=vw ? clamp(tx, vw-pw, 0) : (vw-pw)/2;
+  ty = ph>=vh ? clamp(ty, vh-ph, 0) : clamp(ty, 0, vh-ph);
+  plate.style.transform=`translate(${tx}px,${ty}px) scale(${s})`;
+  plateLetterbox = (pw<vw-2||ph<vh-2) ? 1 : 0;
+}
+
+/* ───── split headlines ───── */
+$$('.split').forEach(el=>{
+  const html=el.innerHTML.split(/<br\s*\/?>/i);
+  const plain=html.join(' ').replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim();
+  el.innerHTML=`<span class="sr">${plain}</span><span aria-hidden="true">`+html.map(line=>line.trim().split(' ').map(w=>`<span class="w">${[...w].map(ch=>`<span class="c">${ch}</span>`).join('')}</span>`).join(' ')).join('<br>')+'</span>';
+});
+
+/* ───── film scroll engine ───── */
+const film=$('#film');
+film.style.height=`calc(${TOTAL*100}vh + 100vh)`;
+film.style.height=`calc(${TOTAL*100}svh + 100svh)`;
+const cues=$$('.cue').map(el=>{ el.inert=true; return {el,seg:+el.dataset.seg,a:+el.dataset.a,b:+el.dataset.b,chars:$$('.c',el),lines:$$('.line',el),night:el.classList.contains('c-night-h'),last:-1,live:false}; });
+const blue=$('#blue'), bp=$('#bp'), measure=$('#measure'), mval=$('#mval'), hint=$('#hint');
+const chapBtns=$$('#chapters button'), chapNav=$('#chapters');
+let drawn=-1, lastBlue=-1, lastSeg=-1, filmBright=false;
+const shadeL=$('#shadeL');
+const lns=$$('#bp .ln');
+let plateLetterbox=0;
+
+function filmState(){
+  const r=film.getBoundingClientRect();
+  const span=film.offsetHeight-innerHeight;
+  const g=clamp(-r.top/span)*TOTAL;           // global, in chapters' units
+  let acc=0, seg=0, p=0;
+  for(let s=0;s<SEGLEN.length;s++){
+    if(g<=acc+SEGLEN[s]||s===SEGLEN.length-1){ seg=s; p=clamp((g-acc)/SEGLEN[s]); break; }
+    acc+=SEGLEN[s];
+  }
+  return {g,seg,p,inView:r.bottom>0&&r.top<innerHeight};
+}
+
+function render(){
+  const st=filmState(); if(!st.inView) return;
+  const {seg,p}=st;
+  const key=seg+':'+p.toFixed(4)+':'+W;
+  if(key===drawn) return; drawn=key;
+
+  // canvas — chapters cut through a short dip to dark with a slight push, never a ghosted blend
+  ctx.fillStyle='#05090a'; ctx.fillRect(0,0,cv.width,cv.height);
+  const clip=CLIPS[seg];
+  let blueOp=0;
+  if(clip){
+    const fi=Math.round(p*(N-1));
+    let alpha=1, z=1;
+    if(seg===0) z=1.06-0.06*ease(p);                                // opening breath
+    const prevIsClip = seg>0 && CLIPS[seg-1];
+    if(prevIsClip) { alpha*=smooth(0,.05,p); z*=1.035-0.035*smooth(0,.12,p); }
+    else if(seg===4) alpha*=smooth(0,.07,p);
+    if(CLIPS[seg+1] && seg<2) { const out=smooth(.95,1,p); alpha*=1-out; z*=1+out*.035; }
+    cover(frameAt(clip,fi),alpha,z);
+    if(seg===2) blueOp=smooth(.74,.94,p);
+  } else {
+    blueOp=1-smooth(.9,1,p);
+  }
+  if(blueOp!==lastBlue){ blue.style.opacity=blueOp; lastBlue=blueOp; }
+  if(seg===3||seg===2){
+    const bpP = seg===3 ? p : 0;
+    const draw=clamp(bpP/.46);
+    // construction order: plinth → slabs → glazing → dimensions
+    lns.forEach((el,i)=>{ const t=ease(clamp(draw*1.8 - (i/lns.length)*0.8)); el.style.strokeDashoffset=(1-t).toFixed(4); });
+    bp.style.setProperty('--t',smooth(.32,.5,bpP).toFixed(3));
+    bp.style.setProperty('--g',(smooth(.42,.54,bpP)*(1-smooth(.62,.8,bpP))*.55).toFixed(3));
+    const rev=ease(clamp((bpP-.52)/.3));
+    plate.style.setProperty('--rev',rev.toFixed(4));
+    plate.style.setProperty('--scan',(rev>0&&rev<1?1:0));
+    blue.style.setProperty('--bd',(rev*plateLetterbox).toFixed(3));
+    bp.style.opacity = 1-0.6*rev;
+  }
+  // the interface takes on lamplight as night falls
+  document.documentElement.style.setProperty('--glow', seg===4 ? smooth(.1,.6,p).toFixed(3) : 0);
+
+  // cues — only touch the ones in (or just leaving) the current chapter
+  for(const c of cues){
+    let v=0;
+    if(c.seg===seg){ v = c.b>1 ? smooth(c.a,c.a+.09,p) : smooth(c.a,c.a+.09,p)*(1-smooth(c.b-.09,c.b,p)); }
+    if(RM) v=v>0.01?1:0;
+    if(v===0 && c.last===0) continue;
+    c.last=v;
+    c.el.style.opacity=v>0.001? Math.min(1,v*1.4).toFixed(3):0;
+    const live=v>.6;
+    if(live!==c.live){ c.live=live; c.el.classList.toggle('live',live); c.el.inert=!live; }
+    const ty=(1-v)*26;
+    c.el.style.transform = c.night ? `translateY(${ty}px)` : `translateY(${ty}px)`;
+    if(c.chars.length){
+      const n=c.chars.length;
+      for(let i=0;i<n;i++){
+        const t=clamp(v*1.7 - (i/n)*0.7);
+        c.chars[i].style.transform=`translateY(${((1-ease(t))*108).toFixed(1)}%)`;
+      }
+    }
+    c.lines.forEach(l=>l.style.transform=`scaleX(${ease(clamp(v*1.3))})`);
+  }
+
+  // cantilever measure
+  if(seg===2){
+    const m=ease(clamp((p-.14)/.4));
+    measure.style.setProperty('--m',(m*0.62).toFixed(4));
+    mval.textContent=(m*7.2).toFixed(2)+' m';
+  }
+  hint.style.opacity = seg===0 && p<.04 ? 1 : 0;
+  if(seg!==lastSeg){
+    lastSeg=seg;
+    chapBtns.forEach((b,i)=>{ b.classList.toggle('on',i===seg); b.setAttribute('aria-current', i===seg ? 'step' : 'false'); });
+    chapNav.classList.toggle('off', seg===3); chapNav.inert = seg===3;
+    shadeL.style.opacity = seg===1 ? 1 : 0;
+    window.__prioritise && CLIPS[seg+1] && window.__prioritise(CLIPS[seg+1]);
+  }
+  // bright chapters (travertine interior, daylight elevation) get a solid nav
+  filmBright = (seg===1) || (seg===3 && p>.5);
+}
+
+/* ───── smooth scroll (loaded async so a slow CDN never blocks the page) ───── */
+let lenis=null, lenisWanted=false;
+function startLenis(){
+  if(RM || lenis || !window.Lenis) return;
+  lenis=new Lenis({lerp:.085,wheelMultiplier:.9,smoothWheel:true});
+  if(!lenisWanted || current) lenis.stop();
+}
+(()=>{ const sc=document.createElement('script'); sc.src='https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js'; sc.async=true; sc.onload=startLenis; document.head.append(sc); })();
+function goTo(y){ lenis? lenis.scrollTo(y,{duration:2.2,easing:t=>1-Math.pow(1-t,4)}) : scrollTo({top:y,behavior:RM?'auto':'smooth'}); }
+chapBtns.forEach((b,i)=>b.addEventListener('click',()=>{
+  const acc=SEGLEN.slice(0,i).reduce((a,c)=>a+c,0)+ (i===4?1.5:0.35);
+  const span=film.offsetHeight-innerHeight;
+  CLIPS[i] && window.__prioritise && window.__prioritise(CLIPS[i]);
+  goTo(film.offsetTop + acc/TOTAL*span);
+}));
+
+/* ───── page reveals, parallax, footer fill ───── */
+const io=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} }),{rootMargin:'0px 0px -12% 0px'});
+$$('[data-rv],.mask-rv').forEach(el=>io.observe(el));
+const shots=$$('.res .shot');
+const bigword=$('#bigword'), foot=$('#foot');
+let lastY=0; const nav=$('#nav');
+function page(){
+  const y=scrollY;
+  const filmEnd=film.offsetTop+film.offsetHeight-innerHeight;
+  // reads first
+  let shotT=null, footP=null;
+  if(y>filmEnd-innerHeight*.2){
+    shotT=shots.map(s=>{ const r=s.getBoundingClientRect(); return (r.bottom<0||r.top>innerHeight)?null:(r.top+r.height/2-innerHeight/2)/innerHeight; });
+    const fr=foot.getBoundingClientRect();
+    footP=clamp((innerHeight-fr.top)/fr.height);
+  }
+  // then writes
+  if(shotT) shotT.forEach((t,i)=>{ if(t!==null) shots[i].firstElementChild.style.setProperty('--py',(t*-9-6).toFixed(2)+'%'); });
+  if(footP!==null) bigword.style.setProperty('--fill',(footP*100).toFixed(1)+'%');
+  if(!document.body.classList.contains('locked')){
+    if(y>lastY+4 && y>innerHeight*.5) nav.classList.add('hide');
+    if(y<lastY-4) nav.classList.remove('hide');
+    nav.classList.toggle('solid', y>filmEnd-2 || (filmBright && y>8));
+  }
+  lastY=y;
+}
+
+function loop(t){
+  if(lenis) lenis.raf(t);
+  if(!current){ render(); page(); }
+  requestAnimationFrame(loop);
+}
+
+/* ───── cursor (fine pointers only) ───── */
+const cur=$('.cursor');
+if(matchMedia('(hover:hover) and (pointer:fine)').matches && !RM){
+  let cx=-100,cy=-100,tx=-100,ty=-100, moving=false;
+  const step=()=>{ cx+=(tx-cx)*.18; cy+=(ty-cy)*.18; cur.style.transform=`translate(${cx}px,${cy}px)`;
+    if(Math.abs(tx-cx)+Math.abs(ty-cy)>.3) requestAnimationFrame(step); else moving=false; };
+  addEventListener('pointermove',e=>{tx=e.clientX;ty=e.clientY; if(!moving){moving=true;requestAnimationFrame(step);} },{passive:true});
+  document.addEventListener('pointerover',e=>{
+    const t=e.target.closest('[data-cursor]');
+    cur.classList.toggle('big',!!t); if(t) cur.firstElementChild.textContent=t.dataset.cursor;
+  });
+} else cur.remove();
+
+/* ───── views (hash routing) ───── */
+const VIEWS=['residences','estate','location','viewing'];
+const horizon=$('.horizon');
+const bgRegions=[$('main'),$('#foot')];
+let current=null, openedInPage=false, opener=null, pending=null;
+function setInert(on){ bgRegions.forEach(el=>el.inert=on); }
+function route(){
+  const h=location.hash.slice(1);
+  const want=VIEWS.includes(h)?h:null;
+  if(want===current && !pending) return;
+  clearTimeout(pending);
+  const swap=()=>{
+    pending=null;
+    $$('.view').forEach(v=>{ v.classList.remove('open'); v.classList.remove('entering'); });
+    if(want){
+      const v=$('#v-'+want); v.classList.add('open'); v.scrollTop=0;
+      document.body.classList.add('locked'); lenis&&lenis.stop(); setInert(true);
+      nav.classList.remove('hide'); nav.classList.add('solid');
+      if(!RM){ v.classList.add('entering'); requestAnimationFrame(()=>requestAnimationFrame(()=>v.classList.remove('entering'))); }
+      setTimeout(()=>v.focus({preventScroll:true}),60);
+      if(want==='location') setTimeout(()=>$('#map').classList.add('drawn'),300);
+      if(want==='estate') estateOpen();
+    } else {
+      document.body.classList.remove('locked'); setInert(false);
+      lenisWanted=true; lenis&&lenis.start();
+      if(opener && document.contains(opener)) opener.focus({preventScroll:true});
+      opener=null; openedInPage=false;
+    }
+    $$('.nav a[href^="#"]').forEach(a=>{ const on=a.getAttribute('href')==='#'+want; a.toggleAttribute('aria-current',on); if(on) a.setAttribute('aria-current','page'); });
+    current=want;
+  };
+  if(RM){ swap(); return; }
+  horizon.classList.remove('run'); void horizon.offsetWidth; horizon.classList.add('run');
+  pending=setTimeout(swap,420);
+}
+function closeView(){
+  if(!current) return;
+  if(openedInPage) history.back();
+  else { history.replaceState(null,'',location.pathname+location.search); route(); }
+}
+// remember what opened a view, so Back and focus return there
+document.addEventListener('click',e=>{
+  const a=e.target.closest('a[href^="#"]'); if(!a) return;
+  const h=a.getAttribute('href');
+  if(h==='#'||a.hasAttribute('data-home')){ e.preventDefault(); closeMenu(); if(current) closeView(); else if(a.hasAttribute('data-home')) goTo(0); return; }
+  if(VIEWS.includes(h.slice(1))){ if(!current){ opener=a; } openedInPage=true; closeMenu(); }
+});
+addEventListener('hashchange',route);
+addEventListener('keydown',e=>{
+  if(e.key!=='Escape') return;
+  if(mm.classList.contains('open')){ closeMenu(); mbtn.focus(); return; }
+  if(current) closeView();
+});
+
+// mobile menu
+const mm=$('#mm'), mbtn=$('.menu-btn');
+mm.inert=true;
+function closeMenu(){ if(!mm.classList.contains('open')) return; mm.classList.remove('open'); mm.inert=true; mbtn.setAttribute('aria-expanded','false'); mbtn.textContent='Menu'; if(!current) document.body.classList.remove('locked'); lenis&&!current&&lenis.start(); }
+mbtn.addEventListener('click',()=>{
+  if(mm.classList.contains('open')) return closeMenu();
+  mm.classList.add('open'); mm.inert=false; mbtn.setAttribute('aria-expanded','true'); mbtn.textContent='Close';
+  document.body.classList.add('locked'); lenis&&lenis.stop();
+  setTimeout(()=>$('a',mm).focus({preventScroll:true}),200);
+});
+
+/* ───── residences plans ───── */
+const PLANS={
+  ridge:{name:'The Ridge',price:'From ₹18.5 Cr, 4 bedrooms',desc:'Two levels on the crest. The living hall is double height and the pool cantilevers 7.2 metres over the valley.',
+    rooms:[['Entrance hall',40,40,110,90,'420 sq ft'],['Living hall',150,40,200,170,'1,180 sq ft'],['Dining',350,40,120,110,'560 sq ft'],['Kitchen',470,40,90,110,'410 sq ft'],
+           ['Library',40,130,110,80,'330 sq ft'],['Stair and lift',350,150,70,60,'Glass lift to roof'],['Spa and steam',420,150,140,80,'390 sq ft'],
+           ['Guest suite',40,210,150,110,'610 sq ft'],['Bedroom 3',190,210,120,110,'480 sq ft'],['Bedroom 4',310,210,110,110,'450 sq ft'],
+           ['Pool terrace',420,230,140,90,'620 sq ft',1],['Infinity pool',260,330,300,52,'7.2 m cantilever',1]],
+    glass:[[40,320,420,320],[560,150,560,230]]},
+  shore:{name:'The Shore',price:'From ₹13.2 Cr, 3 bedrooms',desc:'One long level beside the water. The living room opens on three sides and steps down to a private jetty.',
+    rooms:[['Entrance',40,60,90,80,'280 sq ft'],['Living room',130,60,220,160,'1,040 sq ft'],['Kitchen and dining',350,60,140,110,'690 sq ft'],['Pantry',490,60,70,110,'210 sq ft'],
+           ['Principal suite',40,140,90,180,'720 sq ft'],['Bedroom 2',350,170,110,150,'440 sq ft'],['Bedroom 3',460,170,100,150,'420 sq ft'],
+           ['Lake deck',130,220,220,100,'760 sq ft',1],['Jetty',210,320,60,80,'18 m long',1]],
+    glass:[[130,220,350,220],[40,320,130,320],[350,320,560,320]]},
+  canopy:{name:'The Canopy',price:'From ₹24 Cr, 5 bedrooms',desc:'Raised on stone piers into the deodar. Three floors and a roof terrace above the mist line.',
+    rooms:[['Gallery',40,40,160,80,'560 sq ft'],['Great room',200,40,220,180,'1,420 sq ft'],['Kitchen',420,40,140,100,'580 sq ft'],['Family room',420,140,140,120,'460 sq ft'],
+           ['Principal suite',40,120,160,140,'900 sq ft'],['Bedroom 2',40,260,120,100,'440 sq ft'],['Bedroom 3',160,260,120,100,'430 sq ft'],['Bedroom 4',280,260,120,100,'430 sq ft'],
+           ['Bedroom 5',400,260,160,100,'520 sq ft'],['Canopy deck',200,220,220,40,'40 m long',1]],
+    glass:[[200,220,420,220],[40,360,560,360]]}
+};
+const planSvg=$('#plan'), rList=$('#r-list'); let staggerRooms=true;
+function showPlan(k){
+  const P=PLANS[k]; if(!P) return;
+  $$('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.t===k));
+  $('#r-name').textContent=P.name; $('#r-desc').textContent=P.desc; $('#r-price').textContent=P.price;
+  $('#r-room').textContent='Choose a room'; $('#r-area').textContent='Hover the plan or the list below';
+  const xs=P.rooms.flatMap(r=>[r[1],r[1]+r[3]]), ys=P.rooms.flatMap(r=>[r[2],r[2]+r[4]]);
+  let s='';
+  // outer walls drawn first, rooms on top
+  s+=`<rect class="wall" x="${Math.min(...xs)}" y="${Math.min(...ys)}" width="${Math.max(...xs)-Math.min(...xs)}" height="${Math.max(...ys.filter((y,i)=>!P.rooms[Math.floor(i/2)][6]))-Math.min(...ys)}" pathLength="1" style="stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1.6s var(--ease)"/>`;
+  P.rooms.forEach((r,i)=>{
+    s+=`<g data-i="${i}"><rect class="room${r[6]?' out':''}" x="${r[1]}" y="${r[2]}" width="${r[3]}" height="${r[4]}" tabindex="0" role="button" aria-label="${r[0]}, ${r[5]}"/>`+
+       `<text class="rl" x="${r[1]+8}" y="${r[2]+16}">${r[0]}</text></g>`;
+  });
+  P.glass.forEach(g=>{ s+=`<line class="glass" x1="${g[0]}" y1="${g[1]}" x2="${g[2]}" y2="${g[3]}"/>`; });
+  s+=`<text class="rl" x="300" y="412" text-anchor="middle" style="fill:var(--bronze-hi)">Lake side</text>`;
+  planSvg.innerHTML=s;
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{ const w=$('.wall',planSvg); if(w) w.style.strokeDashoffset=0; }));
+  if(!RM){ $$('.room',planSvg).forEach((el,j)=>{ setTimeout(()=>{ el.classList.add('hl'); setTimeout(()=>el.classList.remove('hl'),380); }, 500+j*70); }); }
+  rList.innerHTML=P.rooms.map((r,i)=>`<li data-i="${i}"><button type="button"><span>${r[0]}</span><span>${r[5]}</span></button></li>`).join('');
+  const hl=i=>{
+    $$('.room',planSvg).forEach((el,j)=>el.classList.toggle('hl',j===i));
+    $$('li',rList).forEach((el,j)=>el.classList.toggle('hl',j===i));
+    staggerRooms=false;
+    if(i>-1){ $('#r-room').textContent=P.rooms[i][0]; $('#r-area').textContent=P.rooms[i][5]; }
+  };
+  $$('g[data-i]',planSvg).forEach(g=>{ const i=+g.dataset.i; ['pointerenter','focusin','click'].forEach(ev=>g.addEventListener(ev,()=>hl(i))); });
+  $$('li',rList).forEach(li=>['pointerenter','focusin','click'].forEach(ev=>li.addEventListener(ev,()=>hl(+li.dataset.i))));
+  $$('.room',planSvg).forEach((el,i)=>el.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); hl(i);} }));
+  const sel=$('#f-res'); if(sel) sel.value=P.name;
+}
+$$('.tabs button').forEach(b=>b.addEventListener('click',()=>showPlan(b.dataset.t)));
+$$('[data-plan]').forEach(a=>a.addEventListener('click',()=>showPlan(a.dataset.plan)));
+showPlan('ridge');
+
+/* ───── estate: rise over the lake (scrubs the nightfall clip) ───── */
+const dayc=$('#dayc'), dctx=dayc.getContext('2d'), dayr=$('#dayr'), dayo=$('#dayo');
+let dayTarget=0, dayCur=0, dayRaf=0;
+function dayDraw(){
+  const r=dayc.getBoundingClientRect(), d=Math.min(devicePixelRatio||1,2);
+  if(dayc.width!==Math.round(r.width*d)){ dayc.width=Math.round(r.width*d); dayc.height=Math.round(r.height*d); dctx.imageSmoothingQuality='high'; }
+  const im=frameAt('nightfall',Math.round(dayCur)); dctx.fillStyle='#05090a'; dctx.fillRect(0,0,dayc.width,dayc.height);
+  if(im){ const sc=Math.max(dayc.width/im.naturalWidth,dayc.height/im.naturalHeight); const w=im.naturalWidth*sc,h=im.naturalHeight*sc; dctx.drawImage(im,(dayc.width-w)/2,(dayc.height-h)/2,w,h); }
+}
+function dayTick(){ dayCur+=(dayTarget-dayCur)*(RM?1:.16); dayDraw(); if(Math.abs(dayTarget-dayCur)>.05 && current==='estate') dayRaf=requestAnimationFrame(dayTick); else dayRaf=0; }
+function dayUpdate(){ dayTarget=+dayr.value; const m=Math.round(2+dayTarget/191*118); dayo.textContent=m+' m'; dayr.setAttribute('aria-valuetext',m+' metres'); if(!dayRaf) dayRaf=requestAnimationFrame(dayTick); }
+dayr.addEventListener('input',dayUpdate);
+function estateOpen(){ window.__prioritise&&window.__prioritise('nightfall'); requestAnimationFrame(()=>{ dayDraw(); dayUpdate(); }); }
+addEventListener('resize',()=>{ if(current==='estate') dayDraw(); });
+
+/* ───── location contours ───── */
+(()=>{
+  const g=$('.contours'); let s='';
+  for(let k=0;k<9;k++){
+    const r=40+k*26, cx=410, cy=200;
+    let d=''; for(let a=0;a<=64;a++){ const t=a/64*Math.PI*2; const w=1+0.18*Math.sin(t*3+k)+0.1*Math.cos(t*5-k*.7);
+      const x=cx+Math.cos(t)*r*1.5*w, y=cy+Math.sin(t)*r*w; d+=(a?'L':'M')+x.toFixed(1)+' '+y.toFixed(1); }
+    s+=`<path class="contour" d="${d}Z"/>`;
+  }
+  g.innerHTML=s;
+})();
+
+/* ───── booking ───── */
+const today=new Date(); today.setHours(0,0,0,0);
+let calY=today.getFullYear(), calM=today.getMonth(), selDate=null, selSlot=null;
+const MON=['January','February','March','April','May','June','July','August','September','October','November','December'];
+const DOW=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const maxDate=new Date(today); maxDate.setDate(maxDate.getDate()+60);
+function cal(){
+  $('#calm').textContent=`${MON[calM]} ${calY}`;
+  const first=new Date(calY,calM,1), lead=(first.getDay()+6)%7, days=new Date(calY,calM+1,0).getDate();
+  let s=DOW.map(d=>`<span class="dow">${d}</span>`).join('');
+  for(let i=0;i<lead;i++) s+='<span></span>';
+  for(let d=1;d<=days;d++){
+    const dt=new Date(calY,calM,d);
+    const off=dt<=today||dt>maxDate||dt.getDay()===1;
+    const sel=selDate&&+dt===+selDate;
+    s+=`<button type="button" data-d="${d}" ${off?'disabled':''} class="${sel?'sel':''}" aria-pressed="${!!sel}" aria-label="${dt.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}${off?', unavailable':''}">${d}</button>`;
+  }
+  $('#calg').innerHTML=s;
+  $('#calp').disabled = calY===today.getFullYear() && calM===today.getMonth();
+  $('#caln').disabled = new Date(calY,calM+1,1)>maxDate;
+}
+$('#calg').addEventListener('click',e=>{ const b=e.target.closest('button[data-d]'); if(!b||b.disabled) return; selDate=new Date(calY,calM,+b.dataset.d); cal(); summary(); });
+$('#calp').addEventListener('click',()=>{ calM--; if(calM<0){calM=11;calY--;} cal(); });
+$('#caln').addEventListener('click',()=>{ calM++; if(calM>11){calM=0;calY++;} cal(); });
+$$('#slots button').forEach(b=>b.addEventListener('click',()=>{ selSlot=b.dataset.s; $$('#slots button').forEach(x=>{ x.classList.toggle('sel',x===b); x.setAttribute('aria-pressed',x===b); }); summary(); }));
+const fmt=d=>d.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
+function summary(){
+  const s=$('#sum'); s.classList.remove('warn');
+  if(selDate&&selSlot) s.textContent=`${fmt(selDate)} at ${selSlot}.`;
+  else if(selDate) s.textContent=`${fmt(selDate)}. Now choose a time.`;
+  else s.textContent='Choose a date and time. Viewings run Tuesday to Sunday.';
+}
+cal();
+$('#bookf').addEventListener('submit',e=>{
+  e.preventDefault();
+  const f=e.target, name=f.name.value.trim(), phone=f.phone.value.replace(/\D/g,'');
+  $('#f-name').classList.toggle('err',!name); $('#f-phone').classList.toggle('err',phone.length<10);
+  f.name.setAttribute('aria-invalid',!name); f.phone.setAttribute('aria-invalid',phone.length<10);
+  if(!name||phone.length<10){ (!name?f.name:f.phone).focus(); return; }
+  if(!selDate||!selSlot){ const s=$('#sum'); s.textContent=!selDate?'Choose a date to request your viewing.':'Choose a time to request your viewing.'; s.classList.add('warn'); return; }
+  $('#done-t').textContent=`${name}, your viewing of ${f.res.value==='Not sure yet'?'the residences':f.res.value} is requested for ${fmt(selDate)} at ${selSlot}. The concierge would call ${f.phone.value.trim()} to confirm.`;
+  $('#done').classList.add('show');
+  $$('input,select,button',f).forEach(el=>{ if(!el.closest('#done')) el.disabled=true; });
+  setTimeout(()=>$('#done').focus(),80);
+});
+
+/* ───── boot ───── */
+const count=$('.count'), ridge=$('.loader .ridge');
+addEventListener('resize',size);
+size();
+(async()=>{
+  const C=CLIPS.filter(Boolean);
+  try{ manifest=await (await fetch('pack/manifest.json')).json(); }catch(e){ manifest=null; }
+  if(manifest){
+    // open as soon as the first chapter's sparse pass is in; everything else streams in viewing order
+    const need=manifest.approach[0].reduce((t,e)=>t+e[2],0); let got=0;
+    const tick=n=>{ got+=n; const p=Math.min(1,got/need); count.textContent=String(Math.round(p*100)).padStart(3,'0'); ridge.style.strokeDashoffset=1-p; };
+    await fetchBundle('approach',0,tick).catch(()=>{});
+  }
+  count.textContent='100'; ridge.style.strokeDashoffset=0;
+  $('.loader .house').style.opacity=1;
+  await new Promise(r=>setTimeout(r,RM?0:700));
+  $('.loader').classList.add('gone');
+  lenisWanted=true; lenis&&!current&&lenis.start();
+  route();
+  requestAnimationFrame(loop);
+  if(manifest){
+    const queue=[]; for(const c of C.slice(1)) queue.push([c,0]);
+    for(const k of [2,1,3]) for(const c of C) queue.push([c,k]);
+    window.__prioritise=c=>{ queue.sort((x,y)=>(y[0]===c)-(x[0]===c)); };
+    const worker=async()=>{ while(queue.length){ const [c,k]=queue.shift(); await fetchBundle(c,k).catch(()=>{}); } };
+    await Promise.all([worker(),worker()]);
+  }
+})();
+})();
+</script>
+</body>
+</html>
