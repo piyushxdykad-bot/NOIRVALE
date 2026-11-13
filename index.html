@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>NOIRVALE — Private Hillside Villas</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0A1416">
+<title>NOIRVALE — The Residents' App</title>
 <meta name="description" content="Twelve private villas on a forested ridge above Lake Vale. A concept website.">
 <link rel="preload" href="pack/manifest.json" as="fetch" crossorigin>
 <link rel="preload" href="pack/approach-0.webp" as="fetch" crossorigin>
@@ -44,7 +45,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   animation:grain 1.2s steps(6) infinite}
 @keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-3%,2%)}40%{transform:translate(2%,-4%)}60%{transform:translate(-4%,-1%)}80%{transform:translate(3%,3%)}100%{transform:translate(0,0)}}
-.cursor{position:fixed;left:0;top:0;width:34px;height:34px;margin:-17px 0 0 -17px;border:1px solid rgba(201,165,122,.7);border-radius:50%;
+.cursor{opacity:0;position:fixed;left:0;top:0;width:34px;height:34px;margin:-17px 0 0 -17px;border:1px solid rgba(201,165,122,.7);border-radius:50%;
   pointer-events:none;z-index:200;transition:width .45s var(--ease),height .45s var(--ease),margin .45s var(--ease),background .45s,border-color .45s;
   display:grid;place-items:center;font-size:11px;letter-spacing:.06em;color:var(--ink)}
 .cursor span{opacity:0;transition:opacity .3s}
@@ -545,6 +546,155 @@ a:hover .roll > span,a:focus-visible .roll > span{transform:translateY(-100%)}
   .map-read{position:static;max-width:none;border:0;border-top:1px solid rgba(160,125,85,.25)}
   .two{grid-template-columns:1fr;gap:0}
 }
+/* ═════════ APP SHELL ═════════ */
+:root{--rail:88px;--tb:0px;--abh:64px}
+@media (max-width:860px){:root{--rail:0px;--tb:calc(66px + env(safe-area-inset-bottom))}}
+body{padding-left:var(--rail)}
+.appbar{left:var(--rail);height:var(--abh);padding:0 var(--gut);gap:20px}
+.appbar .wordmark{flex:none}
+.ab-now{flex:1;display:flex;align-items:center;justify-content:center;gap:10px;font-size:13px;color:var(--trav-2);font-variant-numeric:tabular-nums;white-space:nowrap}
+.ab-dot{width:6px;height:6px;border-radius:50%;background:var(--lamp);box-shadow:0 0 10px var(--lamp);animation:breathe 3s ease-in-out infinite}
+@keyframes breathe{50%{opacity:.35}}
+.ab-sun{color:var(--mist)}
+@media (max-width:860px){.ab-sun{display:none}.appbar .btn{padding:10px 16px;font-size:13px}.appbar .btn .dot{display:none}}
+@media (max-width:420px){.ab-now{justify-content:flex-end}.appbar .btn{display:none}}
+.tabbar{position:fixed;z-index:101;left:0;top:0;bottom:0;width:var(--rail);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  background:rgba(10,20,22,.78);backdrop-filter:blur(18px) saturate(1.2);-webkit-backdrop-filter:blur(18px) saturate(1.2);border-right:1px solid rgba(160,125,85,.2)}
+.tabbar a{position:relative;z-index:1;width:72px;padding:12px 0 10px;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11px;color:var(--mist);transition:color .4s}
+.tabbar a svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round;transition:transform .5s cubic-bezier(.16,1,.3,1)}
+.tabbar a:hover{color:var(--trav)}
+.tabbar a[aria-current]{color:var(--trav)}
+.tabbar a[aria-current] svg{transform:translateY(-1px) scale(1.06);stroke:var(--lamp)}
+.tabbar a:active svg{transform:scale(.88)}
+.tb-ind{position:absolute;z-index:0;left:8px;width:72px;height:var(--ih,62px);border-radius:16px;background:rgba(160,125,85,.16);border:1px solid rgba(201,165,122,.28);
+  transform:translateY(var(--iy,0));transition:transform .6s cubic-bezier(.16,1,.3,1),opacity .3s;top:0}
+.badge{position:absolute;top:6px;right:14px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--lamp);color:var(--ink);font-size:11px;font-weight:600;font-style:normal;display:grid;place-items:center;font-family:var(--sans)}
+.badge[hidden]{display:none}
+.badge.pop{animation:pop .6s cubic-bezier(.16,1,.3,1)}
+@keyframes pop{0%{transform:scale(.4)}60%{transform:scale(1.25)}100%{transform:scale(1)}}
+@media (max-width:860px){
+  .tabbar{top:auto;right:0;width:auto;height:var(--tb);padding-bottom:env(safe-area-inset-bottom);flex-direction:row;justify-content:space-around;border-right:0;border-top:1px solid rgba(160,125,85,.2)}
+  .tabbar a{width:auto;flex:1;padding:10px 0 8px;font-size:10.5px;gap:4px}
+  .tb-ind{left:0;top:6px;height:54px;width:var(--iw,60px);transform:translateX(var(--ix,0))}
+  .badge{right:calc(50% - 22px);top:4px}
+}
+/* views become app screens */
+.view{left:var(--rail);bottom:var(--tb);z-index:80}
+.view-in{padding:calc(var(--abh) + 44px) var(--gut) 90px}
+.view .back{display:none}
+.chapter{right:calc(var(--gut) - 10px)}
+.scrollhint{bottom:calc(var(--tb) + 28px)}
+@media (max-width:860px){ .stage{height:calc(100svh - var(--tb))} .foot{padding-bottom:calc(40px + var(--tb))} .c-night-h{top:calc(var(--abh) + 24px)} }
+/* ═════════ HOME WIDGETS ═════════ */
+.widgets{display:grid;grid-template-columns:1.25fr 1fr 1fr 1fr;gap:14px;padding:clamp(60px,9vh,100px) var(--gut) 0}
+@media (max-width:1180px){.widgets{grid-template-columns:1fr 1fr}}
+@media (max-width:600px){.widgets{grid-template-columns:1fr}}
+.w-card{position:relative;border:1px solid rgba(160,125,85,.26);border-radius:20px;padding:24px;background:linear-gradient(160deg,rgba(23,40,42,.75),rgba(10,20,22,.6));overflow:hidden;min-height:250px;display:flex;flex-direction:column}
+.w-card::before{content:"";position:absolute;inset:0;background:radial-gradient(400px circle at var(--mx,80%) var(--my,0%),rgba(226,168,103,.1),transparent 60%);pointer-events:none}
+.w-k{font-size:12px;color:var(--mist);margin-bottom:14px}
+.w-h{font-family:var(--serif);font-weight:400;font-size:30px;line-height:1.05}
+.w-link{margin-top:auto;font-size:14px;color:var(--lamp);display:inline-flex;gap:8px;align-items:center}
+.w-link::after{content:"";width:22px;height:1px;background:currentColor;transition:width .5s var(--ease)}
+.w-link:hover::after{width:38px}
+.w-dots{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin:22px 0 20px;max-width:220px}
+.w-dots i{aspect-ratio:1;border-radius:50%;border:1.3px solid var(--lamp)}
+.w-dots i.sold{background:var(--lamp);box-shadow:0 0 10px rgba(226,168,103,.7)}
+.w-dots i.reserved{background:rgba(160,125,85,.35);border-color:var(--bronze-hi)}
+.w-time{font-family:var(--serif);font-size:56px;line-height:1;font-variant-numeric:tabular-nums}
+.w-sun{list-style:none;margin-top:auto;font-size:13px}
+.w-sun li{display:flex;justify-content:space-between;padding:7px 0;border-top:1px solid rgba(160,125,85,.2);color:var(--trav-2)}
+.w-sun b{font-weight:400;color:var(--trav);font-variant-numeric:tabular-nums}
+.w-sun li.now b{color:var(--lamp)}
+.w-act{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-top:1px solid rgba(160,125,85,.2);font-size:15px;color:var(--trav);text-align:left;width:100%;transition:padding .5s var(--ease),color .3s}
+.w-act i{font-style:normal;font-size:11px;color:var(--mist)}
+.w-act:hover{padding-left:8px;color:var(--lamp)}
+.w-next .w-h{font-size:34px}
+.w-next .cd{display:flex;gap:16px;margin:18px 0 6px}
+.w-next .cd div{display:flex;flex-direction:column}
+.w-next .cd b{font-family:var(--serif);font-weight:400;font-size:44px;line-height:1;font-variant-numeric:tabular-nums}
+.w-next .cd small{font-size:11px;color:var(--mist)}
+.w-next .meta{font-size:14px;color:var(--trav-2)}
+.w-next .btns{margin-top:auto;display:flex;gap:10px;flex-wrap:wrap;padding-top:18px}
+/* ═════════ MY VIEWINGS ═════════ */
+.vbar{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin:44px 0 26px}
+.seg{display:inline-flex;padding:4px;border:1px solid rgba(160,125,85,.35);border-radius:999px;position:relative}
+.seg button{padding:10px 18px;border-radius:999px;font-size:14px;color:var(--trav-2);transition:.45s var(--ease)}
+.seg button b{font-weight:500;margin-left:6px;color:var(--mist)}
+.seg button[aria-selected="true"]{background:var(--trav);color:var(--ink)}
+.seg button[aria-selected="true"] b{color:var(--bronze)}
+.vlist{display:grid;gap:14px}
+.vcard{display:grid;grid-template-columns:200px 1fr auto;gap:24px;align-items:center;border:1px solid rgba(160,125,85,.26);border-radius:20px;padding:14px;background:rgba(16,32,36,.6);overflow:hidden}
+.vcard.cancelled{opacity:.6}
+.vcard .vimg{aspect-ratio:4/3;border-radius:12px;overflow:hidden}
+.vcard .vimg img{width:100%;height:100%;object-fit:cover}
+.vcard .st{font-size:12px;display:inline-flex;align-items:center;gap:8px;color:var(--trav-2);margin-bottom:6px}
+.vcard .st::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--lamp);box-shadow:0 0 8px var(--lamp)}
+.vcard.cancelled .st::before{background:transparent;border:1px solid var(--mist);box-shadow:none}
+.vcard.past .st::before{background:var(--mist);box-shadow:none}
+.vcard h3{font-family:var(--serif);font-weight:400;font-size:28px;line-height:1.1}
+.vcard .when{color:var(--trav-2);font-size:15px;margin-top:4px}
+.vcard .ref{font-size:12px;color:var(--mist);margin-top:8px;font-variant-numeric:tabular-nums}
+.vcard .cd{font-family:var(--serif);font-size:22px;color:var(--lamp);margin-top:8px;font-variant-numeric:tabular-nums}
+.vcard .acts{display:flex;flex-direction:column;gap:8px;padding-right:8px}
+.vcard .acts .btn{justify-content:center;padding:10px 18px;font-size:13px}
+@media (max-width:760px){.vcard{grid-template-columns:96px 1fr}.vcard .acts{grid-column:1/-1;flex-direction:row;flex-wrap:wrap;padding:0}.vcard h3{font-size:22px}}
+.vempty{border:1px dashed rgba(160,125,85,.4);border-radius:20px;padding:46px 30px;text-align:center}
+.vempty h3{font-family:var(--serif);font-weight:400;font-size:30px;margin-bottom:8px}
+.vempty p{color:var(--trav-2);margin-bottom:22px}
+.vnote{margin-top:26px;font-size:12px;color:var(--mist)}
+.btn.danger{background:#B4654F;border-color:#B4654F;color:var(--trav)}
+.btn.danger::before{background:#d07a63}
+/* ═════════ SHEETS ═════════ */
+.sheet{position:fixed;inset:0;z-index:140;display:flex;justify-content:center;align-items:flex-end}
+.sheet[hidden]{display:none}
+.sheet-scrim{position:absolute;inset:0;background:rgba(3,6,7,.6);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.sheet-panel{position:relative;width:min(760px,100%);max-height:min(92svh,920px);display:flex;flex-direction:column;background:linear-gradient(180deg,#132528,#0C181A);border:1px solid rgba(160,125,85,.3);border-bottom:0;border-radius:26px 26px 0 0;box-shadow:0 -30px 80px rgba(0,0,0,.5);padding:10px clamp(18px,3vw,34px) 0;overflow:hidden}
+@media (min-width:861px){.sheet{align-items:center;padding-left:var(--rail)}.sheet-panel{border-radius:26px;border-bottom:1px solid rgba(160,125,85,.3)}}
+.grab,.bs-head{touch-action:none}
+.grab{display:block;width:44px;height:4px;border-radius:2px;background:rgba(231,223,209,.25);margin:4px auto 10px}
+.bs-head{display:flex;justify-content:space-between;align-items:flex-start;gap:20px}
+.bs-k{font-size:12px;color:var(--lamp)}
+.bs-head h2{font-family:var(--serif);font-weight:400;font-size:clamp(28px,3vw,40px);line-height:1.1}
+.x{width:40px;height:40px;border-radius:50%;border:1px solid rgba(231,223,209,.25);font-size:22px;line-height:1;flex:none}
+.bs-prog{height:2px;background:rgba(160,125,85,.2);margin:18px 0 0;border-radius:2px;overflow:hidden}
+.bs-prog i{display:block;height:100%;width:33.3%;background:linear-gradient(90deg,var(--bronze),var(--lamp));transition:width .6s cubic-bezier(.16,1,.3,1)}
+#bform{display:flex;flex-direction:column;min-height:0;flex:1}
+.steps{overflow-y:auto;overscroll-behavior:contain;padding:24px 2px 10px;flex:1}
+.step[hidden]{display:none}
+.st-h{font-size:14px;font-weight:500;color:var(--trav-2);margin:4px 0 12px}
+.hcards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:26px}
+@media (max-width:560px){.hcards{grid-template-columns:1fr}}
+.hcard{position:relative;border:1px solid rgba(160,125,85,.3);border-radius:16px;overflow:hidden;text-align:left;transition:border-color .4s,transform .5s var(--ease)}
+.hcard img{width:100%;aspect-ratio:16/10;object-fit:cover;transition:transform 1s var(--ease)}
+.hcard span{display:block;padding:10px 12px 12px}
+.hcard b{display:block;font-family:var(--serif);font-weight:400;font-size:20px}
+.hcard small{color:var(--mist);font-size:12px}
+.hcard[aria-checked="true"]{border-color:var(--lamp);box-shadow:0 0 0 1px var(--lamp) inset}
+.hcard[aria-checked="true"]::after{content:"";position:absolute;top:10px;right:10px;width:22px;height:22px;border-radius:50%;background:var(--lamp) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 12.5l4 4 8-8' fill='none' stroke='%230A1416' stroke-width='2.4'/%3E%3C/svg%3E") center/16px no-repeat}
+.hcard:hover img{transform:scale(1.05)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips button{padding:10px 16px;border-radius:999px;border:1px solid rgba(160,125,85,.4);font-size:14px;color:var(--trav-2);transition:.35s}
+.chips button small{color:var(--mist);margin-left:6px;font-size:12px}
+.chips button[aria-checked="true"]{background:var(--trav);color:var(--ink);border-color:var(--trav)}
+.chips button[aria-checked="true"] small{color:var(--bronze)}
+.bs-foot{display:flex;justify-content:space-between;gap:10px;padding:14px 0 calc(16px + env(safe-area-inset-bottom));border-top:1px solid rgba(160,125,85,.2)}
+.bs-foot .btn{justify-content:center;min-width:120px}
+.review{margin-top:14px;border:1px solid rgba(160,125,85,.25);border-radius:14px;padding:6px 16px}
+.review li{display:flex;justify-content:space-between;gap:16px;padding:9px 0;border-bottom:1px dotted rgba(160,125,85,.25);font-size:14px;list-style:none}
+.review li:last-child{border-bottom:0}
+.review span{color:var(--mist)}.review b{font-weight:400;text-align:right}
+.sheet.small .sheet-panel{width:min(460px,100%);padding:30px 28px calc(24px + env(safe-area-inset-bottom))}
+.sheet.small h2{font-family:var(--serif);font-weight:400;font-size:30px;margin-bottom:10px}
+.sheet.small p{color:var(--trav-2);margin-bottom:24px}
+.cs-acts{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+.cal{border-radius:16px}
+/* toast */
+.flydot{position:fixed;left:-7px;top:-7px;width:14px;height:14px;border-radius:50%;background:var(--lamp);box-shadow:0 0 18px 4px rgba(226,168,103,.8);z-index:160;pointer-events:none}
+.toast{position:fixed;z-index:145;left:var(--rail);right:0;margin:0 auto;width:max-content;bottom:calc(var(--tb) + 22px);transform:translateY(140%);opacity:0;display:flex;align-items:center;gap:16px;padding:13px 14px 13px 20px;border-radius:999px;background:var(--trav);color:var(--ink);font-size:14px;box-shadow:0 16px 40px rgba(0,0,0,.4);transition:transform .6s cubic-bezier(.16,1,.3,1),opacity .4s;max-width:min(560px,calc(100vw - var(--rail) - 32px))}
+.toast{visibility:hidden;pointer-events:none}
+.toast.on{transform:none;opacity:1;visibility:visible;pointer-events:auto}
+.toast button{font-weight:600;color:var(--bronze);padding:4px 10px;border-radius:999px}
+.toast button:hover{background:rgba(160,125,85,.15)}
 </style>
 </head>
 <body>
@@ -568,19 +718,16 @@ a:hover .roll > span,a:focus-visible .roll > span{transform:translateY(-100%)}
 </div>
 
 <!-- nav -->
-<header class="nav" id="nav">
+<header class="nav appbar" id="nav">
   <a href="#" class="wordmark" data-home aria-label="NOIRVALE home">NOIRVALE</a>
-  <ul>
-    <li><a href="#residences">Residences</a></li>
-    <li><a href="#estate">The estate</a></li>
-    <li><a href="#location">Location</a></li>
-    <li class="keep"><a href="#viewing" class="btn"><i class="dot"></i>Book a private viewing</a></li>
-    <li class="keep"><button class="menu-btn" aria-expanded="false" aria-controls="mm">Menu</button></li>
-  </ul>
+  <p class="ab-now" aria-live="off"><span class="ab-dot" aria-hidden="true"></span><span id="ab-clock">Lake Vale</span><span class="ab-sun" id="ab-sun"></span></p>
+  <button type="button" class="btn" data-book-open><i class="dot"></i>Book a viewing</button>
 </header>
-<nav class="mobile-menu" id="mm" aria-label="Mobile">
-  <a href="#">Home</a><a href="#residences">Residences</a><a href="#estate">The estate</a><a href="#location">Location</a><a href="#viewing">Private viewing</a>
+<nav class="tabbar" id="tabbar" aria-label="App sections">
+  <i class="tb-ind" id="tbind" aria-hidden="true"></i>
+  <a href="#" data-tab="home" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5h13V10"/><path d="M10 19.5v-5h4v5"/></svg><span>Home</span></a><a href="#residences" data-tab="residences"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="4" width="17" height="16" rx="1"/><path d="M3.5 12h9M12.5 4v16M12.5 9h8"/></svg><span>Residences</span></a><a href="#estate" data-tab="estate"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 6 12h3.5L5 18h14l-4.5-6H18z"/><path d="M12 18v3"/></svg><span>Estate</span></a><a href="#location" data-tab="location"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/></svg><span>Location</span></a><a href="#viewings" data-tab="viewings"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="1.5"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/><path d="M8.5 14.5l2.2 2.2 4.8-4.8"/></svg><span>Viewings</span><b class="badge" id="vbadge" hidden>0</b></a>
 </nav>
+<nav class="mobile-menu" id="mm" aria-label="Mobile" hidden></nav><button class="menu-btn" hidden></button>
 
 <main>
 <!-- ───── film ───── -->
@@ -693,6 +840,29 @@ a:hover .roll > span,a:focus-visible .roll > span{transform:translateY(-100%)}
       <button data-go="4"><span>Nightfall</span><i></i></button>
     </nav>
   </div>
+</section>
+
+<!-- ───── app widgets ───── -->
+<section class="widgets" aria-label="At a glance">
+  <article class="w-card w-next" id="w-next"></article>
+  <article class="w-card w-dark">
+    <p class="w-k">Availability</p>
+    <h3 class="w-h">Four houses<br>still dark.</h3>
+    <div class="w-dots" id="w-dots" aria-hidden="true"></div>
+    <a href="#residences" class="w-link" data-goto-plots>See the open plots</a>
+  </article>
+  <article class="w-card w-now">
+    <p class="w-k">Lake Vale now</p>
+    <p class="w-time" id="w-time">--:--</p>
+    <ul class="w-sun" id="w-sun"></ul>
+  </article>
+  <article class="w-card w-acts">
+    <p class="w-k">Shortcuts</p>
+    <button type="button" class="w-act" data-book-open><span>Book a viewing</span><i>01</i></button>
+    <a class="w-act" href="#location"><span>Get directions</span><i>02</i></a>
+    <a class="w-act" href="#estate"><span>Walk the estate</span><i>03</i></a>
+    <a class="w-act" href="#viewings"><span>My viewings</span><i>04</i></a>
+  </article>
 </section>
 
 <!-- ───── residences preview ───── -->
@@ -865,46 +1035,79 @@ a:hover .roll > span,a:focus-visible .roll > span{transform:translateY(-100%)}
   </div>
 </section>
 
-<section class="view" id="v-viewing" aria-label="Book a private viewing" tabindex="-1">
+<section class="view" id="v-viewings" aria-label="My viewings" tabindex="-1">
   <div class="view-in">
     <a href="#" class="back">Back to the film</a>
-    <h1 class="vh1">Arrive before sunset.</h1>
-    <p class="vlede">A viewing takes an afternoon: lunch at the lake house, a walk through the house you choose, and the ridge at golden hour. Tell us when, and we will have the doors open.</p>
-    <form class="book" id="bookf" novalidate>
-      <div>
-        <label class="field" id="f-name"><span>Full name</span><input name="name" autocomplete="name" required aria-describedby="e-name"><em class="msg" id="e-name">Enter your full name so the concierge knows who to expect.</em></label>
-        <label class="field" id="f-phone"><span>Phone</span><input name="phone" type="tel" autocomplete="tel" inputmode="tel" maxlength="20" required aria-describedby="e-phone"><em class="msg" id="e-phone">Enter a phone number of 10 to 15 digits.</em></label>
-        <label class="field" id="f-email"><span>Email (optional)</span><input name="email" type="email" autocomplete="email" aria-describedby="e-email"><em class="msg" id="e-email">Check the email address, or leave it empty.</em></label>
-        <div class="two">
-          <label class="field"><span>Residence</span>
-            <select name="res" id="f-res"><option>The Ridge</option><option>The Shore</option><option>The Canopy</option><option>Not sure yet</option></select></label>
-          <label class="field"><span>Plot</span>
-            <select name="plot" id="f-plot"></select></label>
-        </div>
-        <label class="field"><span>Guests</span><select name="guests"><option>Just me</option><option selected>2 people</option><option>3 to 4 people</option><option>5 or more</option></select></label>
-        <label class="switch"><input type="checkbox" name="transfer" id="f-transfer" checked><span class="sw" aria-hidden="true"></span><span>Collect me from Pantnagar airport</span></label>
+    <h1 class="vh1">My viewings.</h1>
+    <p class="vlede">Every walk you have booked on the ridge, with a countdown to the next. Move one, cancel one, or send the details to whoever is coming with you.</p>
+    <div class="vbar">
+      <div class="seg" role="tablist" aria-label="Viewings">
+        <button role="tab" aria-selected="true" data-v="up" aria-controls="vlist">Upcoming <b id="n-up">0</b></button>
+        <button role="tab" aria-selected="false" data-v="past" aria-controls="vlist" tabindex="-1">Past and cancelled <b id="n-past">0</b></button>
       </div>
-      <div>
-        <div class="cal" role="group" aria-label="Choose a date">
-          <div class="cal-head"><button type="button" id="calp" aria-label="Previous month">‹</button><b id="calm" aria-live="polite"></b><button type="button" id="caln" aria-label="Next month">›</button></div>
-          <div class="cal-grid" id="calg"></div>
-          <div class="slots" id="slots" role="group" aria-label="Arrival time">
-            <button type="button" data-s="10:00 am" aria-pressed="false">10:00</button><button type="button" data-s="12:30 pm" aria-pressed="false">12:30</button><button type="button" data-s="3:00 pm" aria-pressed="false">15:00</button><button type="button" data-s="5:30 pm" aria-pressed="false">17:30<small>Golden hour</small></button>
-          </div>
-        </div>
-        <p class="summary" id="sum" aria-live="polite">Choose a date and a time. Viewings run Tuesday to Sunday.</p>
-        <button class="btn solid" type="submit" id="bsub">Request viewing</button>
-        <div class="done" id="done" role="status" tabindex="-1">
-          <p class="ref" id="done-ref"></p>
-          <h3>Your viewing is requested.</h3>
-          <ul class="done-list" id="done-list"></ul>
-          <div class="done-acts"><button type="button" class="btn" id="copyd">Copy details</button><button type="button" class="btn" id="editd">Change request</button></div>
-          <small>This is a concept website, so the request is not sent anywhere.</small>
-        </div>
-      </div>
-    </form>
+      <button type="button" class="btn solid" data-book-open>Book a viewing</button>
+    </div>
+    <div class="vlist" id="vlist" role="tabpanel" aria-live="polite"></div>
+    <p class="vnote">Bookings are saved on this device only. This is a concept app, so nothing is sent anywhere.</p>
   </div>
 </section>
+
+<!-- booking sheet -->
+<div class="sheet" id="bsheet" role="dialog" aria-modal="true" aria-labelledby="bs-h" hidden>
+  <div class="sheet-scrim" data-close></div>
+  <div class="sheet-panel">
+    <i class="grab" aria-hidden="true"></i>
+    <header class="bs-head">
+      <div><p class="bs-k" id="bs-k" aria-live="polite">Step 1 of 3</p><h2 id="bs-h" tabindex="-1">Book a viewing</h2></div>
+      <button type="button" class="x" data-close aria-label="Close">&times;</button>
+    </header>
+    <div class="bs-prog" aria-hidden="true"><i id="bs-prog"></i></div>
+    <form id="bform" novalidate>
+      <div class="steps" id="steps">
+        <section class="step" data-step="1" aria-label="Choose a house">
+          <h3 class="st-h">Which house would you like to walk?</h3>
+          <div class="hcards" id="hcards" role="radiogroup" aria-label="Residence"></div>
+          <h3 class="st-h">Plot</h3>
+          <div class="chips" id="pchips" role="radiogroup" aria-label="Plot"></div>
+        </section>
+        <section class="step" data-step="2" aria-label="Choose a date and time">
+          <div class="cal" role="group" aria-label="Choose a date">
+            <div class="cal-head"><button type="button" id="calp" aria-label="Previous month">‹</button><b id="calm" aria-live="polite"></b><button type="button" id="caln" aria-label="Next month">›</button></div>
+            <div class="cal-grid" id="calg"></div>
+            <div class="slots" id="slots" role="group" aria-label="Arrival time">
+              <button type="button" data-s="10:00 am" aria-pressed="false">10:00 am</button><button type="button" data-s="12:30 pm" aria-pressed="false">12:30 pm</button><button type="button" data-s="3:00 pm" aria-pressed="false">3:00 pm</button><button type="button" data-s="5:30 pm" aria-pressed="false">5:30 pm<small>Golden hour</small></button>
+            </div>
+          </div>
+          <p class="summary" id="sum" aria-live="polite">Choose a date and an arrival time. Viewings run Tuesday to Sunday.</p>
+        </section>
+        <section class="step" data-step="3" aria-label="Your details">
+          <label class="field" id="f-name"><span>Full name</span><input name="name" autocomplete="name" required aria-describedby="e-name"><em class="msg" id="e-name">Enter your full name so the concierge knows who to expect.</em></label>
+          <label class="field" id="f-phone"><span>Phone</span><input name="phone" type="tel" autocomplete="tel" inputmode="tel" maxlength="20" required aria-describedby="e-phone"><em class="msg" id="e-phone">Enter a phone number of 10 to 15 digits.</em></label>
+          <label class="field" id="f-email"><span>Email (optional)</span><input name="email" type="email" autocomplete="email" aria-describedby="e-email"><em class="msg" id="e-email">Check the email address, or leave it empty.</em></label>
+          <label class="field"><span>Party</span><select name="guests"><option>Just me</option><option selected>2 people</option><option>3 to 4 people</option><option>5 or more</option></select></label>
+          <label class="switch"><input type="checkbox" name="transfer" checked><span class="sw" aria-hidden="true"></span><span>Collect me from Pantnagar airport</span></label>
+          <div class="review" id="review"></div>
+        </section>
+      </div>
+      <footer class="bs-foot">
+        <button type="button" class="btn" id="bs-back">Back</button>
+        <button type="submit" class="btn solid" id="bs-next">Continue</button>
+      </footer>
+    </form>
+  </div>
+</div>
+
+<!-- confirm dialog -->
+<div class="sheet small" id="csheet" role="alertdialog" aria-modal="true" aria-labelledby="cs-h" aria-describedby="cs-p" hidden>
+  <div class="sheet-scrim" data-close></div>
+  <div class="sheet-panel">
+    <h2 id="cs-h">Cancel this viewing?</h2>
+    <p id="cs-p"></p>
+    <div class="cs-acts"><button type="button" class="btn" data-close>Keep it</button><button type="button" class="btn solid danger" id="cs-yes">Cancel viewing</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toast-t"></span><button type="button" id="toast-u" hidden>Undo</button></div>
 
 <script>
 (()=>{
@@ -1151,7 +1354,7 @@ if(matchMedia('(hover:hover) and (pointer:fine)').matches && !RM){
   let cx=-100,cy=-100,tx=-100,ty=-100, moving=false;
   const step=()=>{ cx+=(tx-cx)*.18; cy+=(ty-cy)*.18; cur.style.transform=`translate(${cx}px,${cy}px)`;
     if(Math.abs(tx-cx)+Math.abs(ty-cy)>.3) requestAnimationFrame(step); else moving=false; };
-  addEventListener('pointermove',e=>{tx=e.clientX;ty=e.clientY; if(!moving){moving=true;requestAnimationFrame(step);} },{passive:true});
+  addEventListener('pointermove',e=>{tx=e.clientX;ty=e.clientY; if(cx<0){ cx=tx; cy=ty; cur.style.opacity=1; } if(!moving){moving=true;requestAnimationFrame(step);} },{passive:true});
   document.addEventListener('pointerover',e=>{
     const t=e.target.closest('[data-cursor]');
     cur.classList.toggle('big',!!t); if(t) cur.firstElementChild.textContent=t.dataset.cursor;
@@ -1159,7 +1362,7 @@ if(matchMedia('(hover:hover) and (pointer:fine)').matches && !RM){
 } else cur.remove();
 
 /* ───── views (hash routing) ───── */
-const VIEWS=['residences','estate','location','viewing'];
+const VIEWS=['residences','estate','location','viewings'];
 const pivot=$('.pivot'), slab=$('.slab',pivot), pDim=$('.dim',pivot), pT=$('.pt .t',pivot), pS=$('.pt small span',pivot);
 const VIEWNAME={residences:['Residences','Choose your ground'],estate:['The estate','Sixty acres, mostly silence'],location:['Location','Close to nothing loud'],viewing:['Private viewing','Arrive before sunset'],home:['The ridge','Back to the film']};
 let pivotBusy=false;
@@ -1180,19 +1383,48 @@ function route(){
       setTimeout(()=>v.focus({preventScroll:true}),60);
       if(want==='location') locationOpen();
       if(want==='estate') estateOpen();
-      if(want==='viewing' && done.classList.contains('show')) resetBooking();
+      if(want==='viewings') renderViewings();
     } else {
       document.body.classList.remove('locked'); setInert(false);
       lenisWanted=true; lenis&&lenis.start();
       if(opener && document.contains(opener)) opener.focus({preventScroll:true});
       opener=null;
     }
-    $$('.nav a[href^="#"]').forEach(a=>{ const on=a.getAttribute('href')==='#'+want; a.toggleAttribute('aria-current',on); if(on) a.setAttribute('aria-current','page'); });
+    setTab(want);
     current=want;
   };
   if(RM||firstRoute){ firstRoute=false; swap(); if(want) revealView($('#v-'+want)); return; }
-  pivotTo(want, swap);
+  appTo(want, swap);
 }
+// app tab transition: the old screen sinks away, the new one lifts into place
+async function appTo(want, swap){
+  const token={}; appTo.token=token;
+  setTab(want);
+  const out = current ? $('#v-'+current) : null;
+  if(out){
+    const a=out.animate([{opacity:1,transform:'none'},{opacity:0,transform:'translateY(16px) scale(.985)'}],{duration:220,easing:'cubic-bezier(.7,0,.84,0)',fill:'forwards'});
+    try{ await a.finished; }catch(e){}
+  }
+  if(appTo.token!==token) return;
+  swap();
+  if(out) out.getAnimations().forEach(x=>x.cancel());
+  const v=want?$('#v-'+want):null;
+  if(v){ v.animate([{opacity:0,transform:'translateY(30px) scale(.99)'},{opacity:1,transform:'none'}],{duration:560,easing:'cubic-bezier(.16,1,.3,1)'}); revealView(v); }
+  else $('main').animate([{opacity:0,transform:'translateY(18px)'},{opacity:1,transform:'none'}],{duration:600,easing:'cubic-bezier(.16,1,.3,1)'});
+}
+const tabbar=$('#tabbar'), tbind=$('#tbind');
+function setTab(want){
+  const k=want||'home';
+  $$('a',tabbar).forEach(a=>{ const on=a.dataset.tab===k; on? a.setAttribute('aria-current','page') : a.removeAttribute('aria-current'); });
+  placeInd();
+}
+function placeInd(){
+  const a=$('a[aria-current]',tabbar); if(!a) return;
+  const tr=tabbar.getBoundingClientRect(), r=a.getBoundingClientRect();
+  if(innerWidth<=860){ tbind.style.setProperty('--ix',(r.left-tr.left+ (r.width-Math.min(r.width-8,72))/2)+'px'); tbind.style.setProperty('--iw',Math.min(r.width-8,72)+'px'); }
+  else { tbind.style.setProperty('--iy',(r.top-tr.top)+'px'); tbind.style.setProperty('--ih',r.height+'px'); }
+}
+addEventListener('resize',placeInd);
 const splitChars=t=>t.split(' ').map(w=>`<span class="w">${[...w].map(c=>`<span class="c">${c}</span>`).join('')}</span>`).join(' ');
 async function pivotTo(want, swap){
   const token={}; pivot.token=token;
@@ -1229,7 +1461,7 @@ function revealView(v){
   if(h && !h.dataset.split){ h.dataset.split=1; const txt=h.textContent; h.setAttribute('aria-label',txt); h.innerHTML=`<span aria-hidden="true">${splitChars(txt)}</span>`; }
   if(RM) return;
   $$('.c',h).forEach((c,i)=>c.animate([{transform:'translateY(110%)'},{transform:'none'}],{duration:1000,delay:120+i*22,easing:'cubic-bezier(.16,1,.3,1)',fill:'both'}));
-  const parts=$$('.back,.vlede,.res-ctl,.plan-wrap,.plots-sec,.stats > div,.day,.day-ctl,.seasons,.amen article,.fig,.loc > .map,.times li,.loc-note,.book > div',v);
+  const parts=$$('.vbar,.vcard,.vempty,.back,.vlede,.res-ctl,.plan-wrap,.plots-sec,.stats > div,.day,.day-ctl,.seasons,.amen article,.fig,.loc > .map,.times li,.loc-note,.book > div',v);
   parts.forEach((el,i)=>el.animate([{opacity:0,transform:'translateY(46px)',filter:'blur(8px)'},{opacity:1,transform:'none',filter:'blur(0px)'}],{duration:1100,delay:260+i*70,easing:'cubic-bezier(.16,1,.3,1)',fill:'both'}));
 }
 function closeView(){
@@ -1239,6 +1471,9 @@ function closeView(){
 }
 // remember what opened a view, so Back and focus return there
 document.addEventListener('click',e=>{
+  const bo=e.target.closest('[data-book-open],a[href="#viewing"],a[href="#book"]');
+  if(bo){ e.preventDefault(); openBooking(); return; }
+  if(e.target.closest('[data-goto-plots]')) setTimeout(()=>{ const p=$('#plots-h'); p&&p.scrollIntoView({behavior:RM?'auto':'smooth',block:'start'}); },900);
   const a=e.target.closest('a[href^="#"]'); if(!a) return;
   const h=a.getAttribute('href');
   if(h==='#'||a.hasAttribute('data-home')){ e.preventDefault(); closeMenu(); if(target) closeView(); else if(a.hasAttribute('data-home')) goTo(0); return; }
@@ -1253,6 +1488,8 @@ addEventListener('hashchange',route);
 addEventListener('keydown',e=>{
   if(e.key!=='Escape') return;
   if(mm.classList.contains('open')){ closeMenu(); mbtn.focus(); return; }
+  if(!$('#csheet').hidden){ closeSheet($('#csheet')); return; }
+  if(!$('#bsheet').hidden){ closeSheet($('#bsheet')); return; }
   if(target) closeView();
 });
 
@@ -1363,12 +1600,12 @@ function drawPlots(){
 }
 function plotCard(p){
   const [id,type,st,,,acres,elev,view,price]=p;
-  const act = st==='open' ? `<a href="#viewing" class="btn solid" data-book="${id}">Book a walk of ${id}</a>`
-            : st==='reserved' ? `<a href="#viewing" class="btn" data-book="${id}">Join the waiting list</a>`
+  const act = st==='open' ? `<button type="button" class="btn solid" data-book="${id}">Book a walk of ${id}</button>`
+            : st==='reserved' ? `<button type="button" class="btn" data-book="${id}">Join the waiting list</button>`
             : `<p class="pc-sold">This house is lived in. Its windows are the lit ones.</p>`;
   $('#plotcard').innerHTML=`<p class="pc-st ${st}">${STATUS[st]}</p><h3>Plot ${id}</h3><p class="pc-type">${PLANS[type].name}</p>
     <dl class="r-spec"><div><dt>Ground</dt><dd>${acres} acres</dd></div><div><dt>Elevation</dt><dd>${elev.toLocaleString('en-IN')} m</dd></div><div><dt>View</dt><dd>${view}</dd></div><div><dt>Price</dt><dd>${price||'Not offered'}</dd></div></dl>${act}`;
-  const bk=$('#plotcard [data-book]'); if(bk) bk.addEventListener('click',()=>prefill(PLANS[type].name,id));
+  const bk=$('#plotcard [data-book]'); if(bk) bk.addEventListener('click',e=>{ e.preventDefault(); e.stopPropagation(); openBooking({res:type,plot:id}); });
   if(!RM) $('#plotcard').animate([{opacity:0,transform:'translateY(16px)'},{opacity:1,transform:'none'}],{duration:600,easing:'cubic-bezier(.16,1,.3,1)'});
 }
 showPlan('ridge');
@@ -1449,13 +1686,162 @@ $$('button',timesEl).forEach(b=>{ b.addEventListener('click',()=>route2(b.datase
 const FINEp=matchMedia('(hover:hover) and (pointer:fine)').matches;
 function locationOpen(){ routeK=null; setTimeout(()=>route2('pantnagar'),RM?0:700); }
 
-/* ───── booking ───── */
-const today=new Date(); today.setHours(0,0,0,0);
+/* ───── store: viewings live on this device ───── */
+const KEY='noirvale.viewings.v1';
+const store={
+  mem:[],
+  all(){ try{ const r=localStorage.getItem(KEY); return r?JSON.parse(r):[]; }catch(e){ return this.mem; } },
+  save(list){ this.mem=list; try{ localStorage.setItem(KEY,JSON.stringify(list)); }catch(e){} }
+};
+const HOUSE={ridge:{name:'The Ridge',img:'img/pool.webp'},shore:{name:'The Shore',img:'img/night.webp'},canopy:{name:'The Canopy',img:'img/aerial.webp'}};
+const SLOTMIN={'10:00 am':600,'12:30 pm':750,'3:00 pm':900,'5:30 pm':1050};
+// slots are Lake Vale (IST) times, whatever the visitor's own timezone
+const at=v=>new Date(Date.parse(v.date+'T00:00:00+05:30')+(SLOTMIN[v.slot]||600)*6e4);
+const dOf=v=>new Date(v.date+'T00:00:00');
+function istToday(){ const p=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Kolkata',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date()).split('-'); return new Date(+p[0],+p[1]-1,+p[2]); }
+let today=istToday();
+const fmt=d=>d.toLocaleDateString('en-GB',Object.assign({weekday:'long',day:'numeric',month:'long'}, d.getFullYear()!==today.getFullYear()?{year:'numeric'}:{}));
+const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+function upcoming(){ const now=Date.now(); return store.all().filter(v=>v.status!=='cancelled' && at(v)>now).sort((a,b)=>at(a)-at(b)); }
+function past(){ const now=Date.now(); return store.all().filter(v=>v.status==='cancelled' || at(v)<=now).sort((a,b)=>at(b)-at(a)); }
+function cdParts(ms){ ms=Math.max(0,ms); const d=Math.floor(ms/864e5), h=Math.floor(ms%864e5/36e5), m=Math.floor(ms%36e5/6e4), s2=Math.floor(ms%6e4/1e3); return {d,h,m,s:s2}; }
+const pad=n=>String(n).padStart(2,'0');
+
+/* ───── sheets ───── */
+let lastFocus=null, lastAct=null;
+function openSheet(el){
+  lastFocus=document.activeElement; el.hidden=false;
+  [$('main'),$('#foot'),$('#nav'),$('#tabbar'),...$$('.view')].forEach(x=>x.inert=true);
+  document.body.classList.add('locked'); lenis&&lenis.stop();
+  if(!RM){ $('.sheet-scrim',el).animate([{opacity:0},{opacity:1}],{duration:400,fill:'both'});
+    $('.sheet-panel',el).animate([{transform:'translateY(100%)'},{transform:'none'}],{duration:620,easing:'cubic-bezier(.16,1,.3,1)',fill:'backwards'}); }
+  $('#toast').classList.remove('on');
+}
+async function closeSheet(el){
+  if(el.hidden) return;
+  if(!RM){ $('.sheet-scrim',el).animate([{opacity:1},{opacity:0}],{duration:300,fill:'forwards'});
+    try{ await $('.sheet-panel',el).animate([{transform:'none'},{transform:'translateY(105%)'}],{duration:380,easing:'cubic-bezier(.7,0,.84,0)',fill:'forwards'}).finished; }catch(e){} }
+  el.hidden=true; el.getAnimations({subtree:true}).forEach(a=>a.cancel());
+  if($('#bsheet').hidden && $('#csheet').hidden){
+    [$('#nav'),$('#tabbar'),...$$('.view')].forEach(x=>x.inert=false);
+    if(!target){ $('main').inert=false; $('#foot').inert=false; document.body.classList.remove('locked'); lenis&&lenis.start(); }
+  }
+  if(lastFocus && document.contains(lastFocus)) lastFocus.focus({preventScroll:true});
+  else if(lastAct){ const el=$(`[data-id="${lastAct.id}"][data-act="${lastAct.act}"]`) || $('.vcard [data-act]') || $('.seg [aria-selected="true"]'); el&&el.focus({preventScroll:true}); }
+  lastAct=null;
+}
+$$('[data-close]').forEach(b=>b.addEventListener('click',()=>closeSheet(b.closest('.sheet'))));
+// swipe the sheet down to dismiss
+$$('.sheet').forEach(sh=>{
+  const p=$('.sheet-panel',sh), g=$('.grab',sh)||$('.bs-head',sh); let y0=null;
+  let t0=0, last=0, scrim=$('.sheet-scrim',sh);
+  (g||p).addEventListener('pointerdown',e=>{ if(e.pointerType==='mouse' || e.target.closest('button')) return; y0=e.clientY; t0=performance.now(); last=0; p.setPointerCapture(e.pointerId); p.style.transition='none'; });
+  p.addEventListener('pointermove',e=>{ if(y0===null) return; let dy=e.clientY-y0; dy = dy<0 ? dy*0.2 : dy; last=dy; p.style.transform=`translateY(${dy}px)`; scrim.style.opacity=Math.max(.2,1-dy/500); });
+  const end=()=>{ if(y0===null) return; const v=last/Math.max(1,performance.now()-t0); y0=null; p.style.transition='transform .45s cubic-bezier(.16,1,.3,1)'; scrim.style.opacity='';
+    if(last>110 || v>0.6){ p.style.transform=''; p.style.transition=''; closeSheet(sh); } else { p.style.transform='translateY(0)'; setTimeout(()=>{ p.style.transform=''; p.style.transition=''; },460); } };
+  p.addEventListener('pointerup',end); p.addEventListener('pointercancel',end);
+});
+// keep Tab inside an open sheet
+document.addEventListener('keydown',e=>{
+  if(e.key!=='Tab') return; const sh=$$('.sheet').find(x=>!x.hidden); if(!sh) return;
+  const f=$$('button:not([disabled]),input:not([disabled]),select,[tabindex="0"]',sh).filter(x=>x.offsetParent!==null);
+  if(!f.length) return; const first=f[0], last=f[f.length-1];
+  if(e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
+  else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
+});
+
+/* ───── booking sheet ───── */
+const bsheet=$('#bsheet'), bform=$('#bform'), stepsEl=$('#steps');
+let B={}, step=1, editing=null;
+const hcards=$('#hcards'), pchips=$('#pchips');
+hcards.innerHTML=Object.entries(HOUSE).map(([k,h])=>`<button type="button" class="hcard" role="radio" aria-checked="false" data-k="${k}"><img src="${h.img}" alt="" loading="lazy"><span><b>${h.name}</b><small>${PLANS[k].spec[0][1]} bedrooms, from ${PLANS[k].spec[3][1]}</small></span></button>`).join('');
+$$('.hcard',hcards).forEach(b=>b.addEventListener('click',()=>{ B.res=b.dataset.k; B.plot=''; drawStep1(); }));
+tabKeys($$('.hcard',hcards),b=>{ B.res=b.dataset.k; B.plot=''; drawStep1(); $(`.hcard[data-k="${B.res}"]`).focus(); });
+function drawStep1(){
+  $$('.hcard',hcards).forEach(b=>{ const on=b.dataset.k===B.res; b.setAttribute('aria-checked',on); b.tabIndex=on||(!B.res&&b===hcards.firstElementChild)?0:-1; });
+  const list=PLOTS.filter(p=>p[1]===B.res && p[2]!=='sold');
+  pchips.innerHTML=`<button type="button" role="radio" data-p="" aria-checked="${!B.plot}">Any open plot</button>`+list.map(p=>`<button type="button" role="radio" data-p="${p[0]}" aria-checked="${B.plot===p[0]}">${p[0]}<small>${p[2]==='reserved'?'waiting list':p[8]}</small></button>`).join('');
+  const pc=$$('button',pchips);
+  pc.forEach(b=>{ b.tabIndex=b.getAttribute('aria-checked')==='true'?0:-1; b.addEventListener('click',()=>{ B.plot=b.dataset.p; drawStep1(); $(`#pchips [data-p="${B.plot}"]`).focus(); }); });
+  tabKeys(pc,b=>{ B.plot=b.dataset.p; drawStep1(); $(`#pchips [data-p="${B.plot}"]`).focus(); });
+}
+function goStep(n){
+  step=n;
+  $$('.step',stepsEl).forEach(s=>s.hidden=+s.dataset.step!==n);
+  $('#bs-k').textContent=`Step ${n} of 3`;
+  $('#bs-prog').style.width=(n/3*100)+'%';
+  $('#bs-back').style.visibility=n===1||(editing&&n===2)?'hidden':'visible';
+  $('#bs-next').querySelector('.lbl') ? ($('#bs-next .lbl').textContent = n<3?'Continue':(editing?'Move viewing':'Request viewing')) : ($('#bs-next').textContent = n<3?'Continue':(editing?'Move viewing':'Request viewing'));
+  stepsEl.scrollTop=0;
+  const cur=$(`.step[data-step="${n}"]`,stepsEl);
+  if(!RM) cur.animate([{opacity:0,transform:'translateX(26px)'},{opacity:1,transform:'none'}],{duration:480,easing:'cubic-bezier(.16,1,.3,1)'});
+  if(n===2) cal();
+  if(n===3) review();
+  if(!bsheet.hidden && bsheet.contains(document.activeElement)===false || (document.activeElement && document.activeElement.closest('.step') && document.activeElement.closest('.step').hidden) || document.activeElement===document.body){
+    const f=$(`.step[data-step="${n}"] [aria-checked="true"], .step[data-step="${n}"] button:not([disabled]), .step[data-step="${n}"] input`,stepsEl); (f||$('#bs-h')).focus({preventScroll:true});
+  }
+}
+function openBooking(pre={},edit=null){
+  editing=edit;
+  if(edit){ B={...edit}; selDate=new Date(edit.date+'T00:00:00'); selSlot=edit.slot; calY=selDate.getFullYear(); calM=selDate.getMonth(); }
+  else { B={res:pre.res||B.res||'ridge',plot:pre.plot||''}; selDate=null; selSlot=null; calY=today.getFullYear(); calM=today.getMonth(); }
+  B.waitlist = !edit && !!pre.plot && (PLOTS.find(p=>p[0]===pre.plot)||[])[2]==='reserved';
+  $('#bs-h').textContent= edit ? `Move ${edit.ref}` : B.waitlist ? `Waiting list for ${pre.plot}` : 'Book a viewing';
+  $$('#slots button').forEach(x=>{ x.classList.toggle('sel',x.dataset.s===selSlot); x.setAttribute('aria-pressed',x.dataset.s===selSlot); });
+  drawStep1(); summary();
+  ['f-name','f-phone','f-email'].forEach(id=>{ $('#'+id).classList.remove('err'); $('input',$('#'+id)).removeAttribute('aria-invalid'); });
+  if(edit){ bform.name.value=edit.name; bform.phone.value=edit.phone; bform.email.value=edit.email||''; bform.guests.value=edit.guests; bform.transfer.checked=edit.transfer; }
+  openSheet(bsheet);
+  goStep(edit||pre.plot ? 2 : 1);
+  setTimeout(()=>{ const f=$(`.step[data-step="${step}"] button, .step[data-step="${step}"] input`,stepsEl); f&&f.focus({preventScroll:true}); },360);
+}
+$('#bs-back').addEventListener('click',()=>goStep(Math.max(1,step-1)));
+bform.addEventListener('submit',e=>{
+  e.preventDefault();
+  if(step===1){ goStep(2); return; }
+  if(step===2){
+    if(!selDate||!selSlot){ const s=$('#sum'); s.textContent=!selDate?'Choose a date first.':'Now choose an arrival time.'; s.classList.add('warn'); return; }
+    if(editing){ finish(); return; }
+    goStep(3); return;
+  }
+  // step 3
+  const f=bform, name=f.name.value.trim(), phone=f.phone.value.replace(/\D/g,''), email=f.email.value.trim();
+  const emailBad=!!email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+  const nameBad=name.length<2, phoneBad=phone.length<10||phone.length>15||/^(\d)\1+$/.test(phone);
+  [['f-name',nameBad,f.name],['f-phone',phoneBad,f.phone],['f-email',emailBad,f.email]].forEach(([id,bad,el])=>{ $('#'+id).classList.toggle('err',bad); bad?el.setAttribute('aria-invalid','true'):el.removeAttribute('aria-invalid'); });
+  if(nameBad){ f.name.focus(); return; } if(phoneBad){ f.phone.focus(); return; } if(emailBad){ f.email.focus(); return; }
+  finish();
+});
+function review(){
+  const rows=[['House',HOUSE[B.res].name+(B.plot?`, plot ${B.plot}`:'')],['Date',selDate?fmt(selDate):'Not chosen'],['Arrival',selSlot||'Not chosen']];
+  $('#review').innerHTML='<ul>'+rows.map(([k,v])=>`<li><span>${esc(k)}</span><b>${esc(v)}</b></li>`).join('')+'</ul>';
+}
+function finish(){
+  const list=store.all();
+  if(editing){
+    const v=list.find(x=>x.id===editing.id);
+    if(!v){ editing=null; closeSheet(bsheet); refresh(); toast('This viewing was changed on another screen.'); return; }
+    Object.assign(v,{date:iso(selDate),slot:selSlot,status:'requested'});
+    store.save(list); closeSheet(bsheet);
+    toast(`${v.ref} moved to ${fmt(selDate)}, ${selSlot}.`);
+  } else {
+    const f=bform;
+    const v={id:Date.now().toString(36),ref:'NV-'+String(Math.floor(1000+Math.random()*9000)),res:B.res,plot:B.plot,date:iso(selDate),slot:selSlot,
+      name:f.name.value.trim(),phone:f.phone.value.trim(),email:f.email.value.trim(),guests:f.guests.value,transfer:f.transfer.checked,status:'requested',created:Date.now()};
+    list.push(v); store.save(list); closeSheet(bsheet);
+    toast(`${B.waitlist?'Added to the waiting list':'Viewing requested'}: ${fmt(selDate)}, ${selSlot}.`, null, target==='viewings'?null:{label:'View',fn:()=>{ location.hash='viewings'; }});
+    flyToTab();
+  }
+  editing=null; refresh();
+}
+
+/* ───── calendar + slots (inside the sheet) ───── */
 let calY=today.getFullYear(), calM=today.getMonth(), selDate=null, selSlot=null;
 const MON=['January','February','March','April','May','June','July','August','September','October','November','December'];
 const DOW=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-const maxDate=new Date(today); maxDate.setDate(maxDate.getDate()+60);
+let maxDate=new Date(today); maxDate.setDate(maxDate.getDate()+60);
 function cal(){
+  today=istToday(); maxDate=new Date(today); maxDate.setDate(maxDate.getDate()+60);
   $('#calm').textContent=`${MON[calM]} ${calY}`;
   const first=new Date(calY,calM,1), lead=(first.getDay()+6)%7, days=new Date(calY,calM+1,0).getDate();
   let s=DOW.map(d=>`<span class="dow" aria-hidden="true">${d}</span>`).join('');
@@ -1473,52 +1859,157 @@ function cal(){
 $('#calg').addEventListener('click',e=>{ const b=e.target.closest('button[data-d]'); if(!b||b.disabled) return; selDate=new Date(calY,calM,+b.dataset.d); cal(); summary(); const nb=$(`#calg button[data-d="${b.dataset.d}"]`); nb&&nb.focus(); });
 $('#calp').addEventListener('click',()=>{ calM--; if(calM<0){calM=11;calY--;} cal(); });
 $('#caln').addEventListener('click',()=>{ calM++; if(calM>11){calM=0;calY++;} cal(); });
-$$('#slots button').forEach(b=>b.addEventListener('click',()=>{ selSlot=b.dataset.s; $$('#slots button').forEach(x=>{ x.classList.toggle('sel',x===b); x.setAttribute('aria-pressed',x===b); }); summary(); }));
-const fmt=d=>d.toLocaleDateString('en-GB',Object.assign({weekday:'long',day:'numeric',month:'long'}, d.getFullYear()!==today.getFullYear()?{year:'numeric'}:{}));
+function slotsTaken(){
+  const d=selDate?iso(selDate):null;
+  $$('#slots button').forEach(b=>{
+    const hit=d && upcoming().find(v=>v.date===d && v.slot===b.dataset.s && (!editing||v.id!==editing.id));
+    b.disabled=!!hit; b.title=hit?`You already have ${hit.ref} at this time`:''; 
+    const sm=b.querySelector('small'); if(hit){ if(!sm) b.insertAdjacentHTML('beforeend','<small>Booked</small>'); else sm.textContent='Booked'; } else if(sm) sm.textContent = b.dataset.s==='5:30 pm'?'Golden hour':'';
+    if(hit && selSlot===b.dataset.s){ selSlot=null; b.classList.remove('sel'); b.setAttribute('aria-pressed','false'); }
+  });
+}
+$$('#slots button').forEach(b=>b.addEventListener('click',()=>{ if(b.disabled) return; selSlot=b.dataset.s; $$('#slots button').forEach(x=>{ x.classList.toggle('sel',x===b); x.setAttribute('aria-pressed',x===b); }); summary(); }));
 function summary(){
+  slotsTaken();
   const s=$('#sum'); s.classList.remove('warn');
   if(selDate&&selSlot) s.textContent=`${fmt(selDate)}, arriving ${selSlot}.${selSlot==='5:30 pm'?' You will see the ridge at golden hour.':''}`;
-  else if(selDate) s.textContent=`${fmt(selDate)}. Now choose a time.`;
-  else s.textContent='Choose a date and a time. Viewings run Tuesday to Sunday.';
+  else if(selDate) s.textContent=`${fmt(selDate)}. Now choose an arrival time.`;
+  else s.textContent='Choose a date and an arrival time. Viewings run Tuesday to Sunday.';
 }
-// plot choices follow the residence
-const fRes=$('#f-res'), fPlot=$('#f-plot');
-function plotOptions(want){
-  const type=Object.keys(PLANS).find(k=>PLANS[k].name===fRes.value);
-  const list=PLOTS.filter(p=>p[2]!=='sold' && (!type||p[1]===type));
-  fPlot.innerHTML='<option value="">Any open plot</option>'+list.map(p=>`<option value="${p[0]}">${p[0]}${p[2]==='reserved'?' (waiting list)':''}</option>`).join('');
-  if(want) fPlot.value=want;
+
+/* ───── my viewings ───── */
+let vTab='up';
+const vlist=$('#vlist');
+$$('.seg button').forEach(b=>b.addEventListener('click',()=>{ vTab=b.dataset.v; renderViewings(); }));
+tabKeys($$('.seg button'),b=>{ vTab=b.dataset.v; renderViewings(); });
+function renderViewings(){
+  $$('.seg button').forEach(b=>{ const on=b.dataset.v===vTab; b.setAttribute('aria-selected',on); b.tabIndex=on?0:-1; });
+  const up=upcoming(), pa=past();
+  $('#n-up').textContent=up.length; $('#n-past').textContent=pa.length;
+  const bd=$('#vbadge'); bd.textContent=up.length; bd.hidden=!up.length;
+  const list=vTab==='up'?up:pa;
+  if(!list.length){
+    vlist.innerHTML = vTab==='up'
+      ? `<div class="vempty"><h3>Nothing booked yet.</h3><p>The ridge is open Tuesday to Sunday. Choose a house and an afternoon, and we will have the doors open.</p><button type="button" class="btn solid" data-book-open>Book your first viewing</button></div>`
+      : `<div class="vempty"><h3>No past viewings.</h3><p>Viewings you have been to, or cancelled, will appear here.</p></div>`;
+    return;
+  }
+  const now=Date.now();
+  vlist.innerHTML=list.map(v=>{
+    const t=at(v), isPast=t<=now, cancelled=v.status==='cancelled';
+    const st=cancelled?'Cancelled':isPast?'Visited':'Requested';
+    const acts = (!cancelled&&!isPast) ? `<button type="button" class="btn" data-act="move" data-id="${v.id}">Reschedule</button><button type="button" class="btn" data-act="copy" data-id="${v.id}">Copy details</button><a class="btn" href="#location">Directions</a><button type="button" class="btn" data-act="cancel" data-id="${v.id}">Cancel</button>`
+      : `<button type="button" class="btn" data-act="again" data-id="${v.id}">Book again</button>${cancelled?`<button type="button" class="btn" data-act="remove" data-id="${v.id}">Remove</button>`:''}`;
+    return `<article class="vcard${cancelled?' cancelled':''}${isPast&&!cancelled?' past':''}" data-id="${v.id}">
+      <div class="vimg"><img src="${HOUSE[v.res].img}" alt=""></div>
+      <div><p class="st">${st}</p><h3>${esc(HOUSE[v.res].name)}${v.plot?`, plot ${esc(v.plot)}`:''}</h3>
+      <p class="when">${esc(fmt(t))}, arriving ${esc(v.slot)}${v.transfer?' · collected from Pantnagar':''}</p>
+      ${(!cancelled&&!isPast)?`<p class="cd" data-cd="${t.getTime()}"></p>`:''}
+      <p class="ref">${esc(v.ref)}, for ${esc(v.name)}, ${esc(v.guests)}</p></div>
+      <div class="acts">${acts}</div></article>`;
+  }).join('');
+  tickCountdowns();
 }
-fRes.addEventListener('change',()=>plotOptions());
-function prefill(resName,plotId){ fRes.value=resName; plotOptions(plotId); }
-plotOptions();
-cal();
-const form=$('#bookf'), done=$('#done');
-form.addEventListener('submit',e=>{
-  e.preventDefault();
-  const f=form, name=f.name.value.trim(), phone=f.phone.value.replace(/\D/g,''), email=f.email.value.trim();
-  const emailBad = !!email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
-  const nameBad = name.length<2, phoneBad = phone.length<10 || phone.length>15 || /^(\d)\1+$/.test(phone);
-  [['f-name',nameBad,f.name],['f-phone',phoneBad,f.phone],['f-email',emailBad,f.email]].forEach(([id,bad,el])=>{ $('#'+id).classList.toggle('err',bad); bad? el.setAttribute('aria-invalid','true') : el.removeAttribute('aria-invalid'); });
-  if(nameBad){ f.name.focus(); return; } if(phoneBad){ f.phone.focus(); return; } if(emailBad){ f.email.focus(); return; }
-  if(!selDate||!selSlot){ const s=$('#sum'); s.textContent=!selDate?'Choose a date to request your viewing.':'Choose an arrival time to request your viewing.'; s.classList.add('warn'); return; }
-  const ref='NV-'+String(Math.floor(1000+Math.random()*9000));
-  const rows=[['Guest',name],['Phone',f.phone.value.trim()],['House',fRes.value+(fPlot.value?`, plot ${fPlot.value}`:'')],['Date',`${fmt(selDate)}, ${selSlot}`],['Party',f.guests.value],['Transfer',f.transfer.checked?'Collected from Pantnagar airport':'Arriving on your own']];
-  $('#done-ref').textContent=`Reference ${ref}`;
-  $('#done-list').innerHTML=rows.map(([k,v])=>`<li><span>${esc(k)}</span><b>${esc(v)}</b></li>`).join('');
-  done.dataset.text=`NOIRVALE private viewing ${ref}\n`+rows.map(([k,v])=>`${k}: ${v}`).join('\n');
-  done.classList.add('show');
-  $$('input,select,button',form).forEach(el=>{ if(!el.closest('#done')) el.disabled=true; });
-  setTimeout(()=>done.focus(),80);
+vlist.addEventListener('click',async e=>{
+  const b=e.target.closest('[data-act]'); if(!b) return;
+  const list=store.all(), v=list.find(x=>x.id===b.dataset.id); if(!v) return;
+  const act=b.dataset.act; lastAct={id:v.id,act};
+  if(act==='move') openBooking({},v);
+  if(act==='again') openBooking({res:v.res,plot:v.plot});
+  if(act==='copy'){
+    const txt=`NOIRVALE private viewing ${v.ref}\nHouse: ${HOUSE[v.res].name}${v.plot?`, plot ${v.plot}`:''}\nDate: ${fmt(dOf(v))}, arriving ${v.slot}\nGuest: ${v.name} (${v.guests})\nTransfer: ${v.transfer?'Collected from Pantnagar airport':'Arriving on your own'}`;
+    try{ await navigator.clipboard.writeText(txt); toast('Details copied. Paste them anywhere.'); }catch(err){ toast('Copying is blocked here. Select the card text instead.'); }
+  }
+  if(act==='cancel') askCancel(v);
+  if(act==='remove'){ store.save(list.filter(x=>x.id!==v.id)); refresh(); toast('Removed from your list.'); }
 });
-$('#copyd').addEventListener('click',async e=>{
-  const b=e.currentTarget, lbl=b.querySelector('.lbl')||b;
-  try{ await navigator.clipboard.writeText(done.dataset.text); lbl.textContent='Copied'; }
-  catch(err){ lbl.textContent='Copy blocked here'; }
-  setTimeout(()=>lbl.textContent='Copy details',2200);
+let pendingCancel=null;
+function askCancel(v){
+  pendingCancel=v;
+  $('#cs-p').textContent=`${HOUSE[v.res].name}${v.plot?`, plot ${v.plot}`:''} on ${fmt(dOf(v))} at ${v.slot}. You can undo this for a few seconds.`;
+  openSheet($('#csheet'));
+  setTimeout(()=>$('#csheet [data-close].btn').focus(),300);
+}
+$('#cs-yes').addEventListener('click',()=>{
+  if(!pendingCancel) return;
+  const list=store.all(), v=list.find(x=>x.id===pendingCancel.id); pendingCancel=null; if(!v || v.status==='cancelled'){ closeSheet($('#csheet')); return; }
+  const prev=v.status; v.status='cancelled'; store.save(list); closeSheet($('#csheet')); refresh();
+  toast(`${v.ref} cancelled.`,{label:'Undo',fn:()=>{ const l=store.all(), x=l.find(y=>y.id===v.id); if(x){ x.status=prev; store.save(l); refresh(); toast('Viewing restored.'); } }});
 });
-function resetBooking(){ done.classList.remove('show'); $$('input,select,button',form).forEach(el=>el.disabled=false); cal(); }
-$('#editd').addEventListener('click',()=>{ resetBooking(); form.name.focus(); });
+
+/* ───── the booking lands: a copper light flies into the Viewings tab ───── */
+function flyToTab(){
+  try{ navigator.vibrate && navigator.vibrate(12); }catch(e){}
+  const bd=$('#vbadge'); const pop=()=>{ bd.classList.remove('pop'); void bd.offsetWidth; bd.classList.add('pop'); };
+  const from=$('#bs-next').getBoundingClientRect(), to=$('[data-tab="viewings"]',tabbar).getBoundingClientRect();
+  if(RM||!from.width){ pop(); return; }
+  const d=document.createElement('i'); d.className='flydot'; document.body.append(d);
+  const x0=from.left+from.width/2, y0=from.top+from.height/2, x1=to.left+to.width/2, y1=to.top+18;
+  const mx=(x0+x1)/2, my=Math.min(y0,y1)-120;
+  const kf=[]; for(let i=0;i<=24;i++){ const t=i/24, x=(1-t)*(1-t)*x0+2*(1-t)*t*mx+t*t*x1, y=(1-t)*(1-t)*y0+2*(1-t)*t*my+t*t*y1; kf.push({transform:`translate(${x}px,${y}px) scale(${1-t*.5})`,opacity:t>.92?0:1}); }
+  d.animate(kf,{duration:900,easing:'cubic-bezier(.5,0,.3,1)',fill:'forwards'}).onfinish=()=>{ d.remove(); pop(); };
+}
+/* ───── toast ───── */
+let toastT=0;
+function toast(msg,undo,action){
+  const t=$('#toast'), u=$('#toast-u'), a=undo||action;
+  $('#toast-t').textContent=msg;
+  u.hidden=!a; u.onclick=null; if(a){ u.textContent=a.label; u.onclick=()=>{ t.classList.remove('on'); u.onclick=null; a.fn(); }; }
+  t.classList.add('on'); clearTimeout(toastT); toastT=setTimeout(()=>{ t.classList.remove('on'); u.onclick=null; u.hidden=true; },a?6000:3200);
+}
+
+/* ───── countdowns, widgets, badge ───── */
+function tickCountdowns(){
+  const now=Date.now();
+  if($$('[data-cd]').some(el=>+el.dataset.cd<=now)){ refresh(); return; }
+  $$('[data-cd]').forEach(el=>{ const p=cdParts(+el.dataset.cd-now); el.textContent = p.d>0 ? `In ${p.d} day${p.d>1?'s':''}, ${p.h} hr${p.h!==1?'s':''}` : `In ${p.h} hr ${pad(p.m)} min`; });
+  const nx=upcoming()[0], cd=$('#w-cd');
+  if(nx && cd){ const p=cdParts(at(nx)-now); cd.innerHTML=`<div><b>${pad(p.d)}</b><small>days</small></div><div><b>${pad(p.h)}</b><small>hours</small></div><div><b>${pad(p.m)}</b><small>min</small></div><div><b>${pad(p.s)}</b><small>sec</small></div>`; }
+}
+function renderNext(){
+  const nx=upcoming()[0], el=$('#w-next');
+  el.innerHTML = nx
+    ? `<p class="w-k">Your next viewing</p><h3 class="w-h">${esc(HOUSE[nx.res].name)}${nx.plot?`, ${esc(nx.plot)}`:''}</h3><div class="cd" id="w-cd" aria-label="Time until your viewing"></div><p class="meta">${esc(fmt(dOf(nx)))}, arriving ${esc(nx.slot)}</p><div class="btns"><a href="#viewings" class="btn">Open my viewings</a><a href="#location" class="btn">Directions</a></div>`
+    : `<p class="w-k">Your next viewing</p><h3 class="w-h">Nothing booked yet.</h3><p class="meta" style="margin-top:12px">Choose a house and an afternoon. The 5:30 slot arrives with the sunset.</p><div class="btns"><button type="button" class="btn solid" data-book-open>Book a viewing</button></div>`;
+}
+function refresh(){
+  const n=upcoming().length, bd=$('#vbadge');
+  bd.textContent=n; bd.hidden=!n;
+  $('[data-tab="viewings"]',tabbar).setAttribute('aria-label', n?`Viewings, ${n} upcoming`:'Viewings');
+  renderNext(); if(target==='viewings') renderViewings(); tickCountdowns();
+}
+$('#w-dots').innerHTML=PLOTS.map(p=>`<i class="${p[2]==='open'?'':p[2]}" title="${p[0]}"></i>`).join('');
+setInterval(tickCountdowns,1000);
+addEventListener('storage',e=>{ if(e.key!==KEY && e.key!==null) return; if(editing && !store.all().some(x=>x.id===editing.id)){ editing=null; closeSheet(bsheet); toast('This viewing was changed on another screen.'); } refresh(); });
+
+/* ───── Lake Vale clock and sun (computed for 29.40°N, 79.52°E) ───── */
+function sunTimes(date){
+  const lat=29.40*Math.PI/180, lon=79.52;
+  const start=new Date(date.getFullYear(),0,0), n=Math.floor((date-start)/864e5);
+  const g=2*Math.PI/365*(n-1);
+  const eq=229.18*(0.000075+0.001868*Math.cos(g)-0.032077*Math.sin(g)-0.014615*Math.cos(2*g)-0.040849*Math.sin(2*g));
+  const dec=0.006918-0.399912*Math.cos(g)+0.070257*Math.sin(g)-0.006758*Math.cos(2*g)+0.000907*Math.sin(2*g)-0.002697*Math.cos(3*g)+0.00148*Math.sin(3*g);
+  const ha=Math.acos(Math.cos(90.833*Math.PI/180)/(Math.cos(lat)*Math.cos(dec))-Math.tan(lat)*Math.tan(dec))*180/Math.PI;
+  const toIST=m=>((m+330)%1440+1440)%1440;
+  return {rise:toIST(720-4*(lon+ha)-eq), set:toIST(720-4*(lon-ha)-eq)};
+}
+const hm=m=>{ m=Math.round(m); let h=Math.floor(m/60), mm=m%60; const ap=h>=12?'pm':'am'; h=h%12||12; return `${h}:${pad(mm)} ${ap}`; };
+function nowIST(){ const p=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Kolkata',hour:'numeric',minute:'numeric',hour12:false}).formatToParts(new Date()); const h=+p.find(x=>x.type==='hour').value, m=+p.find(x=>x.type==='minute').value; return h*60+m; }
+function clock(){
+  const m=nowIST(), {rise,set}=sunTimes(new Date());
+  const t=hm(m);
+  $('#ab-clock').textContent=`Lake Vale, ${t}`;
+  const wt=$('#w-time'); if(wt) wt.textContent=t.replace(/ (am|pm)/,'');
+  const golden=set-40, blue=set+22;
+  const phase = m<rise?'Before sunrise' : m<golden?'Daylight' : m<set?'Golden hour now' : m<blue?'Blue hour now' : 'Night, stars out';
+  $('#ab-sun').textContent=`· ${phase}`;
+  const rows=[['Sunrise',rise],['Golden hour',golden],['Sunset',set],['Blue hour ends',blue]];
+  $('#w-sun').innerHTML=rows.map(([k,v],i)=>{ const nextV=rows[i+1]?rows[i+1][1]:1440; const now=m>=v&&m<nextV&&i>0; return `<li class="${now?'now':''}"><span>${k}</span><b>${hm(v)}</b></li>`; }).join('');
+}
+clock(); setInterval(clock,15000);
+// widgets respond to the pointer
+$$('.w-card').forEach(c=>c.addEventListener('pointermove',e=>{ const r=c.getBoundingClientRect(); c.style.setProperty('--mx',(e.clientX-r.left)+'px'); c.style.setProperty('--my',(e.clientY-r.top)+'px'); }));
+refresh();
 
 /* ───── motion layer ───── */
 const FINE=matchMedia('(hover:hover) and (pointer:fine)').matches && !RM;
