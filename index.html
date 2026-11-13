@@ -98,10 +98,11 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .nav.solid::before{opacity:1}
 .wordmark{font-family:var(--serif);font-size:19px;letter-spacing:.42em;padding-left:.42em;font-weight:400}
 .nav ul{display:flex;gap:clamp(18px,2.6vw,40px);list-style:none;align-items:center;font-size:14px}
-.nav ul a{position:relative;padding:6px 0;color:var(--trav-2);transition:color .4s}
-.nav ul a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--bronze-hi);transform:scaleX(0);transform-origin:right;transition:transform .6s var(--ease)}
-.nav ul a:hover{color:var(--trav)}
-.nav ul a:hover::after,.nav ul a[aria-current]::after{transform:scaleX(1);transform-origin:left}
+.nav ul a:not(.btn){position:relative;padding:6px 0;color:var(--trav-2);transition:color .4s}
+.nav ul a:not(.btn)::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--bronze-hi);transform:scaleX(0);transform-origin:right;transition:transform .6s var(--ease)}
+.nav ul a:not(.btn):hover{color:var(--trav)}
+.nav .btn[aria-current]{border-color:var(--lamp)}
+.nav ul a:not(.btn):hover::after,.nav ul a:not(.btn)[aria-current]::after{transform:scaleX(1);transform-origin:left}
 .btn{display:inline-flex;align-items:center;gap:12px;padding:13px 22px;border:1px solid rgba(201,165,122,.55);border-radius:999px;font-size:14px;color:var(--trav);
   position:relative;overflow:hidden;isolation:isolate;transition:color .5s var(--ease),border-color .5s}
 .btn::before{content:"";position:absolute;inset:0;background:var(--trav);z-index:-1;transform:translateY(101%);border-radius:inherit;transition:transform .6s var(--ease)}
@@ -149,7 +150,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 @keyframes drip{0%{transform:scaleY(0)}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
 
 .c-thr-h{left:var(--gut);top:clamp(110px,18vh,190px)}
-.c-thr-l{left:var(--gut);top:calc(clamp(110px,18vh,190px) + clamp(70px,10vw,170px))}
+.c-thr-l{left:var(--gut);top:calc(clamp(110px,18vh,190px) + 1.95 * clamp(46px,8.6vw,148px) + 26px)}
 .callout{position:absolute;display:flex;align-items:center;gap:12px;font-size:13px;color:var(--trav)}
 .callout > div{background:rgba(8,14,15,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding:8px 12px;border:1px solid rgba(231,223,209,.14)}
 .callout b{font-weight:500}
@@ -179,7 +180,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   background-image:linear-gradient(rgba(160,125,85,.09) 1px,transparent 1px),linear-gradient(90deg,rgba(160,125,85,.09) 1px,transparent 1px),
   linear-gradient(rgba(160,125,85,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(160,125,85,.05) 1px,transparent 1px);
   background-size:120px 120px,120px 120px,24px 24px,24px 24px}
-.blue .backdrop{position:absolute;inset:-40px;background:url(img/elevation.webp) center/cover;filter:blur(28px) brightness(.55);opacity:var(--bd,0)}
+.blue .backdrop{position:absolute;inset:-40px;background:url(img/elevation.webp) center/cover;filter:blur(40px) brightness(.3) saturate(.75);opacity:var(--bd,0)}
 .plate{position:absolute;left:0;top:0;width:1376px;height:768px;transform-origin:0 0}
 .plate img{position:absolute;inset:0;width:100%;height:100%;clip-path:inset(0 calc(100% - var(--rev,0) * 100%) 0 0)}
 .plate .scan{position:absolute;top:0;bottom:0;width:1px;left:calc(var(--rev,0) * 100%);background:var(--bronze-hi);box-shadow:0 0 18px 2px rgba(226,168,103,.5);opacity:var(--scan,0)}
@@ -202,6 +203,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
 .c-night-h{left:0;right:0;top:clamp(92px,13vh,140px);text-align:center;display:flex;flex-direction:column;align-items:center;gap:22px}
 .c-night-h .h-film{font-size:clamp(40px,6vw,104px)}
+.c-night-h .btn:not(.solid){background:rgba(8,14,15,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 .c-night-h .acts{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
 .chapter{position:absolute;right:var(--gut);top:50%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:flex-end;gap:14px;z-index:3;transition:opacity .6s,visibility .6s}
 .chapter.off{opacity:0;visibility:hidden}
@@ -536,6 +538,13 @@ a:hover .roll > span,a:focus-visible .roll > span{transform:translateY(-100%)}
 .done-list span{color:var(--mist)}
 .done-list b{font-weight:400;color:var(--trav);text-align:right}
 .done-acts{display:flex;gap:10px;flex-wrap:wrap}
+@media (max-width:600px){
+  .sitemap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .sitemap svg{min-width:600px}
+  .rlist{columns:1}
+  .map-read{position:static;max-width:none;border:0;border-top:1px solid rgba(160,125,85,.25)}
+  .two{grid-template-columns:1fr;gap:0}
+}
 </style>
 </head>
 <body>
@@ -747,17 +756,17 @@ a:hover .roll > span,a:focus-visible .roll > span{transform:translateY(-100%)}
     <p class="vlede">Every plan starts at the lake and works backwards. Pick a house, walk its rooms, then choose the plot it will stand on. Glass walls are drawn in amber.</p>
     <div class="res-ctl">
       <div class="tabs" role="tablist" aria-label="Residence type">
-        <button role="tab" aria-selected="true" data-t="ridge">The Ridge</button>
-        <button role="tab" aria-selected="false" data-t="shore">The Shore</button>
-        <button role="tab" aria-selected="false" data-t="canopy">The Canopy</button>
+        <button role="tab" aria-selected="true" aria-controls="planpanel" data-t="ridge">The Ridge</button>
+        <button role="tab" aria-selected="false" aria-controls="planpanel" data-t="shore">The Shore</button>
+        <button role="tab" aria-selected="false" aria-controls="planpanel" data-t="canopy">The Canopy</button>
       </div>
-      <div class="lvl" id="lvl" role="group" aria-label="Floor">
+      <div class="lvl" id="lvl" role="group" aria-label="Floor" aria-controls="planpanel">
         <button type="button" data-l="ground" aria-pressed="true">Ground floor</button>
         <button type="button" data-l="upper" aria-pressed="false">Upper floor</button>
       </div>
     </div>
     <div class="plan-wrap">
-      <div class="plan"><div class="north">N <svg width="14" height="18" viewBox="0 0 14 18"><path d="M7 0 L13 18 L7 13 L1 18 Z" fill="none" stroke="currentColor"/></svg></div><svg id="plan" viewBox="0 0 600 420" role="group" aria-label="Floor plan, select a room"></svg></div>
+      <div class="plan" id="planpanel" role="tabpanel" aria-label="Floor plan"><div class="north">N <svg width="14" height="18" viewBox="0 0 14 18"><path d="M7 0 L13 18 L7 13 L1 18 Z" fill="none" stroke="currentColor"/></svg></div><svg id="plan" viewBox="0 0 600 420" role="group" aria-label="Floor plan, select a room"></svg></div>
       <div class="readout">
         <h2 class="r-h" id="r-name">The Ridge</h2>
         <p id="r-desc" class="r-desc"></p>
@@ -811,12 +820,12 @@ a:hover .roll > span,a:focus-visible .roll > span{transform:translateY(-100%)}
     <section class="seasons" aria-labelledby="sea-h">
       <h2 class="h3" id="sea-h">One ridge, four climates.</h2>
       <div class="tabs" role="tablist" aria-label="Season">
-        <button role="tab" aria-selected="true" data-s="winter">Winter</button>
-        <button role="tab" aria-selected="false" data-s="spring">Spring</button>
-        <button role="tab" aria-selected="false" data-s="monsoon">Monsoon</button>
-        <button role="tab" aria-selected="false" data-s="autumn">Autumn</button>
+        <button role="tab" aria-selected="true" aria-controls="season" data-s="winter">Winter</button>
+        <button role="tab" aria-selected="false" aria-controls="season" data-s="spring">Spring</button>
+        <button role="tab" aria-selected="false" aria-controls="season" data-s="monsoon">Monsoon</button>
+        <button role="tab" aria-selected="false" aria-controls="season" data-s="autumn">Autumn</button>
       </div>
-      <div class="season" id="season" aria-live="polite"></div>
+      <div class="season" id="season" role="tabpanel" aria-label="Season" aria-live="polite"></div>
     </section>
 
     <div class="amen">
@@ -863,8 +872,8 @@ a:hover .roll > span,a:focus-visible .roll > span{transform:translateY(-100%)}
     <p class="vlede">A viewing takes an afternoon: lunch at the lake house, a walk through the house you choose, and the ridge at golden hour. Tell us when, and we will have the doors open.</p>
     <form class="book" id="bookf" novalidate>
       <div>
-        <label class="field" id="f-name"><span>Full name</span><input name="name" autocomplete="name" required aria-describedby="e-name"><em class="msg" id="e-name">Enter your name so the concierge knows who to expect.</em></label>
-        <label class="field" id="f-phone"><span>Phone</span><input name="phone" type="tel" autocomplete="tel" inputmode="tel" required aria-describedby="e-phone"><em class="msg" id="e-phone">Enter a phone number with at least 10 digits.</em></label>
+        <label class="field" id="f-name"><span>Full name</span><input name="name" autocomplete="name" required aria-describedby="e-name"><em class="msg" id="e-name">Enter your full name so the concierge knows who to expect.</em></label>
+        <label class="field" id="f-phone"><span>Phone</span><input name="phone" type="tel" autocomplete="tel" inputmode="tel" maxlength="20" required aria-describedby="e-phone"><em class="msg" id="e-phone">Enter a phone number of 10 to 15 digits.</em></label>
         <label class="field" id="f-email"><span>Email (optional)</span><input name="email" type="email" autocomplete="email" aria-describedby="e-email"><em class="msg" id="e-email">Check the email address, or leave it empty.</em></label>
         <div class="two">
           <label class="field"><span>Residence</span>
@@ -987,7 +996,7 @@ film.style.height=`calc(${TOTAL*100}svh + 100svh)`;
 const cues=$$('.cue').map(el=>{ el.inert=true; return {el,seg:+el.dataset.seg,a:+el.dataset.a,b:+el.dataset.b,chars:$$('.c',el),lines:$$('.line',el),night:el.classList.contains('c-night-h'),last:-1,live:false}; });
 const blue=$('#blue'), bp=$('#bp'), measure=$('#measure'), mval=$('#mval'), hint=$('#hint');
 const chapBtns=$$('#chapters button'), chapNav=$('#chapters'), fprog=$('#fprog'), chapN=$('#chapN');
-let drawn=-1, lastBlue=-1, lastSeg=-1, filmBright=false;
+let drawn=-1, lastBlue=-1, lastSeg=-1, filmBright=false, lastG=0;
 const shadeL=$('#shadeL');
 const lns=$$('#bp .ln');
 let plateLetterbox=0;
@@ -1006,7 +1015,7 @@ function filmState(){
 
 function render(){
   const st=filmState(); if(!st.inView) return;
-  const {seg,p}=st;
+  const {seg,p}=st; lastG=st.g;
   const key=seg+':'+p.toFixed(4)+':'+W;
   if(key===drawn) return; drawn=key;
 
@@ -1155,12 +1164,13 @@ const pivot=$('.pivot'), slab=$('.slab',pivot), pDim=$('.dim',pivot), pT=$('.pt 
 const VIEWNAME={residences:['Residences','Choose your ground'],estate:['The estate','Sixty acres, mostly silence'],location:['Location','Close to nothing loud'],viewing:['Private viewing','Arrive before sunset'],home:['The ridge','Back to the film']};
 let pivotBusy=false;
 const bgRegions=[$('main'),$('#foot')];
-let current=null, openedInPage=false, opener=null, firstRoute=true;
+let current=null, target=null, opener=null, firstRoute=true;
 function setInert(on){ bgRegions.forEach(el=>el.inert=on); }
 function route(){
   const h=location.hash.slice(1);
   const want=VIEWS.includes(h)?h:null;
-  if(want===current && !pivot.classList.contains('on')) return;
+  if(want===target) return;
+  target=want;
   const swap=()=>{
     $$('.view').forEach(v=>v.classList.remove('open'));
     if(want){
@@ -1170,11 +1180,12 @@ function route(){
       setTimeout(()=>v.focus({preventScroll:true}),60);
       if(want==='location') locationOpen();
       if(want==='estate') estateOpen();
+      if(want==='viewing' && done.classList.contains('show')) resetBooking();
     } else {
       document.body.classList.remove('locked'); setInert(false);
       lenisWanted=true; lenis&&lenis.start();
       if(opener && document.contains(opener)) opener.focus({preventScroll:true});
-      opener=null; openedInPage=false;
+      opener=null;
     }
     $$('.nav a[href^="#"]').forEach(a=>{ const on=a.getAttribute('href')==='#'+want; a.toggleAttribute('aria-current',on); if(on) a.setAttribute('aria-current','page'); });
     current=want;
@@ -1222,35 +1233,41 @@ function revealView(v){
   parts.forEach((el,i)=>el.animate([{opacity:0,transform:'translateY(46px)',filter:'blur(8px)'},{opacity:1,transform:'none',filter:'blur(0px)'}],{duration:1100,delay:260+i*70,easing:'cubic-bezier(.16,1,.3,1)',fill:'both'}));
 }
 function closeView(){
-  if(!current) return;
-  if(openedInPage) history.back();
-  else { history.replaceState(null,'',location.pathname+location.search); route(); }
+  if(!target) return;
+  history.replaceState(null,'',location.pathname+location.search);
+  route();
 }
 // remember what opened a view, so Back and focus return there
 document.addEventListener('click',e=>{
   const a=e.target.closest('a[href^="#"]'); if(!a) return;
   const h=a.getAttribute('href');
-  if(h==='#'||a.hasAttribute('data-home')){ e.preventDefault(); closeMenu(); if(current) closeView(); else if(a.hasAttribute('data-home')) goTo(0); return; }
-  if(VIEWS.includes(h.slice(1))){ if(!current){ opener=a; } openedInPage=true; closeMenu(); }
+  if(h==='#'||a.hasAttribute('data-home')){ e.preventDefault(); closeMenu(); if(target) closeView(); else if(a.hasAttribute('data-home')) goTo(0); return; }
+  if(VIEWS.includes(h.slice(1))){
+    closeMenu();
+    if(!target){ opener=a; return; }            // first view: normal history entry
+    e.preventDefault();                          // view to view: replace, so Back returns to the film
+    if(h.slice(1)!==target) location.replace(h);
+  }
 });
 addEventListener('hashchange',route);
 addEventListener('keydown',e=>{
   if(e.key!=='Escape') return;
   if(mm.classList.contains('open')){ closeMenu(); mbtn.focus(); return; }
-  if(current) closeView();
+  if(target) closeView();
 });
 
 // mobile menu
 const mm=$('#mm'), mbtn=$('.menu-btn');
 mm.inert=true;
-function closeMenu(){ if(!mm.classList.contains('open')) return; mm.classList.remove('open'); mm.inert=true; mbtn.setAttribute('aria-expanded','false'); mbtn.textContent='Menu'; if(!current) document.body.classList.remove('locked'); lenis&&!current&&lenis.start(); }
+function closeMenu(){ if(!mm.classList.contains('open')) return; mm.classList.remove('open'); mm.inert=true; $('.wordmark').inert=false; if(!target) setInert(false); mbtn.setAttribute('aria-expanded','false'); mbtn.textContent='Menu'; if(!current) document.body.classList.remove('locked'); lenis&&!current&&lenis.start(); }
 mbtn.addEventListener('click',()=>{
   if(mm.classList.contains('open')) return closeMenu();
   mm.classList.add('open'); mm.inert=false; mbtn.setAttribute('aria-expanded','true'); mbtn.textContent='Close';
-  document.body.classList.add('locked'); lenis&&lenis.stop();
+  document.body.classList.add('locked'); lenis&&lenis.stop(); setInert(true); $('.wordmark').inert=true;
   setTimeout(()=>$('a',mm).focus({preventScroll:true}),200);
 });
 
+const esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 /* ───── residences: plans, floors, plots ───── */
 const PLANS={
   ridge:{name:'The Ridge',spec:[['Bedrooms','4'],['Built area','6,400 sq ft'],['Plot','2.1 to 2.6 acres'],['From','₹18.5 Cr']],
@@ -1271,7 +1288,7 @@ const PLANS={
            ['Lake deck',130,220,220,100,'760 sq ft',1],['Jetty',210,320,60,80,'18 m long',1]],
     glass:[[130,220,350,220],[40,320,130,320],[350,320,560,320]]},
   canopy:{name:'The Canopy',spec:[['Bedrooms','5'],['Built area','7,800 sq ft'],['Plot','2.4 acres, raised on piers'],['From','₹24 Cr']],
-    desc:'Three floors lifted into the deodars on stone piers, with a roof terrace above the mist line.',
+    desc:'Lifted into the deodars on stone piers: one long floor of rooms, and above it a roof terrace that clears the mist line.',
     rooms:[['Gallery',40,40,160,80,'560 sq ft'],['Great room',200,40,220,180,'1,420 sq ft'],['Kitchen',420,40,140,100,'580 sq ft'],['Family room',420,140,140,120,'460 sq ft'],
            ['Principal suite',40,120,160,140,'900 sq ft'],['Bedroom 2',40,260,120,100,'440 sq ft'],['Bedroom 3',160,260,120,100,'430 sq ft'],['Bedroom 4',280,260,120,100,'430 sq ft'],
            ['Bedroom 5',400,260,160,100,'520 sq ft'],['Canopy deck',200,220,220,40,'40 m long',1]],
@@ -1294,7 +1311,7 @@ function showPlan(k,level){
   if(k!==planKey) level='ground';
   planKey=k; planLvl=(level==='upper'&&P0.upper)?'upper':'ground';
   const P = planLvl==='upper' ? P0.upper : P0;
-  $$('#v-residences .res-ctl .tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.t===k));
+  $$('#v-residences .res-ctl .tabs button').forEach(b=>{ b.setAttribute('aria-selected',b.dataset.t===k); b.tabIndex=b.dataset.t===k?0:-1; });
   lvl.hidden=!P0.upper;
   $$('button',lvl).forEach(b=>b.setAttribute('aria-pressed',b.dataset.l===planLvl));
   $('#r-name').textContent=P0.name; $('#r-desc').textContent=P0.desc;
@@ -1389,7 +1406,7 @@ const SEASONS={
 const seaBtns=$$('.seasons .tabs button');
 function season(k){
   const [m,t,txt]=SEASONS[k];
-  seaBtns.forEach(b=>b.setAttribute('aria-selected',b.dataset.s===k));
+  seaBtns.forEach(b=>{ b.setAttribute('aria-selected',b.dataset.s===k); b.tabIndex=b.dataset.s===k?0:-1; });
   const el=$('#season'); el.innerHTML=`<p class="sea-m">${m}</p><p class="sea-t">${t}</p><p class="sea-x">${txt}</p>`;
   if(!RM) $$('p',el).forEach((p,i)=>p.animate([{opacity:0,transform:'translateY(14px)'},{opacity:1,transform:'none'}],{duration:700,delay:i*80,easing:'cubic-bezier(.16,1,.3,1)',fill:'both'}));
 }
@@ -1457,7 +1474,7 @@ $('#calg').addEventListener('click',e=>{ const b=e.target.closest('button[data-d
 $('#calp').addEventListener('click',()=>{ calM--; if(calM<0){calM=11;calY--;} cal(); });
 $('#caln').addEventListener('click',()=>{ calM++; if(calM>11){calM=0;calY++;} cal(); });
 $$('#slots button').forEach(b=>b.addEventListener('click',()=>{ selSlot=b.dataset.s; $$('#slots button').forEach(x=>{ x.classList.toggle('sel',x===b); x.setAttribute('aria-pressed',x===b); }); summary(); }));
-const fmt=d=>d.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
+const fmt=d=>d.toLocaleDateString('en-GB',Object.assign({weekday:'long',day:'numeric',month:'long'}, d.getFullYear()!==today.getFullYear()?{year:'numeric'}:{}));
 function summary(){
   const s=$('#sum'); s.classList.remove('warn');
   if(selDate&&selSlot) s.textContent=`${fmt(selDate)}, arriving ${selSlot}.${selSlot==='5:30 pm'?' You will see the ridge at golden hour.':''}`;
@@ -1480,14 +1497,15 @@ const form=$('#bookf'), done=$('#done');
 form.addEventListener('submit',e=>{
   e.preventDefault();
   const f=form, name=f.name.value.trim(), phone=f.phone.value.replace(/\D/g,''), email=f.email.value.trim();
-  const emailBad = email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
-  [['f-name',!name,f.name],['f-phone',phone.length<10,f.phone],['f-email',emailBad,f.email]].forEach(([id,bad,el])=>{ $('#'+id).classList.toggle('err',bad); el.setAttribute('aria-invalid',bad); });
-  if(!name){ f.name.focus(); return; } if(phone.length<10){ f.phone.focus(); return; } if(emailBad){ f.email.focus(); return; }
+  const emailBad = !!email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+  const nameBad = name.length<2, phoneBad = phone.length<10 || phone.length>15 || /^(\d)\1+$/.test(phone);
+  [['f-name',nameBad,f.name],['f-phone',phoneBad,f.phone],['f-email',emailBad,f.email]].forEach(([id,bad,el])=>{ $('#'+id).classList.toggle('err',bad); bad? el.setAttribute('aria-invalid','true') : el.removeAttribute('aria-invalid'); });
+  if(nameBad){ f.name.focus(); return; } if(phoneBad){ f.phone.focus(); return; } if(emailBad){ f.email.focus(); return; }
   if(!selDate||!selSlot){ const s=$('#sum'); s.textContent=!selDate?'Choose a date to request your viewing.':'Choose an arrival time to request your viewing.'; s.classList.add('warn'); return; }
   const ref='NV-'+String(Math.floor(1000+Math.random()*9000));
   const rows=[['Guest',name],['Phone',f.phone.value.trim()],['House',fRes.value+(fPlot.value?`, plot ${fPlot.value}`:'')],['Date',`${fmt(selDate)}, ${selSlot}`],['Party',f.guests.value],['Transfer',f.transfer.checked?'Collected from Pantnagar airport':'Arriving on your own']];
   $('#done-ref').textContent=`Reference ${ref}`;
-  $('#done-list').innerHTML=rows.map(([k,v])=>`<li><span>${k}</span><b>${v}</b></li>`).join('');
+  $('#done-list').innerHTML=rows.map(([k,v])=>`<li><span>${esc(k)}</span><b>${esc(v)}</b></li>`).join('');
   done.dataset.text=`NOIRVALE private viewing ${ref}\n`+rows.map(([k,v])=>`${k}: ${v}`).join('\n');
   done.classList.add('show');
   $$('input,select,button',form).forEach(el=>{ if(!el.closest('#done')) el.disabled=true; });
@@ -1499,11 +1517,8 @@ $('#copyd').addEventListener('click',async e=>{
   catch(err){ lbl.textContent='Copy blocked here'; }
   setTimeout(()=>lbl.textContent='Copy details',2200);
 });
-$('#editd').addEventListener('click',()=>{
-  done.classList.remove('show');
-  $$('input,select,button',form).forEach(el=>el.disabled=false); cal();
-  form.name.focus();
-});
+function resetBooking(){ done.classList.remove('show'); $$('input,select,button',form).forEach(el=>el.disabled=false); cal(); }
+$('#editd').addEventListener('click',()=>{ resetBooking(); form.name.focus(); });
 
 /* ───── motion layer ───── */
 const FINE=matchMedia('(hover:hover) and (pointer:fine)').matches && !RM;
@@ -1627,7 +1642,12 @@ function enter(fromFinale){
   if(!fromFinale) loader.classList.add('gone');
 }
 
-addEventListener('resize',size);
+let rsT=0;
+addEventListener('resize',()=>{
+  const g=lastG, inFilm=!current && scrollY < film.offsetTop+film.offsetHeight-innerHeight;
+  size();
+  clearTimeout(rsT); rsT=setTimeout(()=>{ if(inFilm && g>0){ const span=film.offsetHeight-innerHeight; const y=film.offsetTop+g/TOTAL*span; lenis? lenis.scrollTo(y,{immediate:true}) : scrollTo(0,y); } },60);
+});
 size();
 (async()=>{
   const C=CLIPS.filter(Boolean);
