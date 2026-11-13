@@ -919,7 +919,7 @@ body{padding-left:var(--rail)}
 </footer>
 
 <!-- ───── views ───── -->
-<section class="view" id="v-residences" aria-label="Residences" tabindex="-1">
+<section class="view" data-lenis-prevent id="v-residences" aria-label="Residences" tabindex="-1">
   <div class="view-in">
     <a href="#" class="back">Back to the film</a>
     <h1 class="vh1">Choose your ground.</h1>
@@ -973,7 +973,7 @@ body{padding-left:var(--rail)}
   </div>
 </section>
 
-<section class="view" id="v-estate" aria-label="The estate" tabindex="-1">
+<section class="view" data-lenis-prevent id="v-estate" aria-label="The estate" tabindex="-1">
   <div class="view-in">
     <a href="#" class="back">Back to the film</a>
     <h1 class="vh1">Sixty acres. Mostly silence.</h1>
@@ -1008,7 +1008,7 @@ body{padding-left:var(--rail)}
   </div>
 </section>
 
-<section class="view" id="v-location" aria-label="Location" tabindex="-1">
+<section class="view" data-lenis-prevent id="v-location" aria-label="Location" tabindex="-1">
   <div class="view-in">
     <a href="#" class="back">Back to the film</a>
     <h1 class="vh1">Close to nothing loud.</h1>
@@ -1035,7 +1035,7 @@ body{padding-left:var(--rail)}
   </div>
 </section>
 
-<section class="view" id="v-viewings" aria-label="My viewings" tabindex="-1">
+<section class="view" data-lenis-prevent id="v-viewings" aria-label="My viewings" tabindex="-1">
   <div class="view-in">
     <a href="#" class="back">Back to the film</a>
     <h1 class="vh1">My viewings.</h1>
@@ -1053,7 +1053,7 @@ body{padding-left:var(--rail)}
 </section>
 
 <!-- booking sheet -->
-<div class="sheet" id="bsheet" role="dialog" aria-modal="true" aria-labelledby="bs-h" hidden>
+<div class="sheet" data-lenis-prevent id="bsheet" role="dialog" aria-modal="true" aria-labelledby="bs-h" hidden>
   <div class="sheet-scrim" data-close></div>
   <div class="sheet-panel">
     <i class="grab" aria-hidden="true"></i>
@@ -1098,7 +1098,7 @@ body{padding-left:var(--rail)}
 </div>
 
 <!-- confirm dialog -->
-<div class="sheet small" id="csheet" role="alertdialog" aria-modal="true" aria-labelledby="cs-h" aria-describedby="cs-p" hidden>
+<div class="sheet small" data-lenis-prevent id="csheet" role="alertdialog" aria-modal="true" aria-labelledby="cs-h" aria-describedby="cs-p" hidden>
   <div class="sheet-scrim" data-close></div>
   <div class="sheet-panel">
     <h2 id="cs-h">Cancel this viewing?</h2>
@@ -1303,7 +1303,9 @@ function render(){
 let lenis=null, lenisWanted=false;
 function startLenis(){
   if(RM || lenis || !window.Lenis) return;
-  lenis=new Lenis({lerp:.085,wheelMultiplier:.9,smoothWheel:true});
+  lenis=new Lenis({lerp:.085,wheelMultiplier:.9,smoothWheel:true,
+    // pages and sheets scroll natively, never through the film's smooth scroll
+    prevent:node=>!!(node.closest && node.closest('.view,.sheet,.mobile-menu'))});
   if(!lenisWanted || current) lenis.stop();
 }
 (()=>{ const sc=document.createElement('script'); sc.src='https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js'; sc.async=true; sc.onload=startLenis; document.head.append(sc); })();
