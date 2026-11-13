@@ -333,8 +333,12 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 .map{background:var(--ink-2);border:1px solid rgba(160,125,85,.25);position:relative}
 .map svg{display:block;width:100%;height:auto}
 .map .contour{fill:none;stroke:rgba(160,125,85,.35);stroke-width:.8}
-.map .road{fill:none;stroke:var(--trav-2);stroke-width:1.4;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 2.4s var(--ease)}
-.map.drawn .road{stroke-dashoffset:0}
+.map .road{fill:none;stroke:rgba(231,223,209,.2);stroke-width:1;stroke-dasharray:1;stroke-dashoffset:0;transition:stroke .5s,stroke-width .5s}
+.map .road.on{stroke:var(--lamp);stroke-width:1.8;filter:drop-shadow(0 0 4px rgba(226,168,103,.6))}
+.map .dst circle{fill:var(--ink);stroke:var(--trav-2);transition:.4s}
+.map .dst text{fill:var(--mist);transition:fill .4s}
+.map .dst.on circle{fill:var(--lamp);stroke:var(--lamp)}
+.map .dst.on text{fill:var(--trav)}
 .map .water{fill:rgba(143,170,170,.12);stroke:rgba(143,170,170,.5);stroke-width:.8}
 .map text{font-family:var(--sans);font-size:11px;fill:var(--trav-2)}
 .map .site{fill:var(--lamp)}
@@ -441,6 +445,97 @@ a:hover .roll > span,a:focus-visible .roll > span{transform:translateY(-100%)}
 .h2 .c{display:inline-block;transform:translateY(110%);transition:transform 1.1s cubic-bezier(.16,1,.3,1)}
 .h2.in .c{transform:none}
 @media (prefers-reduced-motion:reduce){.h2 .c{transform:none}}
+/* ───────── pages, rebuilt ───────── */
+.h3{font-family:var(--serif);font-weight:400;font-size:clamp(32px,3.6vw,56px);line-height:1.02;letter-spacing:-.01em}
+.sec-head.small{margin-bottom:40px}
+.res-ctl{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;margin:44px 0 44px}
+.res-ctl .tabs{margin:0}
+.lvl{display:flex;border:1px solid rgba(160,125,85,.4);border-radius:999px;padding:4px}
+.lvl[hidden]{display:none}
+.lvl button{padding:9px 16px;border-radius:999px;font-size:13px;color:var(--trav-2);transition:.4s var(--ease)}
+.lvl button[aria-pressed="true"]{background:var(--bronze);color:var(--ink)}
+.r-h{font-family:var(--serif);font-weight:400;font-size:clamp(36px,3.6vw,58px);line-height:1;margin-bottom:14px}
+.r-desc{color:var(--trav-2);max-width:40ch}
+.r-spec{display:grid;grid-template-columns:1fr 1fr;gap:16px 24px;margin:26px 0 6px}
+.r-spec dt{font-size:12px;color:var(--mist)}
+.r-spec dd{font-family:var(--serif);font-size:20px;color:var(--trav);line-height:1.25}
+.plots-sec{margin-top:clamp(90px,14vh,150px);padding-top:clamp(50px,8vh,80px);border-top:1px solid rgba(160,125,85,.28)}
+.plots-wrap{display:grid;grid-template-columns:1.6fr 1fr;gap:clamp(30px,5vw,80px);align-items:start}
+@media (max-width:960px){.plots-wrap{grid-template-columns:1fr}}
+.sitemap{background:var(--ink-2);border:1px solid rgba(160,125,85,.25);padding:clamp(10px,2vw,24px)}
+.sitemap svg{display:block;width:100%;height:auto;overflow:visible}
+.sm-lake{fill:rgba(143,170,170,.12);stroke:rgba(143,170,170,.4);stroke-width:.8}
+.sm-c{fill:none;stroke:rgba(160,125,85,.3);stroke-width:.8}
+.sm-t{font-family:var(--sans);font-size:10px;fill:var(--mist)}
+.pl{cursor:pointer;transition:opacity .5s}
+.pl.dimmed{opacity:.38}
+.pl .dot{stroke-width:1.4;transition:r .4s var(--ease)}
+.pl .halo{fill:transparent}
+.pl.open .dot{fill:var(--ink);stroke:var(--lamp)}
+.pl.open .halo{stroke:rgba(226,168,103,.5);stroke-width:1;transform-box:fill-box;transform-origin:center;animation:ring 2.6s var(--ease) infinite}
+.pl.reserved .dot{fill:rgba(160,125,85,.35);stroke:var(--bronze-hi)}
+.pl.sold .dot{fill:var(--lamp);stroke:var(--lamp);filter:drop-shadow(0 0 5px rgba(226,168,103,.8))}
+.pl text{font-family:var(--sans);font-size:10px;fill:var(--trav-2);pointer-events:none}
+.pl:hover .dot,.pl:focus .dot,.pl.sel .dot{r:10}
+.pl:focus{outline:none}
+.pl:focus .halo,.pl.sel .halo{stroke:var(--trav);stroke-width:1.2}
+.legend{display:flex;gap:20px;margin-top:14px;font-size:12px;color:var(--mist)}
+.legend span{display:flex;align-items:center;gap:8px}
+.lg{width:10px;height:10px;border-radius:50%;display:inline-block}
+.lg.a{border:1.4px solid var(--lamp)}.lg.r{background:rgba(160,125,85,.35);border:1.4px solid var(--bronze-hi)}.lg.s{background:var(--lamp);box-shadow:0 0 6px var(--lamp)}
+.plotcard{border:1px solid rgba(160,125,85,.3);padding:clamp(22px,3vw,34px);min-height:300px}
+.pc-empty{color:var(--mist)}
+.pc-st{font-size:13px;display:inline-flex;align-items:center;gap:8px;color:var(--trav-2)}
+.pc-st::before{content:"";width:8px;height:8px;border-radius:50%}
+.pc-st.open::before{border:1.4px solid var(--lamp)}.pc-st.reserved::before{background:var(--bronze-hi)}.pc-st.sold::before{background:var(--lamp);box-shadow:0 0 8px var(--lamp)}
+.plotcard h3{font-family:var(--serif);font-weight:400;font-size:clamp(40px,4vw,64px);line-height:1;margin:12px 0 4px}
+.pc-type{color:var(--mist);margin-bottom:6px}
+.plotcard .r-spec{margin-bottom:28px}
+.pc-sold{color:var(--trav-2);font-style:italic;font-family:var(--serif);font-size:19px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin:56px 0 0;border-top:1px solid rgba(160,125,85,.28);border-bottom:1px solid rgba(160,125,85,.28)}
+.stats > div{padding:28px 24px 30px 0}
+.stats > div + div{padding-left:24px;border-left:1px solid rgba(160,125,85,.28)}
+.stats b{font-family:var(--serif);font-weight:400;font-size:clamp(44px,5vw,80px);line-height:1;font-variant-numeric:tabular-nums}
+.stats small{font-family:var(--serif);font-size:20px;color:var(--bronze-hi);margin-left:4px}
+.stats span{display:block;margin-top:10px;font-size:14px;color:var(--trav-2);max-width:22ch}
+@media (max-width:760px){.stats{grid-template-columns:1fr 1fr}.stats > div:nth-child(3){padding-left:0;border-left:0}.stats > div:nth-child(n+3){border-top:1px solid rgba(160,125,85,.28)}}
+.day-note{position:absolute;left:22px;bottom:18px;font-family:var(--serif);font-size:clamp(18px,1.8vw,26px);color:var(--trav);text-shadow:0 1px 20px rgba(0,0,0,.6)}
+.seasons{margin-top:clamp(80px,12vh,130px)}
+.seasons .tabs{margin:28px 0 24px}
+.season{display:grid;grid-template-columns:auto auto 1fr;gap:12px 40px;align-items:baseline;padding:28px 0;border-top:1px solid rgba(160,125,85,.28);border-bottom:1px solid rgba(160,125,85,.28);min-height:120px}
+.sea-m{font-size:14px;color:var(--mist)}
+.sea-t{font-family:var(--serif);font-size:clamp(28px,3vw,44px);color:var(--lamp);white-space:nowrap}
+.sea-x{color:var(--trav-2);max-width:52ch;font-size:clamp(16px,1.2vw,18px)}
+@media (max-width:760px){.season{grid-template-columns:1fr}}
+.fig{margin-top:90px}
+.fig img{width:100%;aspect-ratio:16/8;object-fit:cover}
+.fig figcaption{margin-top:12px;font-size:13px;color:var(--mist)}
+.map-read{position:absolute;left:18px;top:16px;display:flex;flex-direction:column;gap:2px;max-width:70%;background:rgba(10,20,22,.75);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding:12px 16px;border:1px solid rgba(160,125,85,.25)}
+.map-read:empty{display:none}
+.map-read b{font-family:var(--serif);font-weight:400;font-size:22px}
+.map-read span{color:var(--lamp);font-size:14px}
+.map-read em{font-style:normal;color:var(--trav-2);font-size:13px}
+.times button{width:100%;display:flex;justify-content:space-between;align-items:baseline;gap:20px;padding:18px 0;text-align:left;transition:padding .5s var(--ease)}
+.times li{padding:0}
+.times li.static{padding:18px 0}
+.times button[aria-pressed="true"]{padding-left:14px}
+.times button[aria-pressed="true"] b{color:var(--lamp)}
+.times button:hover b{color:var(--trav)}
+.loc-note{margin-top:26px;color:var(--trav-2);font-size:15px;max-width:44ch}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.switch{display:flex;align-items:center;gap:14px;cursor:pointer;font-size:15px;color:var(--trav-2);margin:6px 0 10px}
+.switch input{position:absolute;opacity:0;width:1px;height:1px}
+.switch .sw{width:44px;height:24px;border-radius:999px;border:1px solid rgba(231,223,209,.35);position:relative;transition:.4s var(--ease);flex:none}
+.switch .sw::after{content:"";position:absolute;left:3px;top:3px;width:16px;height:16px;border-radius:50%;background:var(--trav-2);transition:.4s var(--ease)}
+.switch input:checked + .sw{background:var(--bronze);border-color:var(--bronze)}
+.switch input:checked + .sw::after{transform:translateX(20px);background:var(--trav)}
+.switch input:focus-visible + .sw{outline:1px solid var(--bronze-hi);outline-offset:3px}
+.done .ref{font-size:13px;color:var(--lamp);margin-bottom:8px;font-variant-numeric:tabular-nums}
+.done-list{list-style:none;margin:18px 0 22px}
+.done-list li{display:flex;justify-content:space-between;gap:20px;padding:9px 0;border-bottom:1px dotted rgba(160,125,85,.3);font-size:14px}
+.done-list span{color:var(--mist)}
+.done-list b{font-weight:400;color:var(--trav);text-align:right}
+.done-acts{display:flex;gap:10px;flex-wrap:wrap}
 </style>
 </head>
 <body>
@@ -542,27 +637,27 @@ a:hover .roll > span,a:focus-visible .roll > span{transform:translateY(-100%)}
     <div class="shadeL" id="shadeL" aria-hidden="true"></div>
 
     <!-- approach -->
-    <p class="cue place c-approach-p" data-seg="0" data-a="-.2" data-b=".78">Lake Vale, Kumaon hills</p>
-    <h1 class="cue c-approach-h" data-seg="0" data-a="-.2" data-b=".55"><span class="h-film split">Some addresses<br>are earned.</span></h1>
-    <p class="cue lede c-approach-l" data-seg="0" data-a=".18" data-b=".62">Twelve private villas on a forested ridge, 1,900 metres above the lake. Each one sits on two acres of oak and deodar.</p>
-    <div class="scrollhint" id="hint"><i></i>Scroll to approach</div>
+    <p class="cue place c-approach-p" data-seg="0" data-a="-.2" data-b=".78">Lake Vale, Kumaon Himalaya</p>
+    <h1 class="cue c-approach-h" data-seg="0" data-a="-.2" data-b=".55"><span class="h-film split">The mist<br>stops here.</span></h1>
+    <p class="cue lede c-approach-l" data-seg="0" data-a=".18" data-b=".62">Twelve houses on a ridge of oak and deodar, 1,900 metres up, where the clouds settle below you. Each stands on two acres, out of sight of the rest.</p>
+    <div class="scrollhint" id="hint"><i></i>Scroll to begin the approach</div>
 
     <!-- threshold -->
-    <h2 class="cue c-thr-h" data-seg="1" data-a=".04" data-b=".66"><span class="h-film split">Enter slowly.</span></h2>
-    <p class="cue lede c-thr-l" data-seg="1" data-a=".12" data-b=".66">A 4.2-metre bronze door turns on a single pivot and opens onto a double-height hall of honed travertine. The light follows you in.</p>
-    <div class="cue callout c-co1" data-seg="1" data-a=".2" data-b=".55"><i class="pin"></i><i class="line"></i><div><b>Pivot door</b><small>Hand-patinated bronze, 900 kg</small></div></div>
-    <div class="cue callout c-co2" data-seg="1" data-a=".32" data-b=".72"><i class="pin"></i><i class="line"></i><div><b>Travertine walls</b><small>Honed, quarried in Tivoli</small></div></div>
-    <div class="cue callout c-co3" data-seg="1" data-a=".44" data-b=".88"><i class="pin"></i><i class="line"></i><div><b>Lake glass</b><small>9-metre sliding wall, opens fully</small></div></div>
+    <h2 class="cue c-thr-h" data-seg="1" data-a=".04" data-b=".66"><span class="h-film split">Nine hundred kilos,<br>one finger.</span></h2>
+    <p class="cue lede c-thr-l" data-seg="1" data-a=".12" data-b=".66">The front door is hand-patinated bronze, balanced on a single pin. Push, and it turns without a sound onto eleven metres of honed travertine and a wall of lake.</p>
+    <div class="cue callout c-co1" data-seg="1" data-a=".2" data-b=".55"><i class="pin"></i><i class="line"></i><div><b>The pivot door</b><small>4.2 m of bronze on one steel pin</small></div></div>
+    <div class="cue callout c-co2" data-seg="1" data-a=".32" data-b=".72"><i class="pin"></i><i class="line"></i><div><b>Travertine walls</b><small>Honed, from the quarries of Tivoli</small></div></div>
+    <div class="cue callout c-co3" data-seg="1" data-a=".44" data-b=".88"><i class="pin"></i><i class="line"></i><div><b>The lake wall</b><small>9 m of glass that slides into the stone</small></div></div>
 
     <!-- edge -->
-    <h2 class="cue c-edge-h" data-seg="2" data-a=".04" data-b=".6"><span class="h-film split">The pool ends where<br>the lake begins.</span></h2>
+    <h2 class="cue c-edge-h" data-seg="2" data-a=".04" data-b=".6"><span class="h-film split">Swim out<br>over the valley.</span></h2>
     <div class="cue measure" data-seg="2" data-a=".12" data-b=".72" id="measure">
       <div class="bar"><i></i></div>
-      <div class="read"><span>Cantilever, unsupported</span><em id="mval">0.00 m</em></div>
+      <div class="read"><span>Cantilever, with nothing beneath</span><em id="mval">0.00 m</em></div>
     </div>
 
     <!-- blueprint -->
-    <h2 class="cue c-blue-h" data-seg="3" data-a=".06" data-b=".5"><span class="h-film split">Drawn for the ridge,<br>not the market.</span></h2>
+    <h2 class="cue c-blue-h" data-seg="3" data-a=".06" data-b=".5"><span class="h-film split">Every line answers<br>to the ridge.</span></h2>
     <div class="cue titleblock" data-seg="3" data-a=".1" data-b=".9">
       <div class="wide">Residence R-04, The Ridge</div>
       <div><span>Drawing</span>North elevation</div>
@@ -573,8 +668,9 @@ a:hover .roll > span,a:focus-visible .roll > span{transform:translateY(-100%)}
 
     <!-- nightfall -->
     <div class="cue c-night-h" data-seg="4" data-a=".28" data-b="1.01">
-      <span class="place">Completion, winter 2027</span>
-      <h2 class="h-film split">Twelve residences.<br>Four remain.</h2>
+      <span class="place">Handover, winter 2027</span>
+      <h2 class="h-film split">Twelve houses.<br>Four still dark.</h2>
+      <p class="lede" style="max-width:40ch;text-align:center">The lit windows are taken. Four houses on the ridge are still waiting for someone to turn on the lights.</p>
       <div class="acts"><a href="#viewing" class="btn solid">Book a private viewing</a><a href="#residences" class="btn">See the residences</a></div>
     </div>
 
@@ -593,15 +689,15 @@ a:hover .roll > span,a:focus-visible .roll > span{transform:translateY(-100%)}
 <!-- ───── residences preview ───── -->
 <section class="sec" id="homes" aria-labelledby="homes-h">
   <div class="sec-head">
-    <h2 class="h2 hsplit" id="homes-h" aria-label="Three houses, one ridge.">Three houses,<br>one ridge.</h2>
-    <p data-rv>Every residence is placed by the trees, not by a grid. No two share a view, and none can see another from inside.</p>
+    <h2 class="h2 hsplit" id="homes-h" aria-label="Three ways to live on a ridge.">Three ways<br>to live on a ridge.</h2>
+    <p data-rv>The trees decided where the houses go. No two share a view, and from inside any one of them, you cannot see another.</p>
   </div>
 
   <article class="res">
     <a class="shot mask-rv" href="#residences" data-plan="ridge" data-cursor="Plan"><img src="img/pool.webp" alt="Cantilevered infinity pool at sunset above the lake valley" loading="lazy"></a>
     <div class="info" data-rv>
       <h3>The Ridge</h3>
-      <p>The crest of the site. A 7.2-metre pool cantilevers over the valley, and the principal suite takes the whole upper floor.</p>
+      <p>The highest ground on the estate. The pool reaches 7.2 metres past the cliff, and the principal suite takes the entire upper floor: sunrise on one side, the lake on the other.</p>
       <div class="facts"><div><b>4</b>bedrooms</div><div><b>6,400</b>sq ft</div><div><b>₹18.5 Cr</b>from</div></div>
       <a href="#residences" class="btn" data-plan="ridge">View floor plan</a>
       <div class="status"><i></i>2 of 4 available</div>
@@ -612,7 +708,7 @@ a:hover .roll > span,a:focus-visible .roll > span{transform:translateY(-100%)}
     <a class="shot mask-rv" href="#residences" data-plan="shore" data-cursor="Plan"><img src="img/night.webp" alt="Villa at night with lit windows reflected in the lake" loading="lazy"></a>
     <div class="info" data-rv>
       <h3>The Shore</h3>
-      <p>Set low beside the water, with a private jetty and a living room that opens fully to the lake on three sides.</p>
+      <p>Built at the waterline. The living room opens on three sides, and stone steps lead from the deck straight down to your own jetty.</p>
       <div class="facts"><div><b>3</b>bedrooms</div><div><b>4,900</b>sq ft</div><div><b>₹13.2 Cr</b>from</div></div>
       <a href="#residences" class="btn" data-plan="shore">View floor plan</a>
       <div class="status"><i></i>1 of 5 available</div>
@@ -623,7 +719,7 @@ a:hover .roll > span,a:focus-visible .roll > span{transform:translateY(-100%)}
     <a class="shot mask-rv" href="#residences" data-plan="canopy" data-cursor="Plan"><img src="img/aerial.webp" alt="Aerial view of the villa on a forested ridge above misty hills at dusk" loading="lazy"></a>
     <div class="info" data-rv>
       <h3>The Canopy</h3>
-      <p>Raised into the deodar canopy on stone piers. A roof terrace looks over the mist line to the snow peaks on clear mornings.</p>
+      <p>Lifted into the deodars on stone piers. On clear mornings the roof terrace looks across the mist to the snow line of Nanda Devi.</p>
       <div class="facts"><div><b>5</b>bedrooms</div><div><b>7,800</b>sq ft</div><div><b>₹24 Cr</b>from</div></div>
       <a href="#residences" class="btn" data-plan="canopy">View floor plan</a>
       <div class="status"><i></i>1 of 3 available</div>
@@ -635,7 +731,7 @@ a:hover .roll > span,a:focus-visible .roll > span{transform:translateY(-100%)}
 <footer class="foot" id="foot">
   <div class="big" id="bigword" aria-hidden="true">NOIRVALE</div>
   <div class="foot-grid">
-    <div><h4>Private viewings</h4><p>Tuesday to Sunday, by appointment.<br>Our concierge collects you from Pantnagar airport.</p><p style="margin-top:22px"><a href="#viewing" class="btn"><i class="dot"></i>Book a private viewing</a></p></div>
+    <div><h4>Private viewings</h4><p>Tuesday to Sunday, by appointment only.<br>We collect you from Pantnagar and have you on the ridge by golden hour.</p><p style="margin-top:22px"><a href="#viewing" class="btn"><i class="dot"></i>Book a private viewing</a></p></div>
     <div><h4>Explore</h4><a href="#residences">Residences</a><a href="#estate">The estate</a><a href="#location">Location</a></div>
     <div><h4>Sales gallery</h4><p>Lake Vale Road<br>Kumaon, Uttarakhand</p></div>
     <div><h4>Contact</h4><p>+91 00000 00000<br>concierge@noirvale.example</p></div>
@@ -647,70 +743,115 @@ a:hover .roll > span,a:focus-visible .roll > span{transform:translateY(-100%)}
 <section class="view" id="v-residences" aria-label="Residences" tabindex="-1">
   <div class="view-in">
     <a href="#" class="back">Back to the film</a>
-    <h1 class="vh1">Residences</h1>
-    <p class="vlede">Hover or tap a room to see its size. Glass walls are marked in amber; every plan opens to the lake on its south side.</p>
-    <div class="tabs" role="tablist" aria-label="Residence type">
-      <button role="tab" aria-selected="true" data-t="ridge">The Ridge</button>
-      <button role="tab" aria-selected="false" data-t="shore">The Shore</button>
-      <button role="tab" aria-selected="false" data-t="canopy">The Canopy</button>
+    <h1 class="vh1">Choose your ground.</h1>
+    <p class="vlede">Every plan starts at the lake and works backwards. Pick a house, walk its rooms, then choose the plot it will stand on. Glass walls are drawn in amber.</p>
+    <div class="res-ctl">
+      <div class="tabs" role="tablist" aria-label="Residence type">
+        <button role="tab" aria-selected="true" data-t="ridge">The Ridge</button>
+        <button role="tab" aria-selected="false" data-t="shore">The Shore</button>
+        <button role="tab" aria-selected="false" data-t="canopy">The Canopy</button>
+      </div>
+      <div class="lvl" id="lvl" role="group" aria-label="Floor">
+        <button type="button" data-l="ground" aria-pressed="true">Ground floor</button>
+        <button type="button" data-l="upper" aria-pressed="false">Upper floor</button>
+      </div>
     </div>
     <div class="plan-wrap">
       <div class="plan"><div class="north">N <svg width="14" height="18" viewBox="0 0 14 18"><path d="M7 0 L13 18 L7 13 L1 18 Z" fill="none" stroke="currentColor"/></svg></div><svg id="plan" viewBox="0 0 600 420" role="group" aria-label="Floor plan, select a room"></svg></div>
       <div class="readout">
-        <h3 id="r-name">The Ridge</h3>
-        <p id="r-desc" style="color:var(--trav-2)"></p>
-        <p class="price" id="r-price"></p>
-        <div class="room-now" aria-live="polite"><b id="r-room">Choose a room</b><span id="r-area">Hover the plan or the list below</span></div>
+        <h2 class="r-h" id="r-name">The Ridge</h2>
+        <p id="r-desc" class="r-desc"></p>
+        <dl class="r-spec" id="r-spec"></dl>
+        <div class="room-now" aria-live="polite"><b id="r-room">Choose a room</b><span id="r-area">Hover the plan, or use the list below</span></div>
         <ul class="rlist" id="r-list"></ul>
-        <p style="margin-top:34px"><a href="#viewing" class="btn solid">Book a private viewing</a></p>
       </div>
     </div>
+
+    <section class="plots-sec" aria-labelledby="plots-h">
+      <div class="sec-head small">
+        <h2 class="h3" id="plots-h">Twelve plots, four still dark.</h2>
+        <p>Lit plots are taken. Choose an open one to see its ground, its view and its price, then book a walk of it.</p>
+      </div>
+      <div class="plots-wrap">
+        <div class="sitemap">
+          <svg id="plots" viewBox="0 0 640 300" role="group" aria-label="Site plan of the twelve plots">
+            <path class="sm-lake" d="M40 300 C 90 248, 190 236, 280 252 S 470 262, 560 240 S 640 236, 640 250 V300 Z"/>
+            <path class="sm-c" d="M0 120 C 120 70, 220 60, 330 66 S 520 58, 640 96"/>
+            <path class="sm-c" d="M0 160 C 120 118, 230 112, 330 116 S 520 108, 640 140"/>
+            <path class="sm-c" d="M0 200 C 140 168, 250 162, 340 170 S 520 166, 640 186"/>
+            <path class="sm-c" d="M0 232 C 140 210, 260 206, 340 214 S 540 212, 640 222"/>
+            <text class="sm-t" x="22" y="108">ridge line, 1,912 m</text>
+            <text class="sm-t" x="70" y="290">Lake Vale</text>
+            <g id="plot-dots"></g>
+          </svg>
+          <div class="legend"><span><i class="lg a"></i>Open</span><span><i class="lg r"></i>Reserved</span><span><i class="lg s"></i>Lit, sold</span></div>
+        </div>
+        <div class="plotcard" id="plotcard" aria-live="polite">
+          <p class="pc-empty">Select a plot on the plan.</p>
+        </div>
+      </div>
+    </section>
   </div>
 </section>
 
 <section class="view" id="v-estate" aria-label="The estate" tabindex="-1">
   <div class="view-in">
     <a href="#" class="back">Back to the film</a>
-    <h1 class="vh1">Sixty acres, mostly forest.</h1>
-    <p class="vlede">Only nine percent of the estate is built on. The rest stays oak, deodar and rhododendron, managed by a resident forester.</p>
-    <div class="day" id="day"><canvas id="dayc" role="img" aria-label="Residence R-04 at night, seen from the lake as the camera rises"></canvas></div>
-    <div class="day-ctl"><span>Drag to rise over the lake</span><input type="range" id="dayr" min="0" max="191" value="0" aria-label="Camera height above the lake" aria-valuetext="2 metres"><output id="dayo">2 m</output></div>
-    <div class="amen">
-      <article><h3>The lake house</h3><p>A shared boathouse with a 25-metre indoor pool, a sauna in cedar and a wood-fired kitchen on the water.</p></article>
-      <article><h3>Forest trails</h3><p>Eleven kilometres of private paths, lit at ankle height so the night sky stays dark.</p></article>
-      <article><h3>The observatory</h3><p>A 14-inch telescope under a sliding roof. Lake Vale sits in one of the darkest skies in north India.</p></article>
-      <article><h3>Residence care</h3><p>Housekeeping, a resident chef on request and full maintenance while you are away.</p></article>
+    <h1 class="vh1">Sixty acres. Mostly silence.</h1>
+    <p class="vlede">Nine percent of the land is built on. The rest belongs to oak, deodar and rhododendron, and to the forester who lives among them.</p>
+    <div class="stats" id="stats">
+      <div><b data-n="91">0</b><small>%</small><span>of the estate stays forest, by covenant</span></div>
+      <div><b data-n="11">0</b><small>km</small><span>of private trails, lit at ankle height</span></div>
+      <div><b data-n="0">0</b><small></small><span>street lights, so the Milky Way stays</span></div>
+      <div><b data-n="1900">0</b><small>m</small><span>above sea level, above the summer haze</span></div>
     </div>
-    <figure style="margin-top:90px"><img src="img/interior.webp" alt="Double-height travertine living room opening to the lake" loading="lazy" style="width:100%;aspect-ratio:16/8;object-fit:cover"></figure>
+    <div class="day" id="day"><canvas id="dayc" role="img" aria-label="Residence R-04 at night, seen from the lake as the camera rises"></canvas><span class="day-note" id="dayn">At the waterline</span></div>
+    <div class="day-ctl"><span>Drag to rise over the lake</span><input type="range" id="dayr" min="0" max="191" value="0" aria-label="Camera height above the lake" aria-valuetext="2 metres"><output id="dayo">2 m</output></div>
+
+    <section class="seasons" aria-labelledby="sea-h">
+      <h2 class="h3" id="sea-h">One ridge, four climates.</h2>
+      <div class="tabs" role="tablist" aria-label="Season">
+        <button role="tab" aria-selected="true" data-s="winter">Winter</button>
+        <button role="tab" aria-selected="false" data-s="spring">Spring</button>
+        <button role="tab" aria-selected="false" data-s="monsoon">Monsoon</button>
+        <button role="tab" aria-selected="false" data-s="autumn">Autumn</button>
+      </div>
+      <div class="season" id="season" aria-live="polite"></div>
+    </section>
+
+    <div class="amen">
+      <article><h3>The lake house</h3><p>A boathouse of cedar and stone with a 25-metre indoor pool, a wood-fired kitchen and a sauna that opens straight onto the water.</p></article>
+      <article><h3>Forest trails</h3><p>Eleven kilometres of private paths, lit only at ankle height, so you can walk home under the stars without ever seeing a lamp post.</p></article>
+      <article><h3>The observatory</h3><p>A 14-inch telescope under a sliding roof. Lake Vale sits beneath one of the darkest skies in north India; Saturn's rings are an ordinary Tuesday.</p></article>
+      <article><h3>Residence care</h3><p>Housekeeping, a resident chef on request, and a team that airs the house, lights the fires and stocks the cellar before you arrive.</p></article>
+    </div>
+    <figure class="fig"><img src="img/interior.webp" alt="Double-height travertine living room opening to the lake" loading="lazy"><figcaption>The hall of R-04 at five in the afternoon.</figcaption></figure>
   </div>
 </section>
 
 <section class="view" id="v-location" aria-label="Location" tabindex="-1">
   <div class="view-in">
     <a href="#" class="back">Back to the film</a>
-    <h1 class="vh1">Far enough.</h1>
-    <p class="vlede">Lake Vale sits above the cloud line in the Kumaon hills, close enough to fly in for a weekend, far enough that nobody passes by.</p>
+    <h1 class="vh1">Close to nothing loud.</h1>
+    <p class="vlede">Lake Vale sits above the cloud line in the Kumaon hills: near enough to fly in for a long weekend, far enough that nobody ever passes by.</p>
     <div class="loc">
       <div class="map" id="map">
-        <svg viewBox="0 0 640 460" role="img" aria-label="Stylised map of Lake Vale and the approach road">
+        <svg viewBox="0 0 640 460" role="img" aria-label="Map of Lake Vale with routes to nearby towns">
           <g class="contours"></g>
           <path class="water" d="M150 300 C 190 250, 270 240, 320 262 S 430 300, 470 286 S 540 250, 560 276 C 572 300, 520 336, 460 338 S 350 330, 300 344 S 190 360, 160 340 C 140 328, 138 314, 150 300 Z"/>
-          <path class="road" pathLength="1" d="M20 440 C 80 420, 90 380, 130 372 S 210 392, 250 370 S 280 320, 330 330 S 390 360, 400 300 S 380 220, 410 190"/>
+          <g id="routes"></g>
           <circle class="site" cx="410" cy="186" r="5"/><circle class="site-ring" cx="410" cy="186" r="9"/>
-          <text x="424" y="182">NOIRVALE</text>
+          <text x="424" y="182" class="site-t">NOIRVALE</text>
           <text x="300" y="300" style="fill:rgba(190,210,208,.8)">Lake Vale</text>
-          <text x="30" y="428">to Nainital</text>
-          <text x="610" y="84" text-anchor="end">Nanda Devi range, 110 km</text>
+          <text x="610" y="84" text-anchor="end">Nanda Devi, 110 km</text>
           <path d="M560 62 l10 -16 l8 10 l7 -14 l12 20" fill="none" stroke="rgba(231,223,209,.5)"/>
         </svg>
+        <div class="map-read" id="mapread" aria-live="polite"></div>
       </div>
-      <ul class="times">
-        <li><b>Nainital</b><span>45 minutes by road</span></li>
-        <li><b>Pantnagar airport</b><span>1 hr 50 min, with concierge transfer</span></li>
-        <li><b>Kathgodam railway</b><span>1 hr 20 min</span></li>
-        <li><b>New Delhi</b><span>1 hr flight, or 6 hrs by road</span></li>
-        <li><b>Altitude</b><span>1,900 m, above the summer haze</span></li>
-      </ul>
+      <div>
+        <ul class="times" id="times"></ul>
+        <p class="loc-note">Every arrival is met. Tell us your flight or train and a car will be waiting, with the house warm when you get there.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -718,28 +859,39 @@ a:hover .roll > span,a:focus-visible .roll > span{transform:translateY(-100%)}
 <section class="view" id="v-viewing" aria-label="Book a private viewing" tabindex="-1">
   <div class="view-in">
     <a href="#" class="back">Back to the film</a>
-    <h1 class="vh1">Come and see the light.</h1>
-    <p class="vlede">Viewings last about three hours and include lunch at the lake house. We recommend the 5:30 pm slot to walk the ridge at golden hour.</p>
+    <h1 class="vh1">Arrive before sunset.</h1>
+    <p class="vlede">A viewing takes an afternoon: lunch at the lake house, a walk through the house you choose, and the ridge at golden hour. Tell us when, and we will have the doors open.</p>
     <form class="book" id="bookf" novalidate>
       <div>
         <label class="field" id="f-name"><span>Full name</span><input name="name" autocomplete="name" required aria-describedby="e-name"><em class="msg" id="e-name">Enter your name so the concierge knows who to expect.</em></label>
         <label class="field" id="f-phone"><span>Phone</span><input name="phone" type="tel" autocomplete="tel" inputmode="tel" required aria-describedby="e-phone"><em class="msg" id="e-phone">Enter a phone number with at least 10 digits.</em></label>
-        <label class="field"><span>Email (optional)</span><input name="email" type="email" autocomplete="email"></label>
-        <label class="field"><span>Residence</span>
-          <select name="res" id="f-res"><option>The Ridge</option><option>The Shore</option><option>The Canopy</option><option>Not sure yet</option></select></label>
-        <label class="field"><span>Guests</span><select name="guests"><option>Just me</option><option selected>2 people</option><option>3 to 4 people</option></select></label>
+        <label class="field" id="f-email"><span>Email (optional)</span><input name="email" type="email" autocomplete="email" aria-describedby="e-email"><em class="msg" id="e-email">Check the email address, or leave it empty.</em></label>
+        <div class="two">
+          <label class="field"><span>Residence</span>
+            <select name="res" id="f-res"><option>The Ridge</option><option>The Shore</option><option>The Canopy</option><option>Not sure yet</option></select></label>
+          <label class="field"><span>Plot</span>
+            <select name="plot" id="f-plot"></select></label>
+        </div>
+        <label class="field"><span>Guests</span><select name="guests"><option>Just me</option><option selected>2 people</option><option>3 to 4 people</option><option>5 or more</option></select></label>
+        <label class="switch"><input type="checkbox" name="transfer" id="f-transfer" checked><span class="sw" aria-hidden="true"></span><span>Collect me from Pantnagar airport</span></label>
       </div>
       <div>
-        <div class="cal" aria-label="Choose a date">
+        <div class="cal" role="group" aria-label="Choose a date">
           <div class="cal-head"><button type="button" id="calp" aria-label="Previous month">‹</button><b id="calm" aria-live="polite"></b><button type="button" id="caln" aria-label="Next month">›</button></div>
           <div class="cal-grid" id="calg"></div>
-          <div class="slots" id="slots" role="group" aria-label="Time">
+          <div class="slots" id="slots" role="group" aria-label="Arrival time">
             <button type="button" data-s="10:00 am" aria-pressed="false">10:00</button><button type="button" data-s="12:30 pm" aria-pressed="false">12:30</button><button type="button" data-s="3:00 pm" aria-pressed="false">15:00</button><button type="button" data-s="5:30 pm" aria-pressed="false">17:30<small>Golden hour</small></button>
           </div>
         </div>
-        <p class="summary" id="sum" aria-live="polite">Choose a date and time. Viewings run Tuesday to Sunday.</p>
-        <button class="btn solid" type="submit">Request viewing</button>
-        <div class="done" id="done" role="status" tabindex="-1"><h3>Viewing requested</h3><p id="done-t"></p><small>This is a concept website, so the request isn't sent anywhere.</small></div>
+        <p class="summary" id="sum" aria-live="polite">Choose a date and a time. Viewings run Tuesday to Sunday.</p>
+        <button class="btn solid" type="submit" id="bsub">Request viewing</button>
+        <div class="done" id="done" role="status" tabindex="-1">
+          <p class="ref" id="done-ref"></p>
+          <h3>Your viewing is requested.</h3>
+          <ul class="done-list" id="done-list"></ul>
+          <div class="done-acts"><button type="button" class="btn" id="copyd">Copy details</button><button type="button" class="btn" id="editd">Change request</button></div>
+          <small>This is a concept website, so the request is not sent anywhere.</small>
+        </div>
       </div>
     </form>
   </div>
@@ -1000,7 +1152,7 @@ if(matchMedia('(hover:hover) and (pointer:fine)').matches && !RM){
 /* ───── views (hash routing) ───── */
 const VIEWS=['residences','estate','location','viewing'];
 const pivot=$('.pivot'), slab=$('.slab',pivot), pDim=$('.dim',pivot), pT=$('.pt .t',pivot), pS=$('.pt small span',pivot);
-const VIEWNAME={residences:['Residences','Three houses, one ridge'],estate:['The estate','Sixty acres, mostly forest'],location:['Location','Lake Vale, Kumaon'],viewing:['Private viewing','Come and see the light'],home:['The ridge','Back to the film']};
+const VIEWNAME={residences:['Residences','Choose your ground'],estate:['The estate','Sixty acres, mostly silence'],location:['Location','Close to nothing loud'],viewing:['Private viewing','Arrive before sunset'],home:['The ridge','Back to the film']};
 let pivotBusy=false;
 const bgRegions=[$('main'),$('#foot')];
 let current=null, openedInPage=false, opener=null, firstRoute=true;
@@ -1016,7 +1168,7 @@ function route(){
       document.body.classList.add('locked'); lenis&&lenis.stop(); setInert(true);
       nav.classList.remove('hide'); nav.classList.add('solid');
       setTimeout(()=>v.focus({preventScroll:true}),60);
-      if(want==='location') setTimeout(()=>$('#map').classList.add('drawn'),300);
+      if(want==='location') locationOpen();
       if(want==='estate') estateOpen();
     } else {
       document.body.classList.remove('locked'); setInert(false);
@@ -1066,7 +1218,7 @@ function revealView(v){
   if(h && !h.dataset.split){ h.dataset.split=1; const txt=h.textContent; h.setAttribute('aria-label',txt); h.innerHTML=`<span aria-hidden="true">${splitChars(txt)}</span>`; }
   if(RM) return;
   $$('.c',h).forEach((c,i)=>c.animate([{transform:'translateY(110%)'},{transform:'none'}],{duration:1000,delay:120+i*22,easing:'cubic-bezier(.16,1,.3,1)',fill:'both'}));
-  const parts=$$('.back,.vlede,.tabs,.plan-wrap,.day,.day-ctl,.amen article,.loc > .map,.times li,.book > div,.view-in > figure',v);
+  const parts=$$('.back,.vlede,.res-ctl,.plan-wrap,.plots-sec,.stats > div,.day,.day-ctl,.seasons,.amen article,.fig,.loc > .map,.times li,.loc-note,.book > div',v);
   parts.forEach((el,i)=>el.animate([{opacity:0,transform:'translateY(46px)',filter:'blur(8px)'},{opacity:1,transform:'none',filter:'blur(0px)'}],{duration:1100,delay:260+i*70,easing:'cubic-bezier(.16,1,.3,1)',fill:'both'}));
 }
 function closeView(){
@@ -1099,76 +1251,155 @@ mbtn.addEventListener('click',()=>{
   setTimeout(()=>$('a',mm).focus({preventScroll:true}),200);
 });
 
-/* ───── residences plans ───── */
+/* ───── residences: plans, floors, plots ───── */
 const PLANS={
-  ridge:{name:'The Ridge',price:'From ₹18.5 Cr, 4 bedrooms',desc:'Two levels on the crest. The living hall is double height and the pool cantilevers 7.2 metres over the valley.',
-    rooms:[['Entrance hall',40,40,110,90,'420 sq ft'],['Living hall',150,40,200,170,'1,180 sq ft'],['Dining',350,40,120,110,'560 sq ft'],['Kitchen',470,40,90,110,'410 sq ft'],
-           ['Library',40,130,110,80,'330 sq ft'],['Stair and lift',350,150,70,60,'Glass lift to roof'],['Spa and steam',420,150,140,80,'390 sq ft'],
+  ridge:{name:'The Ridge',spec:[['Bedrooms','4'],['Built area','6,400 sq ft'],['Plot','2.1 to 2.6 acres'],['From','₹18.5 Cr']],
+    desc:'Two floors on the crest. The hall rises the full height of the house, and the pool runs 7.2 metres out past the cliff.',
+    rooms:[['Entrance hall',40,40,110,90,'420 sq ft'],['Living hall',150,40,200,170,'1,180 sq ft, double height'],['Dining',350,40,120,110,'560 sq ft'],['Kitchen',470,40,90,110,'410 sq ft'],
+           ['Library',40,130,110,80,'330 sq ft'],['Stair and lift',350,150,70,60,'Glass lift to the roof'],['Spa and steam',420,150,140,80,'390 sq ft'],
            ['Guest suite',40,210,150,110,'610 sq ft'],['Bedroom 3',190,210,120,110,'480 sq ft'],['Bedroom 4',310,210,110,110,'450 sq ft'],
            ['Pool terrace',420,230,140,90,'620 sq ft',1],['Infinity pool',260,330,300,52,'7.2 m cantilever',1]],
-    glass:[[40,320,420,320],[560,150,560,230]]},
-  shore:{name:'The Shore',price:'From ₹13.2 Cr, 3 bedrooms',desc:'One long level beside the water. The living room opens on three sides and steps down to a private jetty.',
+    glass:[[40,320,420,320],[560,150,560,230]],
+    upper:{rooms:[['Principal bedroom',40,40,200,170,'780 sq ft'],['Dressing room',240,40,110,90,'330 sq ft'],['Principal bath',240,130,110,80,'360 sq ft, stone tub'],
+           ['Study',350,40,120,110,'420 sq ft'],['Stair and lift',350,150,70,60,'Glass lift'],['Open to the hall below',470,40,90,170,'Double-height void',1],
+           ['Sunrise terrace',40,210,380,110,'1,050 sq ft',1]],
+      glass:[[40,210,240,210],[350,40,470,40]]}},
+  shore:{name:'The Shore',spec:[['Bedrooms','3'],['Built area','4,900 sq ft'],['Plot','2.0 acres, lake frontage'],['From','₹13.2 Cr']],
+    desc:'One long floor at the waterline. The living room opens on three sides and steps down to a private stone jetty.',
     rooms:[['Entrance',40,60,90,80,'280 sq ft'],['Living room',130,60,220,160,'1,040 sq ft'],['Kitchen and dining',350,60,140,110,'690 sq ft'],['Pantry',490,60,70,110,'210 sq ft'],
            ['Principal suite',40,140,90,180,'720 sq ft'],['Bedroom 2',350,170,110,150,'440 sq ft'],['Bedroom 3',460,170,100,150,'420 sq ft'],
            ['Lake deck',130,220,220,100,'760 sq ft',1],['Jetty',210,320,60,80,'18 m long',1]],
     glass:[[130,220,350,220],[40,320,130,320],[350,320,560,320]]},
-  canopy:{name:'The Canopy',price:'From ₹24 Cr, 5 bedrooms',desc:'Raised on stone piers into the deodar. Three floors and a roof terrace above the mist line.',
+  canopy:{name:'The Canopy',spec:[['Bedrooms','5'],['Built area','7,800 sq ft'],['Plot','2.4 acres, raised on piers'],['From','₹24 Cr']],
+    desc:'Three floors lifted into the deodars on stone piers, with a roof terrace above the mist line.',
     rooms:[['Gallery',40,40,160,80,'560 sq ft'],['Great room',200,40,220,180,'1,420 sq ft'],['Kitchen',420,40,140,100,'580 sq ft'],['Family room',420,140,140,120,'460 sq ft'],
            ['Principal suite',40,120,160,140,'900 sq ft'],['Bedroom 2',40,260,120,100,'440 sq ft'],['Bedroom 3',160,260,120,100,'430 sq ft'],['Bedroom 4',280,260,120,100,'430 sq ft'],
            ['Bedroom 5',400,260,160,100,'520 sq ft'],['Canopy deck',200,220,220,40,'40 m long',1]],
-    glass:[[200,220,420,220],[40,360,560,360]]}
+    glass:[[200,220,420,220],[40,360,560,360]],
+    upper:{rooms:[['Roof terrace',40,40,360,220,'2,400 sq ft, above the canopy',1],['Telescope deck',400,40,160,120,'Mount for a 10-inch reflector',1],['Sky lounge',400,160,160,100,'540 sq ft']],
+      glass:[[400,160,560,160]]}}
 };
-const planSvg=$('#plan'), rList=$('#r-list'); let staggerRooms=true;
-function showPlan(k){
-  const P=PLANS[k]; if(!P) return;
-  $$('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.t===k));
-  $('#r-name').textContent=P.name; $('#r-desc').textContent=P.desc; $('#r-price').textContent=P.price;
-  $('#r-room').textContent='Choose a room'; $('#r-area').textContent='Hover the plan or the list below';
-  const xs=P.rooms.flatMap(r=>[r[1],r[1]+r[3]]), ys=P.rooms.flatMap(r=>[r[2],r[2]+r[4]]);
-  let s='';
-  // outer walls drawn first, rooms on top
-  s+=`<rect class="wall" x="${Math.min(...xs)}" y="${Math.min(...ys)}" width="${Math.max(...xs)-Math.min(...xs)}" height="${Math.max(...ys.filter((y,i)=>!P.rooms[Math.floor(i/2)][6]))-Math.min(...ys)}" pathLength="1" style="stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1.6s var(--ease)"/>`;
+const PLOTS=[
+  ['R-01','ridge','sold',330,84,2.3,1909,'South over the lake'],['R-02','ridge','open',392,80,2.6,1912,'South-east, first light on the water','₹18.5 Cr'],
+  ['R-03','ridge','reserved',454,82,2.2,1908,'South-west, long sunsets'],['R-04','ridge','open',516,88,2.1,1904,'West along the valley','₹19.4 Cr'],
+  ['C-01','canopy','sold',150,140,2.4,1874,'Through the deodars to the lake'],['C-02','canopy','open',214,134,2.4,1879,'North to the snow line','₹24 Cr'],['C-03','canopy','reserved',278,138,2.5,1877,'East over the forest'],
+  ['S-01','shore','sold',250,232,2.0,1846,'Across the water'],['S-02','shore','sold',314,236,2.0,1845,'Across the water'],['S-03','shore','open',378,238,2.1,1845,'Due south, private jetty','₹13.2 Cr'],
+  ['S-04','shore','reserved',442,236,2.0,1846,'South-west, sheltered cove'],['S-05','shore','sold',506,230,2.0,1847,'West, evening light']
+];
+const STATUS={open:'Open',reserved:'Reserved',sold:'Sold'};
+const planSvg=$('#plan'), rList=$('#r-list'), lvl=$('#lvl');
+let planKey='ridge', planLvl='ground', selPlot=null;
+function showPlan(k,level){
+  const P0=PLANS[k]; if(!P0) return;
+  if(k!==planKey) level='ground';
+  planKey=k; planLvl=(level==='upper'&&P0.upper)?'upper':'ground';
+  const P = planLvl==='upper' ? P0.upper : P0;
+  $$('#v-residences .res-ctl .tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.t===k));
+  lvl.hidden=!P0.upper;
+  $$('button',lvl).forEach(b=>b.setAttribute('aria-pressed',b.dataset.l===planLvl));
+  $('#r-name').textContent=P0.name; $('#r-desc').textContent=P0.desc;
+  $('#r-spec').innerHTML=P0.spec.map(([k,v])=>`<div><dt>${k}</dt><dd>${v}</dd></div>`).join('');
+  $('#r-room').textContent='Choose a room'; $('#r-area').textContent='Hover the plan, or use the list below';
+  const inside=P.rooms.filter(r=>!r[6]);
+  const xs=inside.flatMap(r=>[r[1],r[1]+r[3]]), ys=inside.flatMap(r=>[r[2],r[2]+r[4]]);
+  let out=`<rect class="wall" x="${Math.min(...xs)}" y="${Math.min(...ys)}" width="${Math.max(...xs)-Math.min(...xs)}" height="${Math.max(...ys)-Math.min(...ys)}" pathLength="1" style="stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1.6s var(--ease)"/>`;
   P.rooms.forEach((r,i)=>{
-    s+=`<g data-i="${i}"><rect class="room${r[6]?' out':''}" x="${r[1]}" y="${r[2]}" width="${r[3]}" height="${r[4]}" tabindex="0" role="button" aria-label="${r[0]}, ${r[5]}"/>`+
-       `<text class="rl" x="${r[1]+8}" y="${r[2]+16}">${r[0]}</text></g>`;
+    out+=`<g data-i="${i}"><rect class="room${r[6]?' out':''}" x="${r[1]}" y="${r[2]}" width="${r[3]}" height="${r[4]}" tabindex="0" role="button" aria-label="${r[0]}, ${r[5]}"/>`+
+         (r[3]>=70&&r[4]>=50?`<text class="rl" x="${r[1]+8}" y="${r[2]+17}">${r[0]}</text>`:'')+`</g>`;
   });
-  P.glass.forEach(g=>{ s+=`<line class="glass" x1="${g[0]}" y1="${g[1]}" x2="${g[2]}" y2="${g[3]}"/>`; });
-  s+=`<text class="rl" x="300" y="412" text-anchor="middle" style="fill:var(--bronze-hi)">Lake side</text>`;
-  planSvg.innerHTML=s;
+  P.glass.forEach(g=>{ out+=`<line class="glass" x1="${g[0]}" y1="${g[1]}" x2="${g[2]}" y2="${g[3]}"/>`; });
+  out+=`<text class="rl" x="300" y="412" text-anchor="middle" style="fill:var(--bronze-hi)">${planLvl==='upper'?'Upper floor, lake side':'Lake side'}</text>`;
+  planSvg.innerHTML=out;
   requestAnimationFrame(()=>requestAnimationFrame(()=>{ const w=$('.wall',planSvg); if(w) w.style.strokeDashoffset=0; }));
-  if(!RM){ $$('.room',planSvg).forEach((el,j)=>{ setTimeout(()=>{ el.classList.add('hl'); setTimeout(()=>el.classList.remove('hl'),380); }, 500+j*70); }); }
+  if(!RM) $$('.room',planSvg).forEach((el,j)=>setTimeout(()=>{ el.classList.add('hl'); setTimeout(()=>el.classList.remove('hl'),380); },420+j*70));
   rList.innerHTML=P.rooms.map((r,i)=>`<li data-i="${i}"><button type="button"><span>${r[0]}</span><span>${r[5]}</span></button></li>`).join('');
   const hl=i=>{
     $$('.room',planSvg).forEach((el,j)=>el.classList.toggle('hl',j===i));
     $$('li',rList).forEach((el,j)=>el.classList.toggle('hl',j===i));
-    staggerRooms=false;
     if(i>-1){ $('#r-room').textContent=P.rooms[i][0]; $('#r-area').textContent=P.rooms[i][5]; }
   };
   $$('g[data-i]',planSvg).forEach(g=>{ const i=+g.dataset.i; ['pointerenter','focusin','click'].forEach(ev=>g.addEventListener(ev,()=>hl(i))); });
-  $$('li',rList).forEach(li=>['pointerenter','focusin','click'].forEach(ev=>li.addEventListener(ev,()=>hl(+li.dataset.i))));
   $$('.room',planSvg).forEach((el,i)=>el.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); hl(i);} }));
-  const sel=$('#f-res'); if(sel) sel.value=P.name;
+  $$('li',rList).forEach(li=>['pointerenter','focusin','click'].forEach(ev=>li.addEventListener(ev,()=>hl(+li.dataset.i))));
+  drawPlots();
 }
-$$('.tabs button').forEach(b=>b.addEventListener('click',()=>showPlan(b.dataset.t)));
+$$('#v-residences .res-ctl .tabs button').forEach(b=>b.addEventListener('click',()=>showPlan(b.dataset.t)));
+$$('button',lvl).forEach(b=>b.addEventListener('click',()=>showPlan(planKey,b.dataset.l)));
+// arrow keys move between tabs
+function tabKeys(list,onPick){ list.forEach((b,i)=>b.addEventListener('keydown',e=>{ const d=e.key==='ArrowRight'?1:e.key==='ArrowLeft'?-1:0; if(!d) return; e.preventDefault(); const n=list[(i+d+list.length)%list.length]; n.focus(); onPick(n); })); }
+tabKeys($$('#v-residences .res-ctl .tabs button'),b=>showPlan(b.dataset.t));
 $$('[data-plan]').forEach(a=>a.addEventListener('click',()=>showPlan(a.dataset.plan)));
+
+function drawPlots(){
+  const g=$('#plot-dots');
+  g.innerHTML=PLOTS.map(p=>{
+    const mine=p[1]===planKey;
+    return `<g class="pl ${p[2]}${mine?'':' dimmed'}${selPlot===p[0]?' sel':''}" data-id="${p[0]}" transform="translate(${p[3]} ${p[4]})" tabindex="0" role="button" aria-label="Plot ${p[0]}, ${PLANS[p[1]].name}, ${STATUS[p[2]]}">`+
+      `<circle class="halo" r="16"/><circle class="dot" r="7"/><text y="-14" text-anchor="middle">${p[0]}</text></g>`;
+  }).join('');
+  $$('.pl',g).forEach(el=>{
+    const pick=()=>{ selPlot=el.dataset.id; const p=PLOTS.find(x=>x[0]===selPlot); if(p[1]!==planKey){ showPlan(p[1]); return; } drawPlots(); plotCard(p); };
+    el.addEventListener('click',pick);
+    el.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); pick(); } });
+  });
+  const p=PLOTS.find(x=>x[0]===selPlot); if(p) plotCard(p); else $('#plotcard').innerHTML='<p class="pc-empty">Select a plot on the site plan. Amber plots are open.</p>';
+}
+function plotCard(p){
+  const [id,type,st,,,acres,elev,view,price]=p;
+  const act = st==='open' ? `<a href="#viewing" class="btn solid" data-book="${id}">Book a walk of ${id}</a>`
+            : st==='reserved' ? `<a href="#viewing" class="btn" data-book="${id}">Join the waiting list</a>`
+            : `<p class="pc-sold">This house is lived in. Its windows are the lit ones.</p>`;
+  $('#plotcard').innerHTML=`<p class="pc-st ${st}">${STATUS[st]}</p><h3>Plot ${id}</h3><p class="pc-type">${PLANS[type].name}</p>
+    <dl class="r-spec"><div><dt>Ground</dt><dd>${acres} acres</dd></div><div><dt>Elevation</dt><dd>${elev.toLocaleString('en-IN')} m</dd></div><div><dt>View</dt><dd>${view}</dd></div><div><dt>Price</dt><dd>${price||'Not offered'}</dd></div></dl>${act}`;
+  const bk=$('#plotcard [data-book]'); if(bk) bk.addEventListener('click',()=>prefill(PLANS[type].name,id));
+  if(!RM) $('#plotcard').animate([{opacity:0,transform:'translateY(16px)'},{opacity:1,transform:'none'}],{duration:600,easing:'cubic-bezier(.16,1,.3,1)'});
+}
 showPlan('ridge');
 
-/* ───── estate: rise over the lake (scrubs the nightfall clip) ───── */
-const dayc=$('#dayc'), dctx=dayc.getContext('2d'), dayr=$('#dayr'), dayo=$('#dayo');
+/* ───── estate: counters, rise over the lake, seasons ───── */
+function countUp(){
+  $$('#stats b').forEach((b,i)=>{
+    const n=+b.dataset.n, t0=performance.now()+i*140, d=RM?0:1600;
+    (function f(now){ const t=d?clamp((now-t0)/d):1; b.textContent=Math.round(n*ease(t)).toLocaleString('en-IN'); if(t<1) requestAnimationFrame(f); })(performance.now());
+  });
+}
+const dayc=$('#dayc'), dctx=dayc.getContext('2d'), dayr=$('#dayr'), dayo=$('#dayo'), dayn=$('#dayn');
 let dayTarget=0, dayCur=0, dayRaf=0;
 function dayDraw(){
   const r=dayc.getBoundingClientRect(), d=Math.min(devicePixelRatio||1,2);
+  if(!r.width) return;
   if(dayc.width!==Math.round(r.width*d)){ dayc.width=Math.round(r.width*d); dayc.height=Math.round(r.height*d); dctx.imageSmoothingQuality='high'; }
   const im=frameAt('nightfall',Math.round(dayCur)); dctx.fillStyle='#05090a'; dctx.fillRect(0,0,dayc.width,dayc.height);
   if(im){ const sc=Math.max(dayc.width/im.naturalWidth,dayc.height/im.naturalHeight); const w=im.naturalWidth*sc,h=im.naturalHeight*sc; dctx.drawImage(im,(dayc.width-w)/2,(dayc.height-h)/2,w,h); }
 }
 function dayTick(){ dayCur+=(dayTarget-dayCur)*(RM?1:.16); dayDraw(); if(Math.abs(dayTarget-dayCur)>.05 && current==='estate') dayRaf=requestAnimationFrame(dayTick); else dayRaf=0; }
-function dayUpdate(){ dayTarget=+dayr.value; const m=Math.round(2+dayTarget/191*118); dayo.textContent=m+' m'; dayr.setAttribute('aria-valuetext',m+' metres'); if(!dayRaf) dayRaf=requestAnimationFrame(dayTick); }
+function dayUpdate(){
+  dayTarget=+dayr.value; const m=Math.round(2+dayTarget/191*118);
+  dayo.textContent=m+' m'; dayr.setAttribute('aria-valuetext',m+' metres');
+  dayn.textContent = m<20?'At the waterline' : m<60?'Above the reeds' : m<100?'Level with the deodars' : 'Over the ridge, under the Milky Way';
+  if(!dayRaf) dayRaf=requestAnimationFrame(dayTick);
+}
 dayr.addEventListener('input',dayUpdate);
-function estateOpen(){ window.__prioritise&&window.__prioritise('nightfall'); requestAnimationFrame(()=>{ dayDraw(); dayUpdate(); }); }
+const SEASONS={
+  winter:['December to February','−2° to 12°C','Clear, cold and blue. Snow lies on the far peaks, the fires are lit by four, and the lake holds the stars perfectly still.'],
+  spring:['March to May','8° to 22°C','Rhododendron turns the whole ridge red. Lunch moves outside, and the evenings stay light until nearly eight.'],
+  monsoon:['June to September','14° to 21°C','The mist arrives every afternoon and leaves the lake like glass by evening. The forest is at its greenest and quietest.'],
+  autumn:['October and November','6° to 19°C','The clearest air of the year. Nanda Devi stands over the valley most mornings, close enough to count the ridges.']
+};
+const seaBtns=$$('.seasons .tabs button');
+function season(k){
+  const [m,t,txt]=SEASONS[k];
+  seaBtns.forEach(b=>b.setAttribute('aria-selected',b.dataset.s===k));
+  const el=$('#season'); el.innerHTML=`<p class="sea-m">${m}</p><p class="sea-t">${t}</p><p class="sea-x">${txt}</p>`;
+  if(!RM) $$('p',el).forEach((p,i)=>p.animate([{opacity:0,transform:'translateY(14px)'},{opacity:1,transform:'none'}],{duration:700,delay:i*80,easing:'cubic-bezier(.16,1,.3,1)',fill:'both'}));
+}
+seaBtns.forEach(b=>b.addEventListener('click',()=>season(b.dataset.s)));
+tabKeys(seaBtns,b=>season(b.dataset.s));
+season(['winter','winter','spring','spring','spring','monsoon','monsoon','monsoon','monsoon','autumn','autumn','winter'][new Date().getMonth()]);
+function estateOpen(){ window.__prioritise&&window.__prioritise('nightfall'); countUp(); requestAnimationFrame(()=>{ dayDraw(); dayUpdate(); }); }
 addEventListener('resize',()=>{ if(current==='estate') dayDraw(); });
 
-/* ───── location contours ───── */
+/* ───── location: contours and routes ───── */
 (()=>{
   const g=$('.contours'); let s='';
   for(let k=0;k<9;k++){
@@ -1179,6 +1410,27 @@ addEventListener('resize',()=>{ if(current==='estate') dayDraw(); });
   }
   g.innerHTML=s;
 })();
+const DEST=[
+  ['nainital','Nainital','45 min by road','The lake town, for the bazaar and boating',[92,236],'M410 186 C 380 210, 330 196, 300 214 S 220 250, 180 236 S 120 232, 92 236'],
+  ['pantnagar','Pantnagar airport','1 hr 50 min, transfer included','Daily flights from Delhi; we meet every one',[330,438],'M410 186 C 440 230, 420 268, 420 300 S 380 360, 360 390 S 336 420, 330 438'],
+  ['kathgodam','Kathgodam railway','1 hr 20 min by road','The overnight train from Delhi arrives at dawn',[160,410],'M410 186 C 380 230, 300 220, 260 260 S 200 360, 180 380 S 166 400, 160 410'],
+  ['delhi','New Delhi','1 hr flight, or 6 hrs by road','Door to door in under three hours by air',[24,452],'M410 186 C 390 240, 300 230, 250 280 S 120 400, 70 430 S 40 448, 24 452']
+];
+const routesG=$('#routes'), timesEl=$('#times'), mapRead=$('#mapread');
+routesG.innerHTML=DEST.map(d=>`<path class="road" pathLength="1" data-k="${d[0]}" d="${d[5]}"/><g class="dst" data-k="${d[0]}" transform="translate(${d[4][0]} ${d[4][1]})"><circle r="4"/><text x="${d[4][0]<120?8:-8}" y="-8" text-anchor="${d[4][0]<120?'start':'end'}">${d[1]}</text></g>`).join('');
+timesEl.innerHTML=DEST.map(d=>`<li><button type="button" data-k="${d[0]}" aria-pressed="false"><b>${d[1]}</b><span>${d[2]}</span></button></li>`).join('')+'<li class="static"><b>Altitude</b><span>1,900 m, above the summer haze</span></li>';
+let routeK=null;
+function route2(k){
+  if(k===routeK) return; routeK=k;
+  const d=DEST.find(x=>x[0]===k);
+  $$('.road',routesG).forEach(p=>{ const on=p.dataset.k===k; p.classList.toggle('on',on); if(on&&!RM){ p.animate([{strokeDashoffset:1},{strokeDashoffset:0}],{duration:1600,easing:'cubic-bezier(.65,0,.2,1)',fill:'forwards'}); } else if(on) p.style.strokeDashoffset=0; });
+  $$('.dst',routesG).forEach(g=>g.classList.toggle('on',g.dataset.k===k));
+  $$('button',timesEl).forEach(b=>b.setAttribute('aria-pressed',b.dataset.k===k));
+  mapRead.innerHTML=`<b>${d[1]}</b><span>${d[2]}</span><em>${d[3]}</em>`;
+}
+$$('button',timesEl).forEach(b=>{ b.addEventListener('click',()=>route2(b.dataset.k)); b.addEventListener('pointerenter',()=>FINEp&&route2(b.dataset.k)); });
+const FINEp=matchMedia('(hover:hover) and (pointer:fine)').matches;
+function locationOpen(){ routeK=null; setTimeout(()=>route2('pantnagar'),RM?0:700); }
 
 /* ───── booking ───── */
 const today=new Date(); today.setHours(0,0,0,0);
@@ -1189,7 +1441,7 @@ const maxDate=new Date(today); maxDate.setDate(maxDate.getDate()+60);
 function cal(){
   $('#calm').textContent=`${MON[calM]} ${calY}`;
   const first=new Date(calY,calM,1), lead=(first.getDay()+6)%7, days=new Date(calY,calM+1,0).getDate();
-  let s=DOW.map(d=>`<span class="dow">${d}</span>`).join('');
+  let s=DOW.map(d=>`<span class="dow" aria-hidden="true">${d}</span>`).join('');
   for(let i=0;i<lead;i++) s+='<span></span>';
   for(let d=1;d<=days;d++){
     const dt=new Date(calY,calM,d);
@@ -1201,29 +1453,56 @@ function cal(){
   $('#calp').disabled = calY===today.getFullYear() && calM===today.getMonth();
   $('#caln').disabled = new Date(calY,calM+1,1)>maxDate;
 }
-$('#calg').addEventListener('click',e=>{ const b=e.target.closest('button[data-d]'); if(!b||b.disabled) return; selDate=new Date(calY,calM,+b.dataset.d); cal(); summary(); });
+$('#calg').addEventListener('click',e=>{ const b=e.target.closest('button[data-d]'); if(!b||b.disabled) return; selDate=new Date(calY,calM,+b.dataset.d); cal(); summary(); const nb=$(`#calg button[data-d="${b.dataset.d}"]`); nb&&nb.focus(); });
 $('#calp').addEventListener('click',()=>{ calM--; if(calM<0){calM=11;calY--;} cal(); });
 $('#caln').addEventListener('click',()=>{ calM++; if(calM>11){calM=0;calY++;} cal(); });
 $$('#slots button').forEach(b=>b.addEventListener('click',()=>{ selSlot=b.dataset.s; $$('#slots button').forEach(x=>{ x.classList.toggle('sel',x===b); x.setAttribute('aria-pressed',x===b); }); summary(); }));
 const fmt=d=>d.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
 function summary(){
   const s=$('#sum'); s.classList.remove('warn');
-  if(selDate&&selSlot) s.textContent=`${fmt(selDate)} at ${selSlot}.`;
+  if(selDate&&selSlot) s.textContent=`${fmt(selDate)}, arriving ${selSlot}.${selSlot==='5:30 pm'?' You will see the ridge at golden hour.':''}`;
   else if(selDate) s.textContent=`${fmt(selDate)}. Now choose a time.`;
-  else s.textContent='Choose a date and time. Viewings run Tuesday to Sunday.';
+  else s.textContent='Choose a date and a time. Viewings run Tuesday to Sunday.';
 }
+// plot choices follow the residence
+const fRes=$('#f-res'), fPlot=$('#f-plot');
+function plotOptions(want){
+  const type=Object.keys(PLANS).find(k=>PLANS[k].name===fRes.value);
+  const list=PLOTS.filter(p=>p[2]!=='sold' && (!type||p[1]===type));
+  fPlot.innerHTML='<option value="">Any open plot</option>'+list.map(p=>`<option value="${p[0]}">${p[0]}${p[2]==='reserved'?' (waiting list)':''}</option>`).join('');
+  if(want) fPlot.value=want;
+}
+fRes.addEventListener('change',()=>plotOptions());
+function prefill(resName,plotId){ fRes.value=resName; plotOptions(plotId); }
+plotOptions();
 cal();
-$('#bookf').addEventListener('submit',e=>{
+const form=$('#bookf'), done=$('#done');
+form.addEventListener('submit',e=>{
   e.preventDefault();
-  const f=e.target, name=f.name.value.trim(), phone=f.phone.value.replace(/\D/g,'');
-  $('#f-name').classList.toggle('err',!name); $('#f-phone').classList.toggle('err',phone.length<10);
-  f.name.setAttribute('aria-invalid',!name); f.phone.setAttribute('aria-invalid',phone.length<10);
-  if(!name||phone.length<10){ (!name?f.name:f.phone).focus(); return; }
-  if(!selDate||!selSlot){ const s=$('#sum'); s.textContent=!selDate?'Choose a date to request your viewing.':'Choose a time to request your viewing.'; s.classList.add('warn'); return; }
-  $('#done-t').textContent=`${name}, your viewing of ${f.res.value==='Not sure yet'?'the residences':f.res.value} is requested for ${fmt(selDate)} at ${selSlot}. The concierge would call ${f.phone.value.trim()} to confirm.`;
-  $('#done').classList.add('show');
-  $$('input,select,button',f).forEach(el=>{ if(!el.closest('#done')) el.disabled=true; });
-  setTimeout(()=>$('#done').focus(),80);
+  const f=form, name=f.name.value.trim(), phone=f.phone.value.replace(/\D/g,''), email=f.email.value.trim();
+  const emailBad = email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+  [['f-name',!name,f.name],['f-phone',phone.length<10,f.phone],['f-email',emailBad,f.email]].forEach(([id,bad,el])=>{ $('#'+id).classList.toggle('err',bad); el.setAttribute('aria-invalid',bad); });
+  if(!name){ f.name.focus(); return; } if(phone.length<10){ f.phone.focus(); return; } if(emailBad){ f.email.focus(); return; }
+  if(!selDate||!selSlot){ const s=$('#sum'); s.textContent=!selDate?'Choose a date to request your viewing.':'Choose an arrival time to request your viewing.'; s.classList.add('warn'); return; }
+  const ref='NV-'+String(Math.floor(1000+Math.random()*9000));
+  const rows=[['Guest',name],['Phone',f.phone.value.trim()],['House',fRes.value+(fPlot.value?`, plot ${fPlot.value}`:'')],['Date',`${fmt(selDate)}, ${selSlot}`],['Party',f.guests.value],['Transfer',f.transfer.checked?'Collected from Pantnagar airport':'Arriving on your own']];
+  $('#done-ref').textContent=`Reference ${ref}`;
+  $('#done-list').innerHTML=rows.map(([k,v])=>`<li><span>${k}</span><b>${v}</b></li>`).join('');
+  done.dataset.text=`NOIRVALE private viewing ${ref}\n`+rows.map(([k,v])=>`${k}: ${v}`).join('\n');
+  done.classList.add('show');
+  $$('input,select,button',form).forEach(el=>{ if(!el.closest('#done')) el.disabled=true; });
+  setTimeout(()=>done.focus(),80);
+});
+$('#copyd').addEventListener('click',async e=>{
+  const b=e.currentTarget, lbl=b.querySelector('.lbl')||b;
+  try{ await navigator.clipboard.writeText(done.dataset.text); lbl.textContent='Copied'; }
+  catch(err){ lbl.textContent='Copy blocked here'; }
+  setTimeout(()=>lbl.textContent='Copy details',2200);
+});
+$('#editd').addEventListener('click',()=>{
+  done.classList.remove('show');
+  $$('input,select,button',form).forEach(el=>el.disabled=false); cal();
+  form.name.focus();
 });
 
 /* ───── motion layer ───── */
