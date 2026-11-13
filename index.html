@@ -52,14 +52,43 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .cursor.big span{opacity:1}
 @media (hover:none),(pointer:coarse){.cursor{display:none}}
 
-/* ───────── loader ───────── */
-.loader{position:fixed;inset:0;z-index:150;background:var(--ink);display:grid;place-items:center;transition:opacity 1.2s var(--ease),visibility 1.2s}
-.loader.gone{opacity:0;visibility:hidden}
-.loader svg{width:min(560px,80vw);height:auto;overflow:visible}
-.loader .ridge{fill:none;stroke:var(--bronze);stroke-width:1;stroke-dasharray:1;stroke-dashoffset:1}
-.loader .house{fill:var(--lamp);opacity:0;transition:opacity 1s}
-.loader .meta{position:absolute;bottom:clamp(28px,6vh,60px);left:var(--gut);right:var(--gut);display:flex;justify-content:space-between;font-size:13px;color:var(--mist)}
-.loader .count{font-family:var(--serif);font-size:15px;color:var(--trav);font-variant-numeric:tabular-nums}
+@property --shade{syntax:"<number>";inherits:false;initial-value:0}
+/* ───────── loader: the house is drawn, lit, and its doors open onto the film ───────── */
+.loader{position:fixed;inset:0;z-index:150;perspective:2200px;perspective-origin:50% 50%}
+.loader.gone{display:none}
+.ld-door{position:absolute;top:0;bottom:0;width:50.2%;background:var(--ink);backface-visibility:hidden;will-change:transform;overflow:hidden}
+.ld-door::before{content:"";position:absolute;inset:0;opacity:.55;
+  background-image:linear-gradient(rgba(160,125,85,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(160,125,85,.08) 1px,transparent 1px);background-size:96px 96px}
+.ld-door::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,0),rgba(0,0,0,.55));opacity:var(--shade,0)}
+.ld-door.l{left:0;transform-origin:0 50%}
+.ld-door.r{right:0;transform-origin:100% 50%}
+.ld-door.r::before{background-position:right top}
+.ld-door.r::after{background:linear-gradient(270deg,rgba(0,0,0,0),rgba(0,0,0,.55))}
+.ld-door .edge{position:absolute;top:0;bottom:0;width:3px;opacity:0;background:linear-gradient(180deg,#6f5435,#c9a57a 30%,#8a6a45 70%,#5a4329)}
+.ld-door.l .edge{right:0}.ld-door.r .edge{left:0}
+.ld-seam{position:absolute;left:50%;top:0;bottom:0;width:1px;margin-left:-.5px;background:var(--lamp);box-shadow:0 0 24px 3px rgba(226,168,103,.75),0 0 80px 10px rgba(226,168,103,.25);transform:scaleY(0);opacity:0}
+.ld-stage{position:absolute;inset:0;color:var(--trav)}
+.ld-word{position:absolute;left:var(--gut);top:clamp(24px,4vh,40px);font-family:var(--serif);font-size:19px;letter-spacing:.42em;display:flex}
+.ld-word span{display:inline-block;transform:translateY(110%);opacity:0;filter:blur(6px)}
+.ld-coord{position:absolute;right:var(--gut);top:clamp(26px,4vh,42px);text-align:right;font-size:12px;color:var(--mist);line-height:1.7;font-variant-numeric:tabular-nums}
+.ld-coord b{font-weight:400;color:var(--trav-2)}
+.ld-draw{position:absolute;left:50%;top:47%;width:min(1180px,94vw);height:auto;transform:translate(-50%,-50%);overflow:visible}
+.ld-draw .ln{fill:none;stroke:var(--trav);stroke-width:1.1;vector-effect:non-scaling-stroke;stroke-dasharray:1;stroke-dashoffset:1}
+.ld-draw .ln.b{stroke:var(--bronze-hi)}
+.ld-draw .ln.f{stroke-width:.6;opacity:.6}
+.ld-draw .glow{mix-blend-mode:screen}
+.ld-draw .glow rect{fill:#E9A85C;opacity:0}
+.ld-draw .lab{display:none}
+.ld-odo{position:absolute;left:var(--gut);bottom:clamp(26px,5vh,54px);display:flex;align-items:flex-end;gap:10px;font-family:var(--serif);line-height:1}
+.ld-odo .digits{display:flex;font-size:clamp(72px,11vw,170px);height:1.1em;line-height:1.1;overflow:hidden;letter-spacing:-.02em;-webkit-mask-image:linear-gradient(transparent,#000 22%,#000 78%,transparent);mask-image:linear-gradient(transparent,#000 22%,#000 78%,transparent)}
+.ld-odo .col{display:flex;flex-direction:column;overflow:hidden;transition:transform .5s cubic-bezier(.16,1,.3,1),opacity .4s,margin .5s var(--ease)}
+.ld-odo .col span{height:1.1em;display:block}
+.ld-odo small{font-size:clamp(16px,1.6vw,22px);color:var(--bronze-hi);padding-bottom:.6em}
+.ld-stagecap{position:absolute;right:var(--gut);bottom:clamp(36px,6vh,66px);height:1.6em;overflow:hidden;font-size:14px;color:var(--trav-2);text-align:right;min-width:16ch}
+.ld-stagecap span{display:block}
+.ld-bar{position:absolute;left:0;right:0;bottom:0;height:1px;background:rgba(160,125,85,.18)}
+.ld-bar i{position:absolute;inset:0;background:var(--bronze-hi);transform-origin:0 50%;transform:scaleX(var(--p,0));box-shadow:0 0 12px rgba(201,165,122,.6)}
+@media (max-width:600px){.ld-coord{display:none}.ld-draw{top:44%}.ld-stagecap{left:var(--gut);right:auto;bottom:auto;top:clamp(70px,10vh,90px);text-align:left}}
 
 /* ───────── nav ───────── */
 .nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:22px var(--gut);
@@ -174,7 +203,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .c-night-h{left:0;right:0;top:clamp(92px,13vh,140px);text-align:center;display:flex;flex-direction:column;align-items:center;gap:22px}
 .c-night-h .h-film{font-size:clamp(40px,6vw,104px)}
 .c-night-h .acts{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
-.chapter{position:absolute;right:var(--gut);top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:14px;z-index:3;transition:opacity .6s,visibility .6s}
+.chapter{position:absolute;right:var(--gut);top:50%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:flex-end;gap:14px;z-index:3;transition:opacity .6s,visibility .6s}
 .chapter.off{opacity:0;visibility:hidden}
 .chapter button{display:flex;align-items:center;gap:12px;justify-content:flex-end;font-size:12px;color:var(--mist);transition:color .4s}
 .chapter button span{opacity:0;transform:translateX(8px);transition:.5s var(--ease)}
@@ -227,14 +256,26 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 /* ───────── views (hash pages) ───────── */
 .view{position:fixed;inset:0;z-index:80;overflow-y:auto;overscroll-behavior:contain;background:var(--ink);visibility:hidden;-webkit-overflow-scrolling:touch}
 .view.open{visibility:visible}
-.view-in{min-height:100%;padding:130px var(--gut) 90px;opacity:0;transform:translateY(30px);transition:opacity .9s var(--ease) .15s,transform .9s var(--ease) .15s}
-.view.open .view-in{opacity:1;transform:none}
-/* horizon-line transition: a lamp-amber line crosses the screen, the next page opens out of it */
-.horizon{position:fixed;left:0;right:0;top:50%;height:1px;z-index:120;pointer-events:none;background:var(--lamp);box-shadow:0 0 18px 1px rgba(226,168,103,.7);transform:scaleX(0);opacity:0}
-.horizon.run{animation:horizon 1s var(--ease) both}
-@keyframes horizon{0%{transform:scaleX(0);opacity:1}42%{transform:scaleX(1);opacity:1}70%{opacity:1}100%{transform:scaleX(1);opacity:0}}
-.view{clip-path:inset(0 0 0 0);transition:clip-path .75s var(--ease)}
-.view.entering{clip-path:inset(50% 0 50% 0);transition:none}
+.view-in{min-height:100%;padding:130px var(--gut) 90px}
+.vh1 .w{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.08em;margin-bottom:-.08em}.vh1 .c{display:inline-block}
+/* pivot-door page transition: a travertine slab swings shut carrying the next page's name, then swings through */
+.pivot{position:fixed;inset:0;z-index:130;pointer-events:none;perspective:2400px;perspective-origin:50% 50%;visibility:hidden}
+.pivot.on{visibility:visible;pointer-events:auto}
+.pivot .dim{position:absolute;inset:0;background:#030607;opacity:0}
+.pivot .slab{position:absolute;inset:0;transform-origin:0 50%;backface-visibility:hidden;will-change:transform;
+  background-color:#D6CAB5;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9 0.35' numOctaves='2' seed='3'/%3E%3CfeColorMatrix values='0 0 0 0 0.35  0 0 0 0 0.29  0 0 0 0 0.22  0 0 0 2.6 -1.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1400' height='900'%3E%3Cfilter id='t' x='0' y='0'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.0016 0.045' numOctaves='5' seed='11'/%3E%3CfeColorMatrix values='0 0 0 0 0.55  0 0 0 0 0.47  0 0 0 0 0.36  0 0 0 1.9 -0.78'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23t)'/%3E%3C/svg%3E"),linear-gradient(180deg,#DCD1BD,#CDBFA8 60%,#D5C9B3);
+  background-size:300px 300px,cover,cover;box-shadow:0 0 120px rgba(0,0,0,.6)}
+.pivot .slab::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,0) 40%,rgba(0,0,0,.35));opacity:var(--sh,0)}
+.pivot .bronze-edge{position:absolute;top:0;bottom:0;right:0;width:10px;background:linear-gradient(90deg,#5a4329,#b38d60 40%,#7a5c3a)}
+.pivot .pull{position:absolute;right:clamp(40px,8vw,130px);top:28%;bottom:28%;width:4px;border-radius:2px;background:linear-gradient(90deg,#4a3722,#c9a57a 45%,#6d5233);box-shadow:4px 0 10px rgba(0,0,0,.35)}
+.pivot .pt{position:absolute;left:var(--gut);bottom:clamp(40px,10vh,110px);color:#1A2522;max-width:80vw}
+.pivot .pt small{display:block;font-size:14px;color:#6E5839;margin-bottom:18px;overflow:hidden}
+.pivot .pt small span{display:inline-block}
+.pivot .pt .t{font-family:var(--serif);font-size:clamp(60px,11.5vw,196px);line-height:.92;letter-spacing:-.025em}
+.pivot .pt .t .w{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.06em}
+.pivot .pt .t .c{display:inline-block}
+.pivot .idx{position:absolute;left:var(--gut);top:clamp(26px,4vh,42px);font-family:var(--serif);font-size:19px;letter-spacing:.42em;color:#1A2522}
 .back{display:inline-flex;align-items:center;gap:10px;font-size:14px;color:var(--trav-2);margin-bottom:40px}
 .back::before{content:"";width:28px;height:1px;background:var(--bronze-hi);transition:width .5s var(--ease)}
 .back:hover::before{width:44px}
@@ -365,20 +406,61 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
   .plan{padding:10px}
   .titleblock{min-width:0;left:var(--gut)}
 }
+/* ───────── motion layer ───────── */
+/* rolling link labels */
+.roll{display:inline-block;overflow:hidden;vertical-align:top;line-height:1.25;height:1.25em}
+.roll > span{display:block;transition:transform .6s cubic-bezier(.16,1,.3,1)}
+.roll > span::after{content:attr(data-t);display:block;color:var(--lamp)}
+a:hover .roll > span,a:focus-visible .roll > span{transform:translateY(-100%)}
+/* magnetic buttons */
+.btn{transition:color .5s var(--ease),border-color .5s,transform .7s cubic-bezier(.16,1,.3,1)}
+.btn .lbl{display:inline-block;transition:transform .7s cubic-bezier(.16,1,.3,1)}
+/* film progress + chapter odometer */
+.fprog{position:absolute;left:0;top:0;height:1px;width:100%;background:linear-gradient(90deg,var(--bronze),var(--lamp));transform-origin:0 50%;transform:scaleX(var(--fp,0));z-index:4;box-shadow:0 0 10px rgba(226,168,103,.5)}
+.chap-odo{display:flex;justify-content:flex-end;align-items:baseline;gap:6px;font-family:var(--serif);color:var(--trav);margin-bottom:10px}
+.chap-odo .roll-n{height:1.1em;overflow:hidden;font-size:30px;line-height:1.1}
+.chap-odo .roll-n i{display:block;font-style:normal;line-height:1.1;transition:transform .8s cubic-bezier(.16,1,.3,1)}
+.chap-odo small{font-size:14px;color:var(--mist)}
+/* residences: the plan draws itself over the photograph */
+.res .shot::after{content:"";position:absolute;inset:0;background:rgba(8,14,15,.55);opacity:0;transition:opacity .8s var(--ease)}
+.res .shot:hover::after,.res .shot:focus-visible::after{opacity:1}
+.res .shot .mini{position:absolute;inset:8% 10%;width:80%;height:84%;z-index:2;pointer-events:none;overflow:visible}
+.res .shot .mini rect{fill:none;stroke:var(--trav);stroke-width:1;vector-effect:non-scaling-stroke;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1s cubic-bezier(.16,1,.3,1)}
+.res .shot .mini rect.o{stroke:var(--bronze-hi);stroke-width:1.6}
+.res .shot .mini line{stroke:var(--lamp);stroke-width:2.2;vector-effect:non-scaling-stroke;opacity:0;transition:opacity .6s .5s}
+.res .shot .mini text{font-family:var(--sans);font-size:11px;fill:var(--trav-2);opacity:0;transition:opacity .5s}
+.res .shot:hover .mini rect,.res .shot:focus-visible .mini rect{stroke-dashoffset:0}
+.res .shot:hover .mini line,.res .shot:focus-visible .mini line{opacity:.9}
+.res .shot:hover .mini text,.res .shot:focus-visible .mini text{opacity:1;transition-delay:.55s}
+.res .shot .tag{position:absolute;left:22px;bottom:18px;z-index:3;font-size:13px;color:var(--trav);opacity:0;transform:translateY(10px);transition:.6s var(--ease) .3s}
+.res .shot:hover .tag,.res .shot:focus-visible .tag{opacity:1;transform:none}
+/* footer: a lamp follows the cursor across the stone-coloured word */
+.foot::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(520px circle at var(--mx,50%) var(--my,30%),rgba(226,168,103,.16),transparent 60%);opacity:var(--lit,0);transition:opacity .8s}
+/* section heading characters */
+.h2 .w{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.08em;margin-bottom:-.08em}
+.h2 .c{display:inline-block;transform:translateY(110%);transition:transform 1.1s cubic-bezier(.16,1,.3,1)}
+.h2.in .c{transform:none}
+@media (prefers-reduced-motion:reduce){.h2 .c{transform:none}}
 </style>
 </head>
 <body>
 <div class="grain" aria-hidden="true"></div>
 <div class="cursor" aria-hidden="true"><span>View</span></div>
-<div class="horizon" aria-hidden="true"></div>
+<div class="pivot" aria-hidden="true"><div class="dim"></div><div class="slab"><span class="idx">NOIRVALE</span><i class="bronze-edge"></i><i class="pull"></i><div class="pt"><small><span></span></small><div class="t"></div></div></div></div>
 
 <!-- loader -->
-<div class="loader" role="status" aria-live="polite">
-  <svg viewBox="0 0 560 140" aria-hidden="true">
-    <path class="ridge" pathLength="1" d="M0 118 C 40 112, 70 96, 110 98 S 170 84, 210 78 S 262 52, 300 56 S 352 74, 392 70 S 446 88, 488 92 S 536 104, 560 106"/>
-    <rect class="house" x="286" y="44" width="22" height="7" rx="1"/>
-  </svg>
-  <div class="meta"><span>NOIRVALE, Lake Vale</span><span class="count">000</span></div>
+<div class="loader" id="loader" role="status" aria-live="polite" aria-label="Loading NOIRVALE">
+  <div class="ld-door l"><i class="edge"></i></div>
+  <div class="ld-door r"><i class="edge"></i></div>
+  <i class="ld-seam" aria-hidden="true"></i>
+  <div class="ld-stage" aria-hidden="true">
+    <div class="ld-word"><span>N</span><span>O</span><span>I</span><span>R</span><span>V</span><span>A</span><span>L</span><span>E</span></div>
+    <div class="ld-coord"><b>29°24′ N, 79°31′ E</b><br>Elevation <span id="ld-elev">0</span> m</div>
+    <svg class="ld-draw" id="ld-draw" viewBox="280 214 980 280"></svg>
+    <div class="ld-odo"><div class="digits" id="ld-digits"></div><small>%</small></div>
+    <div class="ld-stagecap" id="ld-cap"><span>Surveying the ridge</span></div>
+    <div class="ld-bar"><i id="ld-bar"></i></div>
+  </div>
 </div>
 
 <!-- nav -->
@@ -460,8 +542,8 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
     <div class="shadeL" id="shadeL" aria-hidden="true"></div>
 
     <!-- approach -->
-    <p class="cue place c-approach-p" data-seg="0" data-a="0" data-b=".78">Lake Vale, Kumaon hills</p>
-    <h1 class="cue c-approach-h" data-seg="0" data-a="0" data-b=".55"><span class="h-film split">Some addresses<br>are earned.</span></h1>
+    <p class="cue place c-approach-p" data-seg="0" data-a="-.2" data-b=".78">Lake Vale, Kumaon hills</p>
+    <h1 class="cue c-approach-h" data-seg="0" data-a="-.2" data-b=".55"><span class="h-film split">Some addresses<br>are earned.</span></h1>
     <p class="cue lede c-approach-l" data-seg="0" data-a=".18" data-b=".62">Twelve private villas on a forested ridge, 1,900 metres above the lake. Each one sits on two acres of oak and deodar.</p>
     <div class="scrollhint" id="hint"><i></i>Scroll to approach</div>
 
@@ -496,7 +578,9 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
       <div class="acts"><a href="#viewing" class="btn solid">Book a private viewing</a><a href="#residences" class="btn">See the residences</a></div>
     </div>
 
+    <i class="fprog" aria-hidden="true" id="fprog"></i>
     <nav class="chapter" aria-label="Chapters" id="chapters">
+      <div class="chap-odo" aria-hidden="true"><span class="roll-n"><i id="chapN">01<br>02<br>03<br>04<br>05</i></span><small>/ 05</small></div>
       <button data-go="0"><span>Approach</span><i></i></button>
       <button data-go="1"><span>Threshold</span><i></i></button>
       <button data-go="2"><span>The edge</span><i></i></button>
@@ -509,7 +593,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 <!-- ───── residences preview ───── -->
 <section class="sec" id="homes" aria-labelledby="homes-h">
   <div class="sec-head">
-    <h2 class="h2" id="homes-h" data-rv>Three houses,<br>one ridge.</h2>
+    <h2 class="h2 hsplit" id="homes-h" aria-label="Three houses, one ridge.">Three houses,<br>one ridge.</h2>
     <p data-rv>Every residence is placed by the trees, not by a grid. No two share a view, and none can see another from inside.</p>
   </div>
 
@@ -750,7 +834,7 @@ film.style.height=`calc(${TOTAL*100}vh + 100vh)`;
 film.style.height=`calc(${TOTAL*100}svh + 100svh)`;
 const cues=$$('.cue').map(el=>{ el.inert=true; return {el,seg:+el.dataset.seg,a:+el.dataset.a,b:+el.dataset.b,chars:$$('.c',el),lines:$$('.line',el),night:el.classList.contains('c-night-h'),last:-1,live:false}; });
 const blue=$('#blue'), bp=$('#bp'), measure=$('#measure'), mval=$('#mval'), hint=$('#hint');
-const chapBtns=$$('#chapters button'), chapNav=$('#chapters');
+const chapBtns=$$('#chapters button'), chapNav=$('#chapters'), fprog=$('#fprog'), chapN=$('#chapN');
 let drawn=-1, lastBlue=-1, lastSeg=-1, filmBright=false;
 const shadeL=$('#shadeL');
 const lns=$$('#bp .ln');
@@ -812,6 +896,7 @@ function render(){
   for(const c of cues){
     let v=0;
     if(c.seg===seg){ v = c.b>1 ? smooth(c.a,c.a+.09,p) : smooth(c.a,c.a+.09,p)*(1-smooth(c.b-.09,c.b,p)); }
+    if(c.seg===0 && c.a<0) v*=introT;
     if(RM) v=v>0.01?1:0;
     if(v===0 && c.last===0) continue;
     c.last=v;
@@ -837,8 +922,10 @@ function render(){
     mval.textContent=(m*7.2).toFixed(2)+' m';
   }
   hint.style.opacity = seg===0 && p<.04 ? 1 : 0;
+  fprog.style.setProperty('--fp',(st.g/TOTAL).toFixed(4));
   if(seg!==lastSeg){
     lastSeg=seg;
+    chapN.style.transform=`translateY(${-seg*1.1}em)`;
     chapBtns.forEach((b,i)=>{ b.classList.toggle('on',i===seg); b.setAttribute('aria-current', i===seg ? 'step' : 'false'); });
     chapNav.classList.toggle('off', seg===3); chapNav.inert = seg===3;
     shadeL.style.opacity = seg===1 ? 1 : 0;
@@ -912,23 +999,22 @@ if(matchMedia('(hover:hover) and (pointer:fine)').matches && !RM){
 
 /* ───── views (hash routing) ───── */
 const VIEWS=['residences','estate','location','viewing'];
-const horizon=$('.horizon');
+const pivot=$('.pivot'), slab=$('.slab',pivot), pDim=$('.dim',pivot), pT=$('.pt .t',pivot), pS=$('.pt small span',pivot);
+const VIEWNAME={residences:['Residences','Three houses, one ridge'],estate:['The estate','Sixty acres, mostly forest'],location:['Location','Lake Vale, Kumaon'],viewing:['Private viewing','Come and see the light'],home:['The ridge','Back to the film']};
+let pivotBusy=false;
 const bgRegions=[$('main'),$('#foot')];
-let current=null, openedInPage=false, opener=null, pending=null;
+let current=null, openedInPage=false, opener=null, firstRoute=true;
 function setInert(on){ bgRegions.forEach(el=>el.inert=on); }
 function route(){
   const h=location.hash.slice(1);
   const want=VIEWS.includes(h)?h:null;
-  if(want===current && !pending) return;
-  clearTimeout(pending);
+  if(want===current && !pivot.classList.contains('on')) return;
   const swap=()=>{
-    pending=null;
-    $$('.view').forEach(v=>{ v.classList.remove('open'); v.classList.remove('entering'); });
+    $$('.view').forEach(v=>v.classList.remove('open'));
     if(want){
       const v=$('#v-'+want); v.classList.add('open'); v.scrollTop=0;
       document.body.classList.add('locked'); lenis&&lenis.stop(); setInert(true);
       nav.classList.remove('hide'); nav.classList.add('solid');
-      if(!RM){ v.classList.add('entering'); requestAnimationFrame(()=>requestAnimationFrame(()=>v.classList.remove('entering'))); }
       setTimeout(()=>v.focus({preventScroll:true}),60);
       if(want==='location') setTimeout(()=>$('#map').classList.add('drawn'),300);
       if(want==='estate') estateOpen();
@@ -941,9 +1027,47 @@ function route(){
     $$('.nav a[href^="#"]').forEach(a=>{ const on=a.getAttribute('href')==='#'+want; a.toggleAttribute('aria-current',on); if(on) a.setAttribute('aria-current','page'); });
     current=want;
   };
-  if(RM){ swap(); return; }
-  horizon.classList.remove('run'); void horizon.offsetWidth; horizon.classList.add('run');
-  pending=setTimeout(swap,420);
+  if(RM||firstRoute){ firstRoute=false; swap(); if(want) revealView($('#v-'+want)); return; }
+  pivotTo(want, swap);
+}
+const splitChars=t=>t.split(' ').map(w=>`<span class="w">${[...w].map(c=>`<span class="c">${c}</span>`).join('')}</span>`).join(' ');
+async function pivotTo(want, swap){
+  const token={}; pivot.token=token;
+  const [title,label]=VIEWNAME[want||'home'];
+  pT.innerHTML=splitChars(title); pS.textContent=label;
+  const chars=$$('.c',pT);
+  pivot.classList.add('on');
+  const ez='cubic-bezier(.76,0,.18,1)';
+  // swing shut on the left hinge
+  slab.style.transformOrigin='0 50%';
+  slab.animate([{transform:'rotateY(-96deg)','--sh':1},{transform:'rotateY(0deg)','--sh':0}],{duration:720,easing:ez,fill:'forwards'});
+  slab.animate([{'--sh':1},{'--sh':0}],{duration:720,easing:ez,fill:'forwards'});
+  pDim.animate([{opacity:0},{opacity:.7}],{duration:720,easing:ez,fill:'forwards'});
+  chars.forEach((c,i)=>c.animate([{transform:'translateY(108%)'},{transform:'none'}],{duration:760,delay:330+i*24,easing:'cubic-bezier(.16,1,.3,1)',fill:'both'}));
+  pS.animate([{transform:'translateY(110%)'},{transform:'none'}],{duration:620,delay:420,easing:'cubic-bezier(.16,1,.3,1)',fill:'both'});
+  await W8(1080); if(pivot.token!==token) return;
+  swap();
+  const v=want?$('#v-'+want):null;
+  await W8(160); if(pivot.token!==token) return;
+  // swing through and away, revealing the new page
+  chars.forEach((c,i)=>c.animate([{transform:'none',opacity:1},{transform:'translateY(-108%)',opacity:0}],{duration:420,delay:i*12,easing:'cubic-bezier(.7,0,.3,1)',fill:'forwards'}));
+  pS.animate([{opacity:1},{opacity:0}],{duration:300,fill:'forwards'});
+  await W8(260);
+  slab.animate([{transform:'rotateY(0deg)'},{transform:'rotateY(96deg)'}],{duration:900,easing:ez,fill:'forwards'});
+  slab.animate([{'--sh':0},{'--sh':1}],{duration:900,easing:ez,fill:'forwards'});
+  pDim.animate([{opacity:.7},{opacity:0}],{duration:900,easing:ez,fill:'forwards'});
+  if(v) setTimeout(()=>revealView(v),260);
+  await W8(920); if(pivot.token!==token) return;
+  pivot.classList.remove('on');
+}
+// each page builds itself after the door opens
+function revealView(v){
+  const h=$('.vh1',v);
+  if(h && !h.dataset.split){ h.dataset.split=1; const txt=h.textContent; h.setAttribute('aria-label',txt); h.innerHTML=`<span aria-hidden="true">${splitChars(txt)}</span>`; }
+  if(RM) return;
+  $$('.c',h).forEach((c,i)=>c.animate([{transform:'translateY(110%)'},{transform:'none'}],{duration:1000,delay:120+i*22,easing:'cubic-bezier(.16,1,.3,1)',fill:'both'}));
+  const parts=$$('.back,.vlede,.tabs,.plan-wrap,.day,.day-ctl,.amen article,.loc > .map,.times li,.book > div,.view-in > figure',v);
+  parts.forEach((el,i)=>el.animate([{opacity:0,transform:'translateY(46px)',filter:'blur(8px)'},{opacity:1,transform:'none',filter:'blur(0px)'}],{duration:1100,delay:260+i*70,easing:'cubic-bezier(.16,1,.3,1)',fill:'both'}));
 }
 function closeView(){
   if(!current) return;
@@ -1102,26 +1226,141 @@ $('#bookf').addEventListener('submit',e=>{
   setTimeout(()=>$('#done').focus(),80);
 });
 
-/* ───── boot ───── */
-const count=$('.count'), ridge=$('.loader .ridge');
+/* ───── motion layer ───── */
+const FINE=matchMedia('(hover:hover) and (pointer:fine)').matches && !RM;
+// rolling labels on text links
+$$('.nav ul a:not(.btn), .foot-grid a:not(.btn), .back').forEach(a=>{
+  const t=a.textContent.trim(); if(!t) return;
+  a.innerHTML=`<span class="roll"><span data-t="${t}">${t}</span></span>`;
+});
+// magnetic buttons: the pill leans toward the pointer, its label leans further
+$$('.btn').forEach(b=>{
+  if(!b.querySelector('.lbl')){ const nodes=[...b.childNodes].filter(n=>n.nodeType===3&&n.textContent.trim()); nodes.forEach(n=>{ const sp=document.createElement('span'); sp.className='lbl'; sp.textContent=n.textContent; n.replaceWith(sp); }); }
+  if(!FINE) return;
+  const lbl=b.querySelector('.lbl');
+  b.addEventListener('pointermove',e=>{
+    const r=b.getBoundingClientRect(), x=e.clientX-r.left-r.width/2, y=e.clientY-r.top-r.height/2;
+    b.style.transform=`translate(${x*.22}px,${y*.38}px)`; if(lbl) lbl.style.transform=`translate(${x*.12}px,${y*.18}px)`;
+  });
+  b.addEventListener('pointerleave',()=>{ b.style.transform=''; if(lbl) lbl.style.transform=''; });
+});
+// residences: the plan draws itself over each photograph on hover
+$$('.res .shot').forEach(sh=>{
+  const P=PLANS[sh.dataset.plan]; if(!P) return;
+  const xs=P.rooms.flatMap(r=>[r[1],r[1]+r[3]]), ys=P.rooms.flatMap(r=>[r[2],r[2]+r[4]]);
+  const x0=Math.min(...xs)-10,y0=Math.min(...ys)-10,w=Math.max(...xs)-x0+10,h=Math.max(...ys)-y0+10;
+  let svg=`<svg class="mini" viewBox="${x0} ${y0} ${w} ${h}" preserveAspectRatio="xMidYMid meet" aria-hidden="true">`;
+  P.rooms.forEach((r,i)=>{ svg+=`<rect pathLength="1" class="${r[6]?'o':''}" x="${r[1]}" y="${r[2]}" width="${r[3]}" height="${r[4]}" style="transition-delay:${(i*0.05).toFixed(2)}s"/>`; if(r[3]>100&&r[4]>70) svg+=`<text x="${r[1]+8}" y="${r[2]+18}">${r[0]}</text>`; });
+  P.glass.forEach(g=>{ svg+=`<line x1="${g[0]}" y1="${g[1]}" x2="${g[2]}" y2="${g[3]}"/>`; });
+  sh.insertAdjacentHTML('beforeend', svg+'</svg><span class="tag">Open the floor plan</span>');
+});
+// footer lamp
+const footEl=$('#foot');
+if(FINE){
+  footEl.addEventListener('pointermove',e=>{ const r=footEl.getBoundingClientRect(); footEl.style.setProperty('--mx',(e.clientX-r.left)+'px'); footEl.style.setProperty('--my',(e.clientY-r.top)+'px'); footEl.style.setProperty('--lit',1); });
+  footEl.addEventListener('pointerleave',()=>footEl.style.setProperty('--lit',0));
+}
+// section headings write themselves in
+$$('.hsplit').forEach(h=>{
+  const lines=h.innerHTML.split(/<br\s*\/?>/i);
+  h.innerHTML='<span aria-hidden="true">'+lines.map(l=>splitChars(l.trim())).join('<br>')+'</span>';
+  $$('.c',h).forEach((c,i)=>c.style.transitionDelay=(i*0.028).toFixed(3)+'s');
+  io.observe(h);
+});
+
+/* ───── boot: loading sequence ───── */
+const loader=$('#loader'), ldDraw=$('#ld-draw'), ldBar=$('#ld-bar'), ldElev=$('#ld-elev'), ldCap=$('#ld-cap');
+ldDraw.innerHTML=$('#bp').innerHTML.replace(/lampblur/g,'lampblur-ld');
+const ldL=$$('.ln',ldDraw), ldG=$$('.glow rect',ldDraw);
+// odometer: three rolling columns
+const dig=$('#ld-digits');
+dig.innerHTML=[0,1,2].map(i=>`<div class="col">${(i===0?[0,1]:[0,1,2,3,4,5,6,7,8,9]).map(d=>`<span>${d}</span>`).join('')}</div>`).join('');
+const cols=$$('.col',dig);
+cols[2].style.transition='none';
+function odo(n){ const t=String(n).padStart(3,'0'); cols.forEach((c,i)=>c.style.transform=`translateY(${-(+t[i])*1.1}em)`); cols[0].style.opacity = n===100?1:0; cols[0].style.width = n===100?'':'0px'; }
+const CAPS=['Surveying the ridge','Pouring the plinth','Raising the slabs','Glazing the lake wall','Lighting the house'];
+let capI=0, capBusy=false, capWant=0;
+const capSpan=$('span',ldCap);
+function cap(i){
+  capWant=i; if(capBusy||i===capI) return;
+  capBusy=true; capI=i;
+  if(RM){ capSpan.textContent=CAPS[i]; capBusy=false; return; }
+  capSpan.animate([{transform:'none',opacity:1},{transform:'translateY(-100%)',opacity:0}],{duration:260,easing:'cubic-bezier(.7,0,.3,1)',fill:'forwards'}).onfinish=()=>{
+    capSpan.textContent=CAPS[i];
+    capSpan.animate([{transform:'translateY(100%)',opacity:0},{transform:'none',opacity:1}],{duration:420,easing:'cubic-bezier(.16,1,.3,1)',fill:'forwards'}).onfinish=()=>{ capBusy=false; if(capWant!==capI) cap(capWant); };
+  };
+}
+let real=0, shown=0, ldDone=false, last=performance.now();
+function ldFrame(now){
+  const dt=Math.min(64,now-last); last=now;
+  // the drawing follows real bytes, but never faster than a draughtsman: at least ~2.4 s end to end
+  shown=Math.min(real, shown+dt/3000);
+  const n=ldL.length;
+  ldL.forEach((el,i)=>{ const t=clamp((shown*1.02 - (i/n)*0.78)/0.22); el.style.strokeDashoffset=(1-ease(t)).toFixed(4); });
+  ldBar.parentElement.style.setProperty('--p',shown.toFixed(4));
+  odo(Math.floor(shown*100));
+  ldElev.textContent=Math.round(shown*1900).toLocaleString('en-IN');
+  cap(Math.min(CAPS.length-2,Math.floor(shown*(CAPS.length-1)*0.999)));
+  if(shown>=1 && ldDone){ finale(); return; }
+  requestAnimationFrame(ldFrame);
+}
+const W8=ms=>new Promise(r=>setTimeout(r,ms));
+let introT=RM?1:0;
+async function finale(){
+  odo(100); cap(CAPS.length-1);
+  const stage=$('#stage');
+  if(RM){ loader.animate([{opacity:1},{opacity:0}],{duration:400,fill:'forwards'}); await W8(420); return enter(); }
+  // 1 · the house lights up, window by window
+  ldG.forEach((r,i)=>r.animate([{opacity:0},{opacity:.9}],{duration:520,delay:i*120,easing:'ease-out',fill:'forwards'}));
+  await W8(950);
+  // 2 · the camera pushes into the double-height glass; the paperwork leaves
+  ldDraw.style.transformOrigin='42.4% 43.6%';
+  ldDraw.animate([{transform:'translate(-50%,-50%) scale(1)',filter:'blur(0px)',opacity:1},{transform:'translate(-50%,-50%) scale(3.6)',filter:'blur(12px)',opacity:0}],{duration:1300,easing:'cubic-bezier(.7,0,.25,1)',fill:'forwards'});
+  $$('.ld-word span').forEach((sp,i)=>sp.animate([{transform:'none',opacity:1,filter:'blur(0)'},{transform:'translateY(-110%)',opacity:0,filter:'blur(6px)'}],{duration:600,delay:i*30,easing:'cubic-bezier(.7,0,.3,1)',fill:'forwards'}));
+  ['.ld-odo','.ld-stagecap','.ld-coord','.ld-bar'].forEach((sel,i)=>$(sel).animate([{opacity:1,transform:'none'},{opacity:0,transform:'translateY(18px)'}],{duration:600,delay:120+i*60,easing:'cubic-bezier(.7,0,.3,1)',fill:'forwards'}));
+  // the film is already running behind the doors
+  requestAnimationFrame(loop);
+  stage.animate([{transform:'scale(1.22)',filter:'brightness(.4)'},{transform:'scale(1)',filter:'brightness(1)'}],{duration:3200,delay:900,easing:'cubic-bezier(.2,.7,.1,1)',fill:'backwards'});
+  await W8(1050);
+  // 3 · a line of lamplight in the seam
+  const seam=$('.ld-seam');
+  seam.animate([{transform:'scaleY(0)',opacity:1},{transform:'scaleY(1)',opacity:1}],{duration:520,easing:'cubic-bezier(.7,0,.2,1)',fill:'forwards'});
+  await W8(480);
+  // 4 · the double pivot doors swing open
+  const dl=$('.ld-door.l'), dr=$('.ld-door.r');
+  const door={duration:1700,easing:'cubic-bezier(.62,0,.12,1)',fill:'forwards'};
+  $$('.ld-door .edge').forEach(e=>e.animate([{opacity:0},{opacity:1}],{duration:300,fill:'forwards'}));
+  dl.animate([{transform:'rotateY(0deg)','--shade':0},{transform:'rotateY(-104deg)','--shade':1}],door);
+  dr.animate([{transform:'rotateY(0deg)','--shade':0},{transform:'rotateY(104deg)','--shade':1}],door);
+  [dl,dr].forEach(d=>d.animate([{'--shade':0},{'--shade':1}],door));
+  seam.animate([{opacity:1,transform:'scaleY(1) scaleX(1)'},{opacity:0,transform:'scaleY(1) scaleX(40)'}],{duration:700,easing:'ease-out',fill:'forwards'});
+  enter(true);
+  await W8(1750);
+  loader.classList.add('gone');
+}
+function enter(fromFinale){
+  if(!fromFinale) requestAnimationFrame(loop);
+  lenisWanted=true; lenis&&!current&&lenis.start();
+  route(); firstRoute=false;
+  // the opening headline writes itself once the doors are open
+  const t0=performance.now()+(fromFinale?900:0);
+  (function it(now){ introT=RM?1:clamp((now-t0)/1700); drawn=-1; if(introT<1) requestAnimationFrame(it); })(performance.now());
+  if(!fromFinale) loader.classList.add('gone');
+}
+
 addEventListener('resize',size);
 size();
 (async()=>{
   const C=CLIPS.filter(Boolean);
+  if(!RM) $$('.ld-word span').forEach((sp,i)=>sp.animate([{transform:'translateY(110%)',opacity:0,filter:'blur(6px)'},{transform:'none',opacity:1,filter:'blur(0)'}],{duration:900,delay:200+i*60,easing:'cubic-bezier(.16,1,.3,1)',fill:'forwards'}));
+  else $$('.ld-word span').forEach(sp=>{sp.style.transform='none';sp.style.opacity=1;sp.style.filter='none';});
+  requestAnimationFrame(ldFrame);
   try{ manifest=await (await fetch('pack/manifest.json')).json(); }catch(e){ manifest=null; }
   if(manifest){
-    // open as soon as the first chapter's sparse pass is in; everything else streams in viewing order
     const need=manifest.approach[0].reduce((t,e)=>t+e[2],0); let got=0;
-    const tick=n=>{ got+=n; const p=Math.min(1,got/need); count.textContent=String(Math.round(p*100)).padStart(3,'0'); ridge.style.strokeDashoffset=1-p; };
-    await fetchBundle('approach',0,tick).catch(()=>{});
+    await fetchBundle('approach',0,n=>{ got+=n; real=Math.min(.999,got/need); }).catch(()=>{});
   }
-  count.textContent='100'; ridge.style.strokeDashoffset=0;
-  $('.loader .house').style.opacity=1;
-  await new Promise(r=>setTimeout(r,RM?0:700));
-  $('.loader').classList.add('gone');
-  lenisWanted=true; lenis&&!current&&lenis.start();
-  route();
-  requestAnimationFrame(loop);
+  real=1; ldDone=true;
   if(manifest){
     const queue=[]; for(const c of C.slice(1)) queue.push([c,0]);
     for(const k of [2,1,3]) for(const c of C) queue.push([c,k]);
