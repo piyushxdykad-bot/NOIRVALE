@@ -45,7 +45,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   animation:grain 1.2s steps(6) infinite}
 @keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-3%,2%)}40%{transform:translate(2%,-4%)}60%{transform:translate(-4%,-1%)}80%{transform:translate(3%,3%)}100%{transform:translate(0,0)}}
-.cursor{position:fixed;left:0;top:0;width:34px;height:34px;margin:-17px 0 0 -17px;border:1px solid rgba(201,165,122,.7);border-radius:50%;
+.cursor{opacity:0;position:fixed;left:0;top:0;width:34px;height:34px;margin:-17px 0 0 -17px;border:1px solid rgba(201,165,122,.7);border-radius:50%;
   pointer-events:none;z-index:200;transition:width .45s var(--ease),height .45s var(--ease),margin .45s var(--ease),background .45s,border-color .45s;
   display:grid;place-items:center;font-size:11px;letter-spacing:.06em;color:var(--ink)}
 .cursor span{opacity:0;transition:opacity .3s}
@@ -569,6 +569,7 @@ body{padding-left:var(--rail)}
 .tb-ind{position:absolute;z-index:0;left:8px;width:72px;height:var(--ih,62px);border-radius:16px;background:rgba(160,125,85,.16);border:1px solid rgba(201,165,122,.28);
   transform:translateY(var(--iy,0));transition:transform .6s cubic-bezier(.16,1,.3,1),opacity .3s;top:0}
 .badge{position:absolute;top:6px;right:14px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--lamp);color:var(--ink);font-size:11px;font-weight:600;font-style:normal;display:grid;place-items:center;font-family:var(--sans)}
+.badge[hidden]{display:none}
 .badge.pop{animation:pop .6s cubic-bezier(.16,1,.3,1)}
 @keyframes pop{0%{transform:scale(.4)}60%{transform:scale(1.25)}100%{transform:scale(1)}}
 @media (max-width:860px){
@@ -649,6 +650,7 @@ body{padding-left:var(--rail)}
 .sheet-scrim{position:absolute;inset:0;background:rgba(3,6,7,.6);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 .sheet-panel{position:relative;width:min(760px,100%);max-height:min(92svh,920px);display:flex;flex-direction:column;background:linear-gradient(180deg,#132528,#0C181A);border:1px solid rgba(160,125,85,.3);border-bottom:0;border-radius:26px 26px 0 0;box-shadow:0 -30px 80px rgba(0,0,0,.5);padding:10px clamp(18px,3vw,34px) 0;overflow:hidden}
 @media (min-width:861px){.sheet{align-items:center;padding-left:var(--rail)}.sheet-panel{border-radius:26px;border-bottom:1px solid rgba(160,125,85,.3)}}
+.grab,.bs-head{touch-action:none}
 .grab{display:block;width:44px;height:4px;border-radius:2px;background:rgba(231,223,209,.25);margin:4px auto 10px}
 .bs-head{display:flex;justify-content:space-between;align-items:flex-start;gap:20px}
 .bs-k{font-size:12px;color:var(--lamp)}
@@ -687,8 +689,10 @@ body{padding-left:var(--rail)}
 .cs-acts{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
 .cal{border-radius:16px}
 /* toast */
+.flydot{position:fixed;left:-7px;top:-7px;width:14px;height:14px;border-radius:50%;background:var(--lamp);box-shadow:0 0 18px 4px rgba(226,168,103,.8);z-index:160;pointer-events:none}
 .toast{position:fixed;z-index:145;left:var(--rail);right:0;margin:0 auto;width:max-content;bottom:calc(var(--tb) + 22px);transform:translateY(140%);opacity:0;display:flex;align-items:center;gap:16px;padding:13px 14px 13px 20px;border-radius:999px;background:var(--trav);color:var(--ink);font-size:14px;box-shadow:0 16px 40px rgba(0,0,0,.4);transition:transform .6s cubic-bezier(.16,1,.3,1),opacity .4s;max-width:min(560px,calc(100vw - var(--rail) - 32px))}
-.toast.on{transform:none;opacity:1}
+.toast{visibility:hidden;pointer-events:none}
+.toast.on{transform:none;opacity:1;visibility:visible;pointer-events:auto}
 .toast button{font-weight:600;color:var(--bronze);padding:4px 10px;border-radius:999px}
 .toast button:hover{background:rgba(160,125,85,.15)}
 </style>
@@ -1054,7 +1058,7 @@ body{padding-left:var(--rail)}
   <div class="sheet-panel">
     <i class="grab" aria-hidden="true"></i>
     <header class="bs-head">
-      <div><p class="bs-k" id="bs-k">Step 1 of 3</p><h2 id="bs-h">Book a viewing</h2></div>
+      <div><p class="bs-k" id="bs-k" aria-live="polite">Step 1 of 3</p><h2 id="bs-h" tabindex="-1">Book a viewing</h2></div>
       <button type="button" class="x" data-close aria-label="Close">&times;</button>
     </header>
     <div class="bs-prog" aria-hidden="true"><i id="bs-prog"></i></div>
@@ -1071,7 +1075,7 @@ body{padding-left:var(--rail)}
             <div class="cal-head"><button type="button" id="calp" aria-label="Previous month">‹</button><b id="calm" aria-live="polite"></b><button type="button" id="caln" aria-label="Next month">›</button></div>
             <div class="cal-grid" id="calg"></div>
             <div class="slots" id="slots" role="group" aria-label="Arrival time">
-              <button type="button" data-s="10:00 am" aria-pressed="false">10:00</button><button type="button" data-s="12:30 pm" aria-pressed="false">12:30</button><button type="button" data-s="3:00 pm" aria-pressed="false">15:00</button><button type="button" data-s="5:30 pm" aria-pressed="false">17:30<small>Golden hour</small></button>
+              <button type="button" data-s="10:00 am" aria-pressed="false">10:00 am</button><button type="button" data-s="12:30 pm" aria-pressed="false">12:30 pm</button><button type="button" data-s="3:00 pm" aria-pressed="false">3:00 pm</button><button type="button" data-s="5:30 pm" aria-pressed="false">5:30 pm<small>Golden hour</small></button>
             </div>
           </div>
           <p class="summary" id="sum" aria-live="polite">Choose a date and an arrival time. Viewings run Tuesday to Sunday.</p>
@@ -1350,7 +1354,7 @@ if(matchMedia('(hover:hover) and (pointer:fine)').matches && !RM){
   let cx=-100,cy=-100,tx=-100,ty=-100, moving=false;
   const step=()=>{ cx+=(tx-cx)*.18; cy+=(ty-cy)*.18; cur.style.transform=`translate(${cx}px,${cy}px)`;
     if(Math.abs(tx-cx)+Math.abs(ty-cy)>.3) requestAnimationFrame(step); else moving=false; };
-  addEventListener('pointermove',e=>{tx=e.clientX;ty=e.clientY; if(!moving){moving=true;requestAnimationFrame(step);} },{passive:true});
+  addEventListener('pointermove',e=>{tx=e.clientX;ty=e.clientY; if(cx<0){ cx=tx; cy=ty; cur.style.opacity=1; } if(!moving){moving=true;requestAnimationFrame(step);} },{passive:true});
   document.addEventListener('pointerover',e=>{
     const t=e.target.closest('[data-cursor]');
     cur.classList.toggle('big',!!t); if(t) cur.firstElementChild.textContent=t.dataset.cursor;
@@ -1686,13 +1690,16 @@ function locationOpen(){ routeK=null; setTimeout(()=>route2('pantnagar'),RM?0:70
 const KEY='noirvale.viewings.v1';
 const store={
   mem:[],
-  all(){ try{ const r=localStorage.getItem(KEY); return r?JSON.parse(r):this.mem; }catch(e){ return this.mem; } },
+  all(){ try{ const r=localStorage.getItem(KEY); return r?JSON.parse(r):[]; }catch(e){ return this.mem; } },
   save(list){ this.mem=list; try{ localStorage.setItem(KEY,JSON.stringify(list)); }catch(e){} }
 };
 const HOUSE={ridge:{name:'The Ridge',img:'../img/pool.webp'},shore:{name:'The Shore',img:'../img/night.webp'},canopy:{name:'The Canopy',img:'../img/aerial.webp'}};
 const SLOTMIN={'10:00 am':600,'12:30 pm':750,'3:00 pm':900,'5:30 pm':1050};
-const at=v=>{ const d=new Date(v.date+'T00:00:00'); d.setMinutes(SLOTMIN[v.slot]||600); return d; };
-const today=new Date(); today.setHours(0,0,0,0);
+// slots are Lake Vale (IST) times, whatever the visitor's own timezone
+const at=v=>new Date(Date.parse(v.date+'T00:00:00+05:30')+(SLOTMIN[v.slot]||600)*6e4);
+const dOf=v=>new Date(v.date+'T00:00:00');
+function istToday(){ const p=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Kolkata',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date()).split('-'); return new Date(+p[0],+p[1]-1,+p[2]); }
+let today=istToday();
 const fmt=d=>d.toLocaleDateString('en-GB',Object.assign({weekday:'long',day:'numeric',month:'long'}, d.getFullYear()!==today.getFullYear()?{year:'numeric'}:{}));
 const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 function upcoming(){ const now=Date.now(); return store.all().filter(v=>v.status!=='cancelled' && at(v)>now).sort((a,b)=>at(a)-at(b)); }
@@ -1701,13 +1708,14 @@ function cdParts(ms){ ms=Math.max(0,ms); const d=Math.floor(ms/864e5), h=Math.fl
 const pad=n=>String(n).padStart(2,'0');
 
 /* ───── sheets ───── */
-let lastFocus=null;
+let lastFocus=null, lastAct=null;
 function openSheet(el){
   lastFocus=document.activeElement; el.hidden=false;
   [$('main'),$('#foot'),$('#nav'),$('#tabbar'),...$$('.view')].forEach(x=>x.inert=true);
   document.body.classList.add('locked'); lenis&&lenis.stop();
   if(!RM){ $('.sheet-scrim',el).animate([{opacity:0},{opacity:1}],{duration:400,fill:'both'});
-    $('.sheet-panel',el).animate([{transform:'translateY(100%)'},{transform:'none'}],{duration:620,easing:'cubic-bezier(.16,1,.3,1)',fill:'both'}); }
+    $('.sheet-panel',el).animate([{transform:'translateY(100%)'},{transform:'none'}],{duration:620,easing:'cubic-bezier(.16,1,.3,1)',fill:'backwards'}); }
+  $('#toast').classList.remove('on');
 }
 async function closeSheet(el){
   if(el.hidden) return;
@@ -1719,14 +1727,19 @@ async function closeSheet(el){
     if(!target){ $('main').inert=false; $('#foot').inert=false; document.body.classList.remove('locked'); lenis&&lenis.start(); }
   }
   if(lastFocus && document.contains(lastFocus)) lastFocus.focus({preventScroll:true});
+  else if(lastAct){ const el=$(`[data-id="${lastAct.id}"][data-act="${lastAct.act}"]`) || $('.vcard [data-act]') || $('.seg [aria-selected="true"]'); el&&el.focus({preventScroll:true}); }
+  lastAct=null;
 }
 $$('[data-close]').forEach(b=>b.addEventListener('click',()=>closeSheet(b.closest('.sheet'))));
 // swipe the sheet down to dismiss
 $$('.sheet').forEach(sh=>{
   const p=$('.sheet-panel',sh), g=$('.grab',sh)||$('.bs-head',sh); let y0=null;
-  (g||p).addEventListener('pointerdown',e=>{ if(e.pointerType==='mouse') return; y0=e.clientY; p.setPointerCapture(e.pointerId); });
-  p.addEventListener('pointermove',e=>{ if(y0===null) return; const dy=Math.max(0,e.clientY-y0); p.style.transform=`translateY(${dy}px)`; });
-  p.addEventListener('pointerup',e=>{ if(y0===null) return; const dy=e.clientY-y0; y0=null; p.style.transform=''; if(dy>110) closeSheet(sh); });
+  let t0=0, last=0, scrim=$('.sheet-scrim',sh);
+  (g||p).addEventListener('pointerdown',e=>{ if(e.pointerType==='mouse' || e.target.closest('button')) return; y0=e.clientY; t0=performance.now(); last=0; p.setPointerCapture(e.pointerId); p.style.transition='none'; });
+  p.addEventListener('pointermove',e=>{ if(y0===null) return; let dy=e.clientY-y0; dy = dy<0 ? dy*0.2 : dy; last=dy; p.style.transform=`translateY(${dy}px)`; scrim.style.opacity=Math.max(.2,1-dy/500); });
+  const end=()=>{ if(y0===null) return; const v=last/Math.max(1,performance.now()-t0); y0=null; p.style.transition='transform .45s cubic-bezier(.16,1,.3,1)'; scrim.style.opacity='';
+    if(last>110 || v>0.6){ p.style.transform=''; p.style.transition=''; closeSheet(sh); } else { p.style.transform='translateY(0)'; setTimeout(()=>{ p.style.transform=''; p.style.transition=''; },460); } };
+  p.addEventListener('pointerup',end); p.addEventListener('pointercancel',end);
 });
 // keep Tab inside an open sheet
 document.addEventListener('keydown',e=>{
@@ -1743,11 +1756,14 @@ let B={}, step=1, editing=null;
 const hcards=$('#hcards'), pchips=$('#pchips');
 hcards.innerHTML=Object.entries(HOUSE).map(([k,h])=>`<button type="button" class="hcard" role="radio" aria-checked="false" data-k="${k}"><img src="${h.img}" alt="" loading="lazy"><span><b>${h.name}</b><small>${PLANS[k].spec[0][1]} bedrooms, from ${PLANS[k].spec[3][1]}</small></span></button>`).join('');
 $$('.hcard',hcards).forEach(b=>b.addEventListener('click',()=>{ B.res=b.dataset.k; B.plot=''; drawStep1(); }));
+tabKeys($$('.hcard',hcards),b=>{ B.res=b.dataset.k; B.plot=''; drawStep1(); $(`.hcard[data-k="${B.res}"]`).focus(); });
 function drawStep1(){
   $$('.hcard',hcards).forEach(b=>{ const on=b.dataset.k===B.res; b.setAttribute('aria-checked',on); b.tabIndex=on||(!B.res&&b===hcards.firstElementChild)?0:-1; });
   const list=PLOTS.filter(p=>p[1]===B.res && p[2]!=='sold');
   pchips.innerHTML=`<button type="button" role="radio" data-p="" aria-checked="${!B.plot}">Any open plot</button>`+list.map(p=>`<button type="button" role="radio" data-p="${p[0]}" aria-checked="${B.plot===p[0]}">${p[0]}<small>${p[2]==='reserved'?'waiting list':p[8]}</small></button>`).join('');
-  $$('button',pchips).forEach(b=>b.addEventListener('click',()=>{ B.plot=b.dataset.p; drawStep1(); }));
+  const pc=$$('button',pchips);
+  pc.forEach(b=>{ b.tabIndex=b.getAttribute('aria-checked')==='true'?0:-1; b.addEventListener('click',()=>{ B.plot=b.dataset.p; drawStep1(); $(`#pchips [data-p="${B.plot}"]`).focus(); }); });
+  tabKeys(pc,b=>{ B.plot=b.dataset.p; drawStep1(); $(`#pchips [data-p="${B.plot}"]`).focus(); });
 }
 function goStep(n){
   step=n;
@@ -1761,12 +1777,16 @@ function goStep(n){
   if(!RM) cur.animate([{opacity:0,transform:'translateX(26px)'},{opacity:1,transform:'none'}],{duration:480,easing:'cubic-bezier(.16,1,.3,1)'});
   if(n===2) cal();
   if(n===3) review();
+  if(!bsheet.hidden && bsheet.contains(document.activeElement)===false || (document.activeElement && document.activeElement.closest('.step') && document.activeElement.closest('.step').hidden) || document.activeElement===document.body){
+    const f=$(`.step[data-step="${n}"] [aria-checked="true"], .step[data-step="${n}"] button:not([disabled]), .step[data-step="${n}"] input`,stepsEl); (f||$('#bs-h')).focus({preventScroll:true});
+  }
 }
 function openBooking(pre={},edit=null){
   editing=edit;
   if(edit){ B={...edit}; selDate=new Date(edit.date+'T00:00:00'); selSlot=edit.slot; calY=selDate.getFullYear(); calM=selDate.getMonth(); }
   else { B={res:pre.res||B.res||'ridge',plot:pre.plot||''}; selDate=null; selSlot=null; calY=today.getFullYear(); calM=today.getMonth(); }
-  $('#bs-h').textContent= edit ? `Move ${edit.ref}` : 'Book a viewing';
+  B.waitlist = !edit && !!pre.plot && (PLOTS.find(p=>p[0]===pre.plot)||[])[2]==='reserved';
+  $('#bs-h').textContent= edit ? `Move ${edit.ref}` : B.waitlist ? `Waiting list for ${pre.plot}` : 'Book a viewing';
   $$('#slots button').forEach(x=>{ x.classList.toggle('sel',x.dataset.s===selSlot); x.setAttribute('aria-pressed',x.dataset.s===selSlot); });
   drawStep1(); summary();
   ['f-name','f-phone','f-email'].forEach(id=>{ $('#'+id).classList.remove('err'); $('input',$('#'+id)).removeAttribute('aria-invalid'); });
@@ -1800,6 +1820,7 @@ function finish(){
   const list=store.all();
   if(editing){
     const v=list.find(x=>x.id===editing.id);
+    if(!v){ editing=null; closeSheet(bsheet); refresh(); toast('This viewing was changed on another screen.'); return; }
     Object.assign(v,{date:iso(selDate),slot:selSlot,status:'requested'});
     store.save(list); closeSheet(bsheet);
     toast(`${v.ref} moved to ${fmt(selDate)}, ${selSlot}.`);
@@ -1808,8 +1829,8 @@ function finish(){
     const v={id:Date.now().toString(36),ref:'NV-'+String(Math.floor(1000+Math.random()*9000)),res:B.res,plot:B.plot,date:iso(selDate),slot:selSlot,
       name:f.name.value.trim(),phone:f.phone.value.trim(),email:f.email.value.trim(),guests:f.guests.value,transfer:f.transfer.checked,status:'requested',created:Date.now()};
     list.push(v); store.save(list); closeSheet(bsheet);
-    toast(`Viewing requested: ${fmt(selDate)}, ${selSlot}.`, null, {label:'View',fn:()=>{ if(target!=='viewings') location.hash='viewings'; }});
-    const bd=$('#vbadge'); bd.classList.remove('pop'); void bd.offsetWidth; bd.classList.add('pop');
+    toast(`${B.waitlist?'Added to the waiting list':'Viewing requested'}: ${fmt(selDate)}, ${selSlot}.`, null, target==='viewings'?null:{label:'View',fn:()=>{ location.hash='viewings'; }});
+    flyToTab();
   }
   editing=null; refresh();
 }
@@ -1818,8 +1839,9 @@ function finish(){
 let calY=today.getFullYear(), calM=today.getMonth(), selDate=null, selSlot=null;
 const MON=['January','February','March','April','May','June','July','August','September','October','November','December'];
 const DOW=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-const maxDate=new Date(today); maxDate.setDate(maxDate.getDate()+60);
+let maxDate=new Date(today); maxDate.setDate(maxDate.getDate()+60);
 function cal(){
+  today=istToday(); maxDate=new Date(today); maxDate.setDate(maxDate.getDate()+60);
   $('#calm').textContent=`${MON[calM]} ${calY}`;
   const first=new Date(calY,calM,1), lead=(first.getDay()+6)%7, days=new Date(calY,calM+1,0).getDate();
   let s=DOW.map(d=>`<span class="dow" aria-hidden="true">${d}</span>`).join('');
@@ -1837,8 +1859,18 @@ function cal(){
 $('#calg').addEventListener('click',e=>{ const b=e.target.closest('button[data-d]'); if(!b||b.disabled) return; selDate=new Date(calY,calM,+b.dataset.d); cal(); summary(); const nb=$(`#calg button[data-d="${b.dataset.d}"]`); nb&&nb.focus(); });
 $('#calp').addEventListener('click',()=>{ calM--; if(calM<0){calM=11;calY--;} cal(); });
 $('#caln').addEventListener('click',()=>{ calM++; if(calM>11){calM=0;calY++;} cal(); });
-$$('#slots button').forEach(b=>b.addEventListener('click',()=>{ selSlot=b.dataset.s; $$('#slots button').forEach(x=>{ x.classList.toggle('sel',x===b); x.setAttribute('aria-pressed',x===b); }); summary(); }));
+function slotsTaken(){
+  const d=selDate?iso(selDate):null;
+  $$('#slots button').forEach(b=>{
+    const hit=d && upcoming().find(v=>v.date===d && v.slot===b.dataset.s && (!editing||v.id!==editing.id));
+    b.disabled=!!hit; b.title=hit?`You already have ${hit.ref} at this time`:''; 
+    const sm=b.querySelector('small'); if(hit){ if(!sm) b.insertAdjacentHTML('beforeend','<small>Booked</small>'); else sm.textContent='Booked'; } else if(sm) sm.textContent = b.dataset.s==='5:30 pm'?'Golden hour':'';
+    if(hit && selSlot===b.dataset.s){ selSlot=null; b.classList.remove('sel'); b.setAttribute('aria-pressed','false'); }
+  });
+}
+$$('#slots button').forEach(b=>b.addEventListener('click',()=>{ if(b.disabled) return; selSlot=b.dataset.s; $$('#slots button').forEach(x=>{ x.classList.toggle('sel',x===b); x.setAttribute('aria-pressed',x===b); }); summary(); }));
 function summary(){
+  slotsTaken();
   const s=$('#sum'); s.classList.remove('warn');
   if(selDate&&selSlot) s.textContent=`${fmt(selDate)}, arriving ${selSlot}.${selSlot==='5:30 pm'?' You will see the ridge at golden hour.':''}`;
   else if(selDate) s.textContent=`${fmt(selDate)}. Now choose an arrival time.`;
@@ -1854,6 +1886,7 @@ function renderViewings(){
   $$('.seg button').forEach(b=>{ const on=b.dataset.v===vTab; b.setAttribute('aria-selected',on); b.tabIndex=on?0:-1; });
   const up=upcoming(), pa=past();
   $('#n-up').textContent=up.length; $('#n-past').textContent=pa.length;
+  const bd=$('#vbadge'); bd.textContent=up.length; bd.hidden=!up.length;
   const list=vTab==='up'?up:pa;
   if(!list.length){
     vlist.innerHTML = vTab==='up'
@@ -1880,11 +1913,11 @@ function renderViewings(){
 vlist.addEventListener('click',async e=>{
   const b=e.target.closest('[data-act]'); if(!b) return;
   const list=store.all(), v=list.find(x=>x.id===b.dataset.id); if(!v) return;
-  const act=b.dataset.act;
+  const act=b.dataset.act; lastAct={id:v.id,act};
   if(act==='move') openBooking({},v);
   if(act==='again') openBooking({res:v.res,plot:v.plot});
   if(act==='copy'){
-    const txt=`NOIRVALE private viewing ${v.ref}\nHouse: ${HOUSE[v.res].name}${v.plot?`, plot ${v.plot}`:''}\nDate: ${fmt(at(v))}, arriving ${v.slot}\nGuest: ${v.name} (${v.guests})\nTransfer: ${v.transfer?'Collected from Pantnagar airport':'Arriving on your own'}`;
+    const txt=`NOIRVALE private viewing ${v.ref}\nHouse: ${HOUSE[v.res].name}${v.plot?`, plot ${v.plot}`:''}\nDate: ${fmt(dOf(v))}, arriving ${v.slot}\nGuest: ${v.name} (${v.guests})\nTransfer: ${v.transfer?'Collected from Pantnagar airport':'Arriving on your own'}`;
     try{ await navigator.clipboard.writeText(txt); toast('Details copied. Paste them anywhere.'); }catch(err){ toast('Copying is blocked here. Select the card text instead.'); }
   }
   if(act==='cancel') askCancel(v);
@@ -1893,28 +1926,42 @@ vlist.addEventListener('click',async e=>{
 let pendingCancel=null;
 function askCancel(v){
   pendingCancel=v;
-  $('#cs-p').textContent=`${HOUSE[v.res].name}${v.plot?`, plot ${v.plot}`:''} on ${fmt(at(v))} at ${v.slot}. You can undo this for a few seconds.`;
+  $('#cs-p').textContent=`${HOUSE[v.res].name}${v.plot?`, plot ${v.plot}`:''} on ${fmt(dOf(v))} at ${v.slot}. You can undo this for a few seconds.`;
   openSheet($('#csheet'));
   setTimeout(()=>$('#csheet [data-close].btn').focus(),300);
 }
 $('#cs-yes').addEventListener('click',()=>{
-  const list=store.all(), v=list.find(x=>x.id===pendingCancel.id); if(!v) return;
+  if(!pendingCancel) return;
+  const list=store.all(), v=list.find(x=>x.id===pendingCancel.id); pendingCancel=null; if(!v || v.status==='cancelled'){ closeSheet($('#csheet')); return; }
   const prev=v.status; v.status='cancelled'; store.save(list); closeSheet($('#csheet')); refresh();
   toast(`${v.ref} cancelled.`,{label:'Undo',fn:()=>{ const l=store.all(), x=l.find(y=>y.id===v.id); if(x){ x.status=prev; store.save(l); refresh(); toast('Viewing restored.'); } }});
 });
 
+/* ───── the booking lands: a copper light flies into the Viewings tab ───── */
+function flyToTab(){
+  try{ navigator.vibrate && navigator.vibrate(12); }catch(e){}
+  const bd=$('#vbadge'); const pop=()=>{ bd.classList.remove('pop'); void bd.offsetWidth; bd.classList.add('pop'); };
+  const from=$('#bs-next').getBoundingClientRect(), to=$('[data-tab="viewings"]',tabbar).getBoundingClientRect();
+  if(RM||!from.width){ pop(); return; }
+  const d=document.createElement('i'); d.className='flydot'; document.body.append(d);
+  const x0=from.left+from.width/2, y0=from.top+from.height/2, x1=to.left+to.width/2, y1=to.top+18;
+  const mx=(x0+x1)/2, my=Math.min(y0,y1)-120;
+  const kf=[]; for(let i=0;i<=24;i++){ const t=i/24, x=(1-t)*(1-t)*x0+2*(1-t)*t*mx+t*t*x1, y=(1-t)*(1-t)*y0+2*(1-t)*t*my+t*t*y1; kf.push({transform:`translate(${x}px,${y}px) scale(${1-t*.5})`,opacity:t>.92?0:1}); }
+  d.animate(kf,{duration:900,easing:'cubic-bezier(.5,0,.3,1)',fill:'forwards'}).onfinish=()=>{ d.remove(); pop(); };
+}
 /* ───── toast ───── */
 let toastT=0;
 function toast(msg,undo,action){
   const t=$('#toast'), u=$('#toast-u'), a=undo||action;
   $('#toast-t').textContent=msg;
-  u.hidden=!a; if(a){ u.textContent=a.label; u.onclick=()=>{ t.classList.remove('on'); a.fn(); }; }
-  t.classList.add('on'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('on'),a?6000:3200);
+  u.hidden=!a; u.onclick=null; if(a){ u.textContent=a.label; u.onclick=()=>{ t.classList.remove('on'); u.onclick=null; a.fn(); }; }
+  t.classList.add('on'); clearTimeout(toastT); toastT=setTimeout(()=>{ t.classList.remove('on'); u.onclick=null; u.hidden=true; },a?6000:3200);
 }
 
 /* ───── countdowns, widgets, badge ───── */
 function tickCountdowns(){
   const now=Date.now();
+  if($$('[data-cd]').some(el=>+el.dataset.cd<=now)){ refresh(); return; }
   $$('[data-cd]').forEach(el=>{ const p=cdParts(+el.dataset.cd-now); el.textContent = p.d>0 ? `In ${p.d} day${p.d>1?'s':''}, ${p.h} hr${p.h!==1?'s':''}` : `In ${p.h} hr ${pad(p.m)} min`; });
   const nx=upcoming()[0], cd=$('#w-cd');
   if(nx && cd){ const p=cdParts(at(nx)-now); cd.innerHTML=`<div><b>${pad(p.d)}</b><small>days</small></div><div><b>${pad(p.h)}</b><small>hours</small></div><div><b>${pad(p.m)}</b><small>min</small></div><div><b>${pad(p.s)}</b><small>sec</small></div>`; }
@@ -1922,7 +1969,7 @@ function tickCountdowns(){
 function renderNext(){
   const nx=upcoming()[0], el=$('#w-next');
   el.innerHTML = nx
-    ? `<p class="w-k">Your next viewing</p><h3 class="w-h">${esc(HOUSE[nx.res].name)}${nx.plot?`, ${esc(nx.plot)}`:''}</h3><div class="cd" id="w-cd" aria-label="Time until your viewing"></div><p class="meta">${esc(fmt(at(nx)))}, arriving ${esc(nx.slot)}</p><div class="btns"><a href="#viewings" class="btn">Open my viewings</a><a href="#location" class="btn">Directions</a></div>`
+    ? `<p class="w-k">Your next viewing</p><h3 class="w-h">${esc(HOUSE[nx.res].name)}${nx.plot?`, ${esc(nx.plot)}`:''}</h3><div class="cd" id="w-cd" aria-label="Time until your viewing"></div><p class="meta">${esc(fmt(dOf(nx)))}, arriving ${esc(nx.slot)}</p><div class="btns"><a href="#viewings" class="btn">Open my viewings</a><a href="#location" class="btn">Directions</a></div>`
     : `<p class="w-k">Your next viewing</p><h3 class="w-h">Nothing booked yet.</h3><p class="meta" style="margin-top:12px">Choose a house and an afternoon. The 5:30 slot arrives with the sunset.</p><div class="btns"><button type="button" class="btn solid" data-book-open>Book a viewing</button></div>`;
 }
 function refresh(){
@@ -1933,7 +1980,7 @@ function refresh(){
 }
 $('#w-dots').innerHTML=PLOTS.map(p=>`<i class="${p[2]==='open'?'':p[2]}" title="${p[0]}"></i>`).join('');
 setInterval(tickCountdowns,1000);
-addEventListener('storage',e=>{ if(e.key===KEY) refresh(); });
+addEventListener('storage',e=>{ if(e.key!==KEY && e.key!==null) return; if(editing && !store.all().some(x=>x.id===editing.id)){ editing=null; closeSheet(bsheet); toast('This viewing was changed on another screen.'); } refresh(); });
 
 /* ───── Lake Vale clock and sun (computed for 29.40°N, 79.52°E) ───── */
 function sunTimes(date){
